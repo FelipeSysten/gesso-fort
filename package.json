@@ -1,0 +1,9 @@
+{
+  "name": "gesso-fort",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Site institucional e retaguarda da Gesso Fort Itabuna",
+  "dependencies": {
+    "@neondatabase/serverless": "^0.10.4"
+  }
+}

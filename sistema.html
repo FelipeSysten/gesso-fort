@@ -64,6 +64,10 @@ input:focus,select:focus,textarea:focus{outline:2px solid #C79A3B;outline-offset
       <label style="display:block;font-size:11.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#6a6a6a;margin-bottom:7px">Senha</label>
       <input type="password" value="{{ loginPass }}" onChange="{{ onLoginPass }}" placeholder="••••••••" style="width:100%;padding:12px 14px;font-size:15px;border:1px solid #dcd9d4;border-radius:10px;background:#fff;margin-bottom:14px" />
 
+      <sc-if value="{{ loginErro }}" hint-placeholder-val="{{ false }}">
+        <div style="margin:-2px 0 16px;font-size:13px;color:#A34A24;font-weight:600">Usuário ou senha incorretos.</div>
+      </sc-if>
+
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:22px">
         <label style="display:flex;align-items:center;gap:8px;font-size:13.5px;color:#6a6a6a;cursor:pointer">
           <input type="checkbox" style="width:16px;height:16px;accent-color:#C79A3B" /> Manter conectado
@@ -71,7 +75,7 @@ input:focus,select:focus,textarea:focus{outline:2px solid #C79A3B;outline-offset
         <a href="#" style="font-size:13.5px">Esqueci a senha</a>
       </div>
 
-      <button onClick="{{ doLogin }}" style="width:100%;padding:14px;border:none;border-radius:999px;background:linear-gradient(160deg,#E0B75C,#B8862B);color:#1a1206;font-weight:700;font-size:15.5px;cursor:pointer;box-shadow:0 6px 20px rgba(184,134,43,.28);transition:transform 150ms cubic-bezier(.4,0,.2,1)" style-hover="transform:scale(1.02)" style-active="transform:scale(.97)">Entrar</button>
+      <button onClick="{{ doLogin }}" disabled="{{ loginCarregando }}" style="width:100%;padding:14px;border:none;border-radius:999px;background:linear-gradient(160deg,#E0B75C,#B8862B);color:#1a1206;font-weight:700;font-size:15.5px;cursor:pointer;box-shadow:0 6px 20px rgba(184,134,43,.28);transition:transform 150ms cubic-bezier(.4,0,.2,1)" style-hover="transform:scale(1.02)" style-active="transform:scale(.97)">{{ loginBtnLabel }}</button>
       <p style="margin:20px 0 0;font-size:12px;color:#9a9a9a;text-align:center">Versão 2.4.1 · Gesso Fort Retaguarda</p>
     </div>
   </div>
@@ -707,7 +711,7 @@ input:focus,select:focus,textarea:focus{outline:2px solid #C79A3B;outline-offset
 <script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:900}}">
 class Component extends DCLogic {
   state = {
-    logged: false, loginUser: 'alex.gomes', loginPass: '123456',
+    logged: false, loginUser: 'alex.gomes', loginPass: '', loginErro: false, loginCarregando: false,
     tabs: [{ id: 'home', label: 'Home' }],
     active: 'home', fly: null, homeTab: 'atalhos',
     busca: '', campo: 'Todos', de: '2026-06-01', ate: '2026-09-17',
@@ -970,10 +974,31 @@ class Component extends DCLogic {
     return id;
   }
 
-  loadLeads = () => {
+  api = async (url, opts) => {
+    const r = await fetch(url, { headers: { 'Content-Type': 'application/json' }, ...opts });
+    if (!r.ok) throw new Error('api ' + url + ' -> ' + r.status);
+    return r.status === 204 ? null : r.json();
+  };
+
+  loadLeads = async () => {
+    try { this.setState({ leads: await this.api('/api/leads') }); return; } catch (e) {}
     let leads = [];
     try { leads = JSON.parse(localStorage.getItem('gf_site_leads') || '[]'); } catch (e) { leads = []; }
     this.setState({ leads });
+  };
+
+  loadClientes = async () => {
+    try {
+      const clientes = await this.api('/api/clientes');
+      if (clientes && clientes.length) this.setState({ clientes });
+    } catch (e) {}
+  };
+
+  loadNotas = async () => {
+    try {
+      const notas = await this.api('/api/notas');
+      if (notas && notas.length) this.setState({ notas });
+    } catch (e) {}
   };
 
   saveLeads(leads) {
@@ -981,20 +1006,51 @@ class Component extends DCLogic {
     try { localStorage.setItem('gf_site_leads', JSON.stringify(leads)); } catch (e) {}
   }
 
-  converterLead(lead) {
+  setLeadSit = async (lead, sit) => {
+    if (typeof lead.id !== 'undefined') {
+      try { await this.api('/api/leads/' + lead.id, { method: 'PATCH', body: JSON.stringify({ sit }) }); } catch (e) {}
+    }
+    this.saveLeads(this.state.leads.map(l => l.protocolo === lead.protocolo ? { ...l, sit } : l));
+  };
+
+  converterLead = async (lead) => {
     let cli = this.state.clientes.find(c => c.nome.toLowerCase() === lead.nome.toLowerCase());
     if (!cli) {
-      cli = { id: 'c' + Date.now(), nome: lead.nome, fantasia: '—', contato: lead.nome, doc: '—', tel: lead.tel, cel: lead.tel, municipio: lead.cidade || 'Itabuna', uf: 'BA', ativo: 'Sim', dtCompra: '—', nasc: '—', rua: '', num: '', bairro: '', cep: '', end: lead.cidade || '' };
+      const novo = { nome: lead.nome, fantasia: '—', contato: lead.nome, doc: '—', tel: lead.tel, cel: lead.tel, municipio: lead.cidade || 'Itabuna', uf: 'BA', ativo: 'Sim', dtCompra: '—', nasc: '—', rua: '', num: '', bairro: '', cep: '', end: lead.cidade || '' };
+      try { cli = await this.api('/api/clientes', { method: 'POST', body: JSON.stringify(novo) }); }
+      catch (e) { cli = { ...novo, id: 'c' + Date.now() }; }
       this.setState(st => ({ clientes: [cli, ...st.clientes] }));
     }
-    this.saveLeads(this.state.leads.map(l => l.protocolo === lead.protocolo ? { ...l, sit: 'Convertido' } : l));
+    await this.setLeadSit(lead, 'Convertido');
     this.setState({ novaTipo: 'Orçamento', novaCliente: cli.id, itens: [],
       novaObs: lead.servico + (lead.metragem ? ' · ' + lead.metragem : '') + (lead.obs ? '\n' + lead.obs : '') + '\nOrigem: site (protocolo ' + lead.protocolo + ')' });
     this.open('nova');
-  }
+  };
+
+  checkAuth = async () => {
+    try { const r = await this.api('/api/auth/check'); if (r && r.logged) this.setState({ logged: true }); } catch (e) {}
+  };
+
+  doLogin = async () => {
+    this.setState({ loginErro: false, loginCarregando: true });
+    try {
+      await this.api('/api/auth/login', { method: 'POST', body: JSON.stringify({ usuario: this.state.loginUser, senha: this.state.loginPass }) });
+      this.setState({ logged: true, loginCarregando: false, loginPass: '' });
+    } catch (e) {
+      this.setState({ loginErro: true, loginCarregando: false });
+    }
+  };
+
+  doLogout = async () => {
+    try { await fetch('/api/auth/logout', { method: 'POST' }); } catch (e) {}
+    this.setState({ logged: false, active: 'home', tabs: [{ id: 'home', label: 'Home' }] });
+  };
 
   componentDidMount() {
+    this.checkAuth();
     this.loadLeads();
+    this.loadClientes();
+    this.loadNotas();
     this._ls = () => this.loadLeads();
     window.addEventListener('storage', this._ls);
     window.addEventListener('focus', this._ls);
@@ -1037,10 +1093,20 @@ class Component extends DCLogic {
       : { cod: '', nome: '', cat: this.cats[0], un: type === 'material' ? 'pç' : 'm²', preco: '', estoque: '', prazo: '' });
     this.setState({ modal: type, form: f, editId: item ? item.id : null });
   }
-  save = () => {
+  save = async () => {
     const { modal, form, editId } = this.state;
-    const key = modal === 'cliente' ? 'clientes' : modal === 'material' ? 'materiais' : 'servicos';
     if (!form.nome) { this.setState({ modal: null }); return; }
+    if (modal === 'cliente') {
+      try {
+        const saved = await this.api(editId ? '/api/clientes/' + editId : '/api/clientes', { method: editId ? 'PUT' : 'POST', body: JSON.stringify(form) });
+        this.setState(s => ({ clientes: editId ? s.clientes.map(c => c.id === editId ? saved : c) : [saved, ...s.clientes], modal: null, form: {}, editId: null }));
+        return;
+      } catch (e) {}
+      const rec = { ...form, id: editId || 'c' + Date.now() };
+      this.setState(s => ({ clientes: editId ? s.clientes.map(x => x.id === editId ? rec : x) : [rec, ...s.clientes], modal: null, form: {}, editId: null }));
+      return;
+    }
+    const key = modal === 'material' ? 'materiais' : 'servicos';
     const rec = { ...form, id: editId || key[0] + Date.now(), preco: Number(form.preco) || 0 };
     this.setState(s => ({ [key]: editId ? s[key].map(x => x.id === editId ? rec : x) : [rec, ...s[key]], modal: null, form: {}, editId: null }));
   };
@@ -1051,9 +1117,15 @@ class Component extends DCLogic {
     this.setState(s => ({ itens: [...s.itens, { key: 'i' + Date.now(), nome: src.nome, un: src.un, cat: src.cat, qtd: 1, preco: src.preco }], addSel: '' }));
   };
 
-  salvarNota = () => {
+  salvarNota = async () => {
     const s = this.state; if (!s.itens.length) return;
-    const nota = { id: 'n' + Date.now(), numero: String(s.seq).padStart(6, '0'), tipo: s.novaTipo, cliente: s.novaCliente, obs: s.novaObs, desc: Number(s.novaDesc) || 0, sit: 'Pendente', validade: '', data: new Date().toLocaleDateString('pt-BR') + ' ' + new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }), itens: s.itens.map(i => ({ nome: i.nome, un: i.un, qtd: Number(i.qtd) || 0, preco: Number(i.preco) || 0 })) };
+    const itens = s.itens.map(i => ({ nome: i.nome, un: i.un, qtd: Number(i.qtd) || 0, preco: Number(i.preco) || 0 }));
+    try {
+      const nota = await this.api('/api/notas', { method: 'POST', body: JSON.stringify({ tipo: s.novaTipo, clienteId: s.novaCliente, obs: s.novaObs, desc: Number(s.novaDesc) || 0, itens }) });
+      this.setState(st => ({ notas: [nota, ...st.notas], itens: [], novaObs: '', novaDesc: 0, novaCliente: '', printId: nota.id }));
+      return;
+    } catch (e) {}
+    const nota = { id: 'n' + Date.now(), numero: String(s.seq).padStart(6, '0'), tipo: s.novaTipo, cliente: s.novaCliente, obs: s.novaObs, desc: Number(s.novaDesc) || 0, sit: 'Pendente', validade: '', data: new Date().toLocaleDateString('pt-BR') + ' ' + new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }), itens };
     this.setState(st => ({ notas: [nota, ...st.notas], seq: st.seq + 1, itens: [], novaObs: '', novaDesc: 0, novaCliente: '', printId: nota.id }));
   };
 
@@ -1333,7 +1405,7 @@ class Component extends DCLogic {
       const lead = s.leads.find(l => l.protocolo === s.sel);
       actions = [
         { label: '⟳ Atualizar', style: btn('ghost'), go: this.loadLeads },
-        { label: '⊘ Descartar', style: btn('ghost'), go: () => lead && this.saveLeads(s.leads.map(l => l.protocolo === lead.protocolo ? { ...l, sit: 'Descartado' } : l)) },
+        { label: '⊘ Descartar', style: btn('ghost'), go: () => lead && this.setLeadSit(lead, 'Descartado') },
         { label: '⌕ Ver detalhes', style: btn('normal'), go: () => lead && window.alert(lead.protocolo + ' — ' + lead.nome + '\n' + lead.tel + ' · ' + (lead.cidade || '') + '\n' + lead.servico + (lead.metragem ? ' · ' + lead.metragem : '') + (lead.obs ? '\n\n' + lead.obs : '')) },
         { label: '⤨ Transformar em Orçamento', style: btn('primary'), go: () => lead && this.converterLead(lead) }
       ];
@@ -1430,7 +1502,8 @@ class Component extends DCLogic {
     return {
       isLogin: !s.logged, isApp: s.logged,
       loginUser: s.loginUser, loginPass: s.loginPass, onLoginUser: this.set('loginUser'), onLoginPass: this.set('loginPass'),
-      doLogin: () => this.setState({ logged: true }), doLogout: () => this.setState({ logged: false, active: 'home', tabs: [{ id: 'home', label: 'Home' }] }),
+      loginErro: s.loginErro, loginCarregando: s.loginCarregando, loginBtnLabel: s.loginCarregando ? 'Entrando…' : 'Entrar',
+      doLogin: this.doLogin, doLogout: this.doLogout,
       rail, flyOpen: !!flyMenu, flyLabel: flyMenu ? flyMenu.label : '', flyItems,
       flyStyle: 'position:fixed;z-index:40;left:66px;top:' + Math.min(Math.max(58 + flyIdx * 51, 58), 300) + 'px;min-width:232px;background:#fff;border:1px solid #e2ded6;border-radius:14px;box-shadow:0 16px 48px rgba(0,0,0,.2);padding:10px 0;animation:gfFly .16s cubic-bezier(.4,0,.2,1)',
       closeFly: () => this.setState({ fly: null }),
