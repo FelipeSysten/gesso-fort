@@ -1,0 +1,7 @@
+node_modules/
+.vercel/
+uploads/
+.thumbnail
+*.bak
+.env
+.env.local

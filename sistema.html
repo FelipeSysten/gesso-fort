@@ -1,0 +1,1482 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Retaguarda Gesso Fort — Sistema Interno</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+html,body{margin:0;padding:0}
+body{font-family:'Outfit',system-ui,sans-serif;background:#F5F4F2;color:#0D0D0D;-webkit-font-smoothing:antialiased}
+*{box-sizing:border-box}
+a{color:#8A6318;text-decoration:none}
+a:hover{color:#E0B75C}
+input,select,textarea,button{font-family:inherit}
+input:focus,select:focus,textarea:focus{outline:2px solid #C79A3B;outline-offset:-1px}
+::placeholder{color:#A8A8A8}
+@keyframes gfIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@keyframes gfFly{from{opacity:0;transform:translateX(-8px)}to{opacity:1;transform:none}}
+@keyframes gfFade{from{opacity:0}to{opacity:1}}
+@media print{
+  body *{visibility:hidden!important}
+  #gf-print,#gf-print *{visibility:visible!important}
+  #gf-print{position:absolute!important;inset:0!important;padding:0!important;background:#fff!important;overflow:visible!important}
+  .gf-noprint{display:none!important}
+}
+</style>
+</helmet>
+
+<sc-if value="{{ isLogin }}" hint-placeholder-val="{{ true }}">
+<div style="min-height:100vh;display:flex;background:#0D0D0D">
+  <div style="flex:1.1;min-width:0;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:48px 40px;background:radial-gradient(120% 90% at 20% 10%,#1c1a16 0%,#0D0D0D 60%);position:relative">
+    <div style="position:absolute;inset:0;opacity:.5;background:repeating-linear-gradient(135deg,transparent 0 22px,rgba(199,154,59,.05) 22px 23px)"></div>
+    <div style="position:relative;width:100%;max-width:420px;display:flex;flex-direction:column;gap:26px">
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:52px;line-height:.95;letter-spacing:-.02em">
+          <span style="background:linear-gradient(160deg,#fff 10%,#9aa0a6 55%,#e8ecef 90%);-webkit-background-clip:text;background-clip:text;color:transparent">GESSO</span>
+          <span style="background:linear-gradient(160deg,#F0D18A 5%,#B8862B 45%,#E8C46A 95%);-webkit-background-clip:text;background-clip:text;color:transparent"> FORT</span>
+        </div>
+        <div style="font-size:11px;letter-spacing:.42em;color:#7d7d7d;text-transform:uppercase;padding-left:3px">Qualidade que transforma</div>
+      </div>
+      <div style="height:1px;background:linear-gradient(90deg,#C79A3B,rgba(199,154,59,0))"></div>
+      <p style="margin:0;color:#9c9c9c;font-size:16px;line-height:1.55;max-width:360px">Retaguarda de gestão — cadastros, compras, vendas, financeiro e emissão de documentos.</p>
+      <div style="font-size:12px;color:#6b6b6b;letter-spacing:.06em">GESSO FORT ITABUNA, MATRIZ · 60.560.384/0001-29</div>
+    </div>
+  </div>
+
+  <div style="flex:0 0 clamp(340px,42%,500px);background:#fff;display:flex;flex-direction:column;justify-content:center;padding:48px clamp(28px,5vw,60px)">
+    <div style="max-width:370px;width:100%;margin:0 auto;animation:gfIn .4s cubic-bezier(.4,0,.2,1)">
+      <img src="assets/gessofort-logo.png" alt="Gesso Fort" style="width:148px;display:block;margin:0 0 26px -8px" />
+      <h1 style="font-family:'Nunito',sans-serif;font-weight:900;font-size:27px;margin:0 0 6px;letter-spacing:-.01em">Acessar a retaguarda</h1>
+      <p style="margin:0 0 28px;color:#7a7a7a;font-size:14.5px">Informe suas credenciais para continuar.</p>
+
+      <label style="display:block;font-size:11.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#6a6a6a;margin-bottom:7px">Usuário</label>
+      <input type="text" value="{{ loginUser }}" onChange="{{ onLoginUser }}" placeholder="seu.usuario" style="width:100%;padding:12px 14px;font-size:15px;border:1px solid #dcd9d4;border-radius:10px;background:#fff;margin-bottom:16px" />
+      <label style="display:block;font-size:11.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#6a6a6a;margin-bottom:7px">Senha</label>
+      <input type="password" value="{{ loginPass }}" onChange="{{ onLoginPass }}" placeholder="••••••••" style="width:100%;padding:12px 14px;font-size:15px;border:1px solid #dcd9d4;border-radius:10px;background:#fff;margin-bottom:14px" />
+
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:22px">
+        <label style="display:flex;align-items:center;gap:8px;font-size:13.5px;color:#6a6a6a;cursor:pointer">
+          <input type="checkbox" style="width:16px;height:16px;accent-color:#C79A3B" /> Manter conectado
+        </label>
+        <a href="#" style="font-size:13.5px">Esqueci a senha</a>
+      </div>
+
+      <button onClick="{{ doLogin }}" style="width:100%;padding:14px;border:none;border-radius:999px;background:linear-gradient(160deg,#E0B75C,#B8862B);color:#1a1206;font-weight:700;font-size:15.5px;cursor:pointer;box-shadow:0 6px 20px rgba(184,134,43,.28);transition:transform 150ms cubic-bezier(.4,0,.2,1)" style-hover="transform:scale(1.02)" style-active="transform:scale(.97)">Entrar</button>
+      <p style="margin:20px 0 0;font-size:12px;color:#9a9a9a;text-align:center">Versão 2.4.1 · Gesso Fort Retaguarda</p>
+    </div>
+  </div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isApp }}" hint-placeholder-val="{{ false }}">
+<div style="min-height:100vh;display:flex;background:#EFEDEA">
+
+  <aside class="gf-noprint" style="flex:0 0 62px;background:#0D0D0D;display:flex;flex-direction:column;align-items:center;padding:14px 0 12px;position:sticky;top:0;height:100vh;z-index:30">
+    <div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(160deg,#E0B75C,#B8862B);display:flex;align-items:center;justify-content:center;font-family:'Nunito',sans-serif;font-weight:900;font-size:13px;color:#1a1206;margin-bottom:16px">GF</div>
+    <nav style="display:flex;flex-direction:column;gap:4px;width:100%;align-items:center">
+      <sc-for list="{{ rail }}" as="r" hint-placeholder-count="8">
+        <button onClick="{{ r.toggle }}" title="{{ r.label }}" style="{{ r.style }}">
+          <span style="font-size:17px;line-height:1">{{ r.icon }}</span>
+          <span style="font-size:7.5px;letter-spacing:.06em;text-transform:uppercase;line-height:1">{{ r.short }}</span>
+        </button>
+      </sc-for>
+    </nav>
+    <button onClick="{{ doLogout }}" title="Sair" style="margin-top:auto;background:none;border:none;color:#7d7d7d;cursor:pointer;font-size:16px;padding:8px" style-hover="color:#E0B75C">⏻</button>
+  </aside>
+
+  <sc-if value="{{ flyOpen }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ closeFly }}" style="position:fixed;inset:0;z-index:35"></div>
+    <div style="{{ flyStyle }}">
+      <div style="font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:#a09580;padding:4px 16px 8px;font-weight:600">{{ flyLabel }}</div>
+      <sc-for list="{{ flyItems }}" as="f" hint-placeholder-count="5">
+        <button onClick="{{ f.go }}" style="{{ f.style }}">{{ f.label }}<span style="{{ f.lockStyle }}">⌁</span></button>
+      </sc-for>
+    </div>
+  </sc-if>
+
+  <main style="flex:1;min-width:0;display:flex;flex-direction:column">
+    <div class="gf-noprint" style="display:flex;align-items:center;gap:12px;padding:8px clamp(12px,2vw,22px);background:#fff;border-bottom:1px solid #e7e4df;flex-wrap:wrap">
+      <div style="display:flex;align-items:center;gap:7px;font-size:11px;color:#8a8a8a;letter-spacing:.02em">
+        <span style="width:16px;height:16px;border-radius:4px;background:linear-gradient(160deg,#E0B75C,#B8862B);display:inline-block"></span>
+        GESSO FORT ITABUNA, MATRIZ — 60.560.384/0001-29
+      </div>
+      <div style="margin-left:auto;display:flex;align-items:center;gap:8px">
+        <a href="index.html" style="font-size:12px;padding:6px 13px;border:1px solid #e7e4df;border-radius:999px;color:#8A6318" style-hover="border-color:#C79A3B;color:#B8862B">Ver site</a>
+        <span style="font-size:11px;color:#a5a5a5">{{ agora }}</span>
+        <div style="width:26px;height:26px;border-radius:50%;background:#F5F4F2;border:1px solid #e7e4df;display:flex;align-items:center;justify-content:center;font-size:10.5px;font-weight:700;color:#7a7a7a">AG</div>
+      </div>
+    </div>
+
+    <div class="gf-noprint" style="display:flex;align-items:center;gap:7px;padding:11px clamp(12px,2vw,22px) 0;background:#fff;flex-wrap:wrap">
+      <sc-for list="{{ tabs }}" as="t" hint-placeholder-count="3">
+        <div style="{{ t.style }}">
+          <button onClick="{{ t.go }}" style="background:none;border:none;font:inherit;color:inherit;cursor:pointer;padding:0">{{ t.label }}</button>
+          <sc-if value="{{ t.closable }}" hint-placeholder-val="{{ true }}">
+            <button onClick="{{ t.close }}" title="Fechar" style="background:none;border:none;color:#a5a5a5;cursor:pointer;font-size:14px;line-height:1;padding:0 0 0 2px" style-hover="color:#0D0D0D">×</button>
+          </sc-if>
+        </div>
+      </sc-for>
+    </div>
+
+    <div style="flex:1;background:#EFEDEA;padding:clamp(14px,2vw,26px) clamp(12px,2vw,26px) 88px;position:relative">
+
+      <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+      <div style="position:relative;min-height:min(560px,68vh);border-radius:16px;overflow:hidden;background:linear-gradient(135deg,#1a1713 0%,#2A2A2A 55%,#141210 100%);box-shadow:0 4px 24px rgba(0,0,0,.12);animation:gfFade .3s">
+        <div style="position:absolute;inset:0;opacity:.5;background:repeating-linear-gradient(115deg,transparent 0 30px,rgba(199,154,59,.055) 30px 31px)"></div>
+        <div style="position:absolute;left:0;right:0;bottom:0;height:56%;background:linear-gradient(to top,rgba(13,13,13,.6),transparent)"></div>
+
+        <div style="position:relative;padding:clamp(18px,3vw,34px);display:flex;flex-direction:column;gap:18px;min-height:inherit">
+          <div style="display:flex;align-items:flex-start;gap:16px;flex-wrap:wrap">
+            <div>
+              <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:clamp(22px,3vw,30px);color:#fff;letter-spacing:-.01em">Bem-vindo, Alex</div>
+              <div style="font-size:13.5px;color:#9a9a9a;margin-top:3px">{{ dataLonga }}</div>
+            </div>
+            <div style="margin-left:auto;display:flex;gap:4px;background:rgba(255,255,255,.08);padding:4px;border-radius:999px">
+              <button onClick="{{ goAtalhos }}" style="{{ tgAtalhos }}">Atalhos</button>
+              <button onClick="{{ goDash }}" style="{{ tgDash }}">Dashboard</button>
+            </div>
+          </div>
+
+          <sc-if value="{{ homeAtalhos }}" hint-placeholder-val="{{ true }}">
+          <div style="align-self:center;width:min(880px,100%);margin-top:auto;margin-bottom:auto;background:rgba(255,255,255,.93);backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.5);border-radius:16px;box-shadow:0 16px 48px rgba(0,0,0,.2);padding:clamp(18px,2.4vw,30px);display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px">
+            <sc-for list="{{ atalhos }}" as="a" hint-placeholder-count="8">
+              <button onClick="{{ a.go }}" style="display:flex;flex-direction:column;align-items:center;gap:10px;padding:20px 10px;background:transparent;border:none;border-radius:14px;cursor:pointer;transition:all 150ms cubic-bezier(.4,0,.2,1)" style-hover="background:#F5F4F2;transform:scale(1.03)" style-active="transform:scale(.97)">
+                <span style="width:52px;height:52px;border-radius:14px;border:1.5px solid #e2ded6;display:flex;align-items:center;justify-content:center;font-size:21px;color:#B8862B;background:#fff">{{ a.icon }}</span>
+                <span style="font-size:13px;font-weight:600;color:#2A2A2A;text-align:center">{{ a.label }}</span>
+              </button>
+            </sc-for>
+          </div>
+          </sc-if>
+
+          <sc-if value="{{ homeDash }}" hint-placeholder-val="{{ false }}">
+          <div style="align-self:center;width:min(1060px,100%);margin:auto 0;display:flex;flex-direction:column;gap:12px">
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:12px">
+              <sc-for list="{{ dashCards }}" as="k" hint-placeholder-count="4">
+                <div style="background:rgba(255,255,255,.94);backdrop-filter:blur(14px);border-radius:16px;padding:20px 22px;box-shadow:0 4px 24px rgba(0,0,0,.12)">
+                  <div style="display:flex;align-items:center;gap:8px">
+                    <span style="width:22px;height:22px;border-radius:7px;background:#F5F4F2;color:#8A6318;font-size:12px;display:flex;align-items:center;justify-content:center;flex:none">{{ k.icon }}</span>
+                    <span style="font-size:13.5px;color:#6a6a6a;font-weight:600">{{ k.label }}</span>
+                  </div>
+                  <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:26px;margin-top:14px;letter-spacing:-.02em;text-align:right">{{ k.value }}</div>
+                  <div style="font-size:11.5px;color:#9a9a9a;margin-top:3px;text-align:right">{{ k.hint }}</div>
+                </div>
+              </sc-for>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px">
+              <div style="background:rgba(255,255,255,.94);backdrop-filter:blur(14px);border-radius:16px;padding:24px;box-shadow:0 4px 24px rgba(0,0,0,.12)">
+                <div style="font-family:'Nunito',sans-serif;font-weight:800;font-size:15px;margin-bottom:16px">Itens mais vendidos</div>
+                <div style="display:flex;flex-direction:column;gap:12px">
+                  <sc-for list="{{ topItens }}" as="b" hint-placeholder-count="5">
+                    <div>
+                      <div style="display:flex;justify-content:space-between;gap:12px;font-size:12.5px;color:#5a5a5a;margin-bottom:5px">
+                        <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ b.nome }}</span>
+                        <span style="color:#8a6318;font-weight:600;white-space:nowrap">{{ b.valor }}</span>
+                      </div>
+                      <div style="height:7px;border-radius:999px;background:#EFEDEA;overflow:hidden"><div style="{{ b.barStyle }}"></div></div>
+                    </div>
+                  </sc-for>
+                </div>
+              </div>
+              <div style="background:rgba(255,255,255,.94);backdrop-filter:blur(14px);border-radius:16px;padding:24px;box-shadow:0 4px 24px rgba(0,0,0,.12)">
+                <div style="font-family:'Nunito',sans-serif;font-weight:800;font-size:15px;margin-bottom:16px">Modelo de emissão</div>
+                <div style="display:flex;flex-direction:column;gap:12px">
+                  <sc-for list="{{ modelos }}" as="b" hint-placeholder-count="4">
+                    <div>
+                      <div style="display:flex;justify-content:space-between;gap:12px;font-size:12.5px;color:#5a5a5a;margin-bottom:5px">
+                        <span>{{ b.nome }}</span><span style="color:#5a5a5a;font-weight:600;white-space:nowrap">{{ b.valor }}</span>
+                      </div>
+                      <div style="height:7px;border-radius:999px;background:#EFEDEA;overflow:hidden"><div style="{{ b.barStyle }}"></div></div>
+                    </div>
+                  </sc-for>
+                </div>
+              </div>
+            </div>
+            <div style="background:rgba(255,255,255,.94);backdrop-filter:blur(14px);border-radius:16px;padding:24px;box-shadow:0 4px 24px rgba(0,0,0,.12)">
+              <div style="font-family:'Nunito',sans-serif;font-weight:800;font-size:15px;margin-bottom:16px">Faturamento por categoria · últimos 30 dias</div>
+              <div style="display:flex;flex-direction:column;gap:12px">
+                <sc-for list="{{ barras }}" as="b" hint-placeholder-count="5">
+                  <div>
+                    <div style="display:flex;justify-content:space-between;font-size:12.5px;color:#5a5a5a;margin-bottom:5px">
+                      <span>{{ b.nome }}</span><span style="color:#8a6318;font-weight:600">{{ b.valor }}</span>
+                    </div>
+                    <div style="height:7px;border-radius:999px;background:#EFEDEA;overflow:hidden"><div style="{{ b.barStyle }}"></div></div>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </div>
+          </sc-if>
+        </div>
+      </div>
+      </sc-if>
+
+      <sc-if value="{{ isList }}" hint-placeholder-val="{{ false }}">
+      <div style="animation:gfFade .3s">
+        <div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:16px">
+          <h1 style="margin:0;font-family:'Nunito',sans-serif;font-weight:900;font-size:clamp(21px,2.6vw,27px);letter-spacing:-.015em">{{ listTitle }}</h1>
+          <span style="margin-left:auto;width:22px;height:22px;border-radius:50%;border:1.5px solid #cfcac1;color:#a5a5a5;font-size:12px;display:flex;align-items:center;justify-content:center;flex:none">?</span>
+        </div>
+
+        <sc-if value="{{ hasListCards }}" hint-placeholder-val="{{ false }}">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:14px">
+          <sc-for list="{{ listCards }}" as="k" hint-placeholder-count="4">
+            <div style="background:#fff;border:1px solid #e2ded6;border-radius:14px;padding:18px 20px;box-shadow:0 4px 24px rgba(0,0,0,.05)">
+              <div style="font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:#9a9a9a;font-weight:600">{{ k.label }}</div>
+              <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:23px;margin-top:8px;letter-spacing:-.02em">{{ k.value }}</div>
+              <div style="font-size:11.5px;color:#8A6318;margin-top:3px">{{ k.hint }}</div>
+            </div>
+          </sc-for>
+        </div>
+        </sc-if>
+
+        <div style="display:flex;align-items:stretch;gap:0;flex-wrap:wrap;background:#fff;border:1px solid #e2ded6;border-radius:14px;box-shadow:0 4px 24px rgba(0,0,0,.05);overflow:hidden;margin-bottom:12px">
+          <input type="text" value="{{ busca }}" onChange="{{ onBusca }}" placeholder="Pesquisar por Todos" style="flex:1 1 240px;min-width:180px;padding:14px 18px;font-size:14.5px;border:none;background:#fff" />
+          <div style="display:flex;flex:1 1 auto;border-left:1px solid #eeebe6;padding:8px 14px;flex-direction:column;justify-content:center;min-width:130px">
+            <div style="font-size:10px;color:#a5a5a5;letter-spacing:.06em">Campo</div>
+            <select value="{{ campo }}" onChange="{{ onCampo }}" style="border:none;background:none;font-size:13.5px;color:#2A2A2A;padding:2px 0;width:100%">
+              <sc-for list="{{ campoOpts }}" as="c" hint-placeholder-count="3"><option value="{{ c }}">{{ c }}</option></sc-for>
+            </select>
+          </div>
+          <div style="display:flex;flex:0 1 auto;border-left:1px solid #eeebe6;padding:8px 14px;flex-direction:column;justify-content:center;min-width:120px">
+            <div style="font-size:10px;color:#a5a5a5;letter-spacing:.06em">Período</div>
+            <input type="date" value="{{ de }}" onChange="{{ onDe }}" style="border:none;background:none;font-size:13px;color:#2A2A2A;padding:2px 0;width:100%" />
+          </div>
+          <div style="display:flex;flex:0 1 auto;border-left:1px solid #eeebe6;padding:8px 14px;flex-direction:column;justify-content:center;min-width:120px">
+            <div style="font-size:10px;color:#a5a5a5;letter-spacing:.06em">até</div>
+            <input type="date" value="{{ ate }}" onChange="{{ onAte }}" style="border:none;background:none;font-size:13px;color:#2A2A2A;padding:2px 0;width:100%" />
+          </div>
+          <button title="Pesquisar" style="flex:none;padding:0 20px;border:none;border-left:1px solid #eeebe6;background:#FAF9F7;color:#8A6318;font-size:16px;cursor:pointer" style-hover="background:#F5F4F2">⌕</button>
+        </div>
+
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap">
+          <select value="{{ colsSel }}" onChange="{{ onColsSel }}" style="padding:9px 14px;font-size:13px;border:1px solid #e2ded6;border-radius:10px;background:#fff;color:#4a4a4a">
+            <sc-for list="{{ colsOpts }}" as="c" hint-placeholder-count="3"><option value="{{ c }}">{{ c }}</option></sc-for>
+          </select>
+          <sc-if value="{{ hasFiltros }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex;gap:6px;flex-wrap:wrap">
+              <sc-for list="{{ filtros }}" as="f" hint-placeholder-count="4">
+                <button onClick="{{ f.go }}" style="{{ f.style }}">{{ f.label }}</button>
+              </sc-for>
+            </div>
+          </sc-if>
+          <button style="margin-left:auto;display:flex;align-items:center;gap:7px;padding:9px 16px;border:1px solid #e2ded6;border-radius:10px;background:#fff;font-size:13px;color:#4a4a4a;cursor:pointer" style-hover="border-color:#C79A3B;color:#8A6318">⤓ Exportar</button>
+        </div>
+
+        <div style="background:#fff;border:1px solid #e2ded6;border-radius:14px;box-shadow:0 4px 24px rgba(0,0,0,.05);overflow:hidden">
+          <div style="overflow-x:auto">
+            <table style="width:100%;border-collapse:collapse;min-width:760px">
+              <thead>
+                <tr style="background:#FAF9F7;border-bottom:1px solid #e7e4df">
+                  <sc-for list="{{ cols }}" as="c" hint-placeholder-count="7"><th style="{{ c.style }}">{{ c.label }}</th></sc-for>
+                </tr>
+              </thead>
+              <tbody>
+                <sc-for list="{{ rows }}" as="r" hint-placeholder-count="8">
+                  <tr onClick="{{ r.select }}" style="{{ r.style }}">
+                    <sc-for list="{{ r.cells }}" as="c" hint-placeholder-count="7"><td style="{{ c.style }}">{{ c.v }}</td></sc-for>
+                  </tr>
+                </sc-for>
+              </tbody>
+            </table>
+          </div>
+          <sc-if value="{{ isEmpty }}" hint-placeholder-val="{{ false }}">
+            <div style="padding:46px;text-align:center;color:#9a9a9a;font-size:14px">Nenhum registro encontrado no período.</div>
+          </sc-if>
+          <div style="display:flex;align-items:center;gap:12px;padding:11px 18px;border-top:1px solid #f0ede8;background:#FDFCFB;font-size:12px;color:#8a8a8a;flex-wrap:wrap">
+            <span>{{ rowCount }} registro(s)</span>
+            <span style="margin-left:auto">{{ selInfo }}</span>
+          </div>
+        </div>
+      </div>
+      </sc-if>
+
+      <sc-if value="{{ isNova }}" hint-placeholder-val="{{ false }}">
+      <div style="animation:gfFade .3s">
+        <h1 style="margin:0 0 16px;font-family:'Nunito',sans-serif;font-weight:900;font-size:clamp(21px,2.6vw,27px);letter-spacing:-.015em">{{ novaTitulo }}</h1>
+        <div style="display:flex;gap:16px;flex-wrap:wrap;align-items:flex-start">
+          <div style="flex:1 1 440px;min-width:290px;display:flex;flex-direction:column;gap:14px">
+            <div style="background:#fff;border:1px solid #e2ded6;border-radius:14px;box-shadow:0 4px 24px rgba(0,0,0,.05);padding:22px">
+              <h3 style="margin:0 0 14px;font-family:'Nunito',sans-serif;font-weight:800;font-size:15px">Tipo de documento</h3>
+              <div style="display:flex;gap:8px;flex-wrap:wrap">
+                <sc-for list="{{ tiposDoc }}" as="t" hint-placeholder-count="4"><button onClick="{{ t.go }}" style="{{ t.style }}">{{ t.label }}</button></sc-for>
+              </div>
+            </div>
+
+            <div style="background:#fff;border:1px solid #e2ded6;border-radius:14px;box-shadow:0 4px 24px rgba(0,0,0,.05);padding:22px">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+                <h3 style="margin:0;font-family:'Nunito',sans-serif;font-weight:800;font-size:15px">Cliente</h3>
+                <button onClick="{{ openNovoCliente }}" style="background:none;border:none;color:#8A6318;font-size:13px;font-weight:600;cursor:pointer;padding:0">+ Cadastrar cliente</button>
+              </div>
+              <select value="{{ novaCliente }}" onChange="{{ onNovaCliente }}" style="width:100%;padding:12px 14px;font-size:14.5px;border:1px solid #e2ded6;border-radius:10px;background:#fff">
+                <option value="">NÃO CADASTRADO</option>
+                <sc-for list="{{ clientesOpts }}" as="c" hint-placeholder-count="4"><option value="{{ c.id }}">{{ c.nome }}</option></sc-for>
+              </select>
+            </div>
+
+            <div style="background:#fff;border:1px solid #e2ded6;border-radius:14px;box-shadow:0 4px 24px rgba(0,0,0,.05);padding:22px">
+              <h3 style="margin:0 0 12px;font-family:'Nunito',sans-serif;font-weight:800;font-size:15px">Produtos e serviços</h3>
+              <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px">
+                <select value="{{ addSel }}" onChange="{{ onAddSel }}" style="flex:1;min-width:200px;padding:12px 14px;font-size:14px;border:1px solid #e2ded6;border-radius:10px;background:#fff">
+                  <option value="">Selecione um item do catálogo…</option>
+                  <sc-for list="{{ catalogoOpts }}" as="o" hint-placeholder-count="6"><option value="{{ o.id }}">{{ o.label }}</option></sc-for>
+                </select>
+                <button onClick="{{ addItem }}" style="padding:12px 22px;border:none;border-radius:10px;background:#0D0D0D;color:#fff;font-weight:600;font-size:14px;cursor:pointer" style-hover="background:#2A2A2A">Adicionar</button>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:8px">
+                <sc-for list="{{ itensNova }}" as="i" hint-placeholder-count="2">
+                  <div style="border:1px solid #eeebe6;border-radius:12px;padding:12px 13px;display:flex;gap:11px;align-items:center;flex-wrap:wrap;background:#FDFCFB">
+                    <div style="flex:1;min-width:150px">
+                      <div style="font-size:14px;font-weight:600">{{ i.nome }}</div>
+                      <div style="font-size:11px;color:#9a9a9a;letter-spacing:.06em;text-transform:uppercase">{{ i.meta }}</div>
+                    </div>
+                    <div style="display:flex;align-items:center;gap:8px">
+                      <div>
+                        <div style="font-size:9.5px;color:#9a9a9a;text-transform:uppercase;letter-spacing:.1em;margin-bottom:3px">Qtd</div>
+                        <input type="number" value="{{ i.qtd }}" onChange="{{ i.onQtd }}" style="width:72px;padding:8px 10px;font-size:14px;border:1px solid #e2ded6;border-radius:8px;text-align:right" />
+                      </div>
+                      <div>
+                        <div style="font-size:9.5px;color:#9a9a9a;text-transform:uppercase;letter-spacing:.1em;margin-bottom:3px">Valor un.</div>
+                        <input type="number" value="{{ i.preco }}" onChange="{{ i.onPreco }}" style="width:90px;padding:8px 10px;font-size:14px;border:1px solid #e2ded6;border-radius:8px;text-align:right" />
+                      </div>
+                      <div style="text-align:right;min-width:90px">
+                        <div style="font-size:9.5px;color:#9a9a9a;text-transform:uppercase;letter-spacing:.1em;margin-bottom:3px">Total</div>
+                        <div style="font-size:15px;font-weight:700;padding:8px 0">{{ i.total }}</div>
+                      </div>
+                      <button onClick="{{ i.del }}" title="Remover" style="background:none;border:none;color:#b98080;font-size:17px;cursor:pointer;padding:6px">×</button>
+                    </div>
+                  </div>
+                </sc-for>
+              </div>
+              <sc-if value="{{ semItens }}" hint-placeholder-val="{{ true }}">
+                <div style="border:1px dashed #ddd9d3;border-radius:12px;padding:32px;text-align:center;color:#a5a5a5;font-size:13.5px">Nenhum item adicionado.</div>
+              </sc-if>
+            </div>
+
+            <div style="background:#fff;border:1px solid #e2ded6;border-radius:14px;box-shadow:0 4px 24px rgba(0,0,0,.05);padding:22px">
+              <h3 style="margin:0 0 12px;font-family:'Nunito',sans-serif;font-weight:800;font-size:15px">Observações</h3>
+              <textarea value="{{ novaObs }}" onChange="{{ onNovaObs }}" rows="3" placeholder="Prazo, condições, detalhes da execução…" style="width:100%;padding:12px 14px;font-size:14.5px;border:1px solid #e2ded6;border-radius:10px;resize:vertical;line-height:1.5"></textarea>
+            </div>
+          </div>
+
+          <div style="flex:0 1 320px;min-width:275px;position:sticky;top:20px;background:#0D0D0D;border-radius:14px;padding:24px;box-shadow:0 4px 24px rgba(0,0,0,.14)">
+            <div style="font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;color:#7d7d7d">Resumo</div>
+            <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:21px;color:#fff;margin:5px 0 20px">{{ novaTipo }}</div>
+            <div style="display:flex;justify-content:space-between;font-size:14px;color:#b5b5b5;padding:8px 0"><span>Qtd. itens vendidos</span><span style="color:#fff">{{ resumoQtd }}</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:14px;color:#b5b5b5;padding:8px 0"><span>Total produtos</span><span style="color:#fff">{{ resumoSub }}</span></div>
+            <div style="display:flex;justify-content:space-between;align-items:center;font-size:14px;color:#b5b5b5;padding:8px 0;gap:10px">
+              <span>Desconto (R$)</span>
+              <input type="number" value="{{ novaDesc }}" onChange="{{ onNovaDesc }}" style="width:98px;padding:7px 10px;font-size:14px;border:1px solid rgba(255,255,255,.15);border-radius:8px;background:rgba(255,255,255,.06);color:#fff;text-align:right" />
+            </div>
+            <div style="display:flex;justify-content:flex-end;font-size:12px;color:#7d7d7d;padding:0 0 12px">{{ resumoDescPct }}</div>
+            <div style="height:1px;background:rgba(255,255,255,.1);margin:4px 0 14px"></div>
+            <div style="display:flex;justify-content:space-between;align-items:baseline">
+              <span style="font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:#7d7d7d">Valor total</span>
+              <span style="font-family:'Nunito',sans-serif;font-weight:900;font-size:27px;background:linear-gradient(160deg,#F0D18A,#B8862B);-webkit-background-clip:text;background-clip:text;color:transparent">{{ resumoTotal }}</span>
+            </div>
+            <button onClick="{{ salvarNota }}" style="width:100%;margin-top:22px;padding:14px;border:none;border-radius:999px;background:linear-gradient(160deg,#E0B75C,#B8862B);color:#1a1206;font-weight:700;font-size:15px;cursor:pointer;transition:transform 150ms cubic-bezier(.4,0,.2,1)" style-hover="transform:scale(1.02)" style-active="transform:scale(.97)">Gerar documento</button>
+          </div>
+        </div>
+      </div>
+      </sc-if>
+
+      <sc-if value="{{ isRel }}" hint-placeholder-val="{{ false }}">
+      <div style="animation:gfFade .3s">
+        <div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:6px">
+          <h1 style="margin:0;font-family:'Nunito',sans-serif;font-weight:900;font-size:clamp(21px,2.6vw,27px);letter-spacing:-.015em">Relatórios</h1>
+          <span style="margin-left:auto;width:22px;height:22px;border-radius:50%;border:1.5px solid #cfcac1;color:#a5a5a5;font-size:12px;display:flex;align-items:center;justify-content:center;flex:none">?</span>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;border-bottom:1px solid #e2ded6;margin-bottom:16px">
+          <sc-for list="{{ relGrupos }}" as="g" hint-placeholder-count="5"><button onClick="{{ g.go }}" style="{{ g.style }}">{{ g.label }}</button></sc-for>
+        </div>
+        <div style="display:flex;gap:16px;flex-wrap:wrap;align-items:flex-start">
+          <div style="flex:0 1 300px;min-width:250px;background:#fff;border:1px solid #e2ded6;border-radius:14px;box-shadow:0 4px 24px rgba(0,0,0,.05);padding:14px">
+            <input type="text" placeholder="Pesquisar relatório" style="width:100%;padding:10px 13px;font-size:13.5px;border:1px solid #e2ded6;border-radius:10px;margin-bottom:10px" />
+            <div style="display:flex;flex-direction:column;gap:2px">
+              <sc-for list="{{ relList }}" as="r" hint-placeholder-count="6"><button onClick="{{ r.go }}" style="{{ r.style }}">{{ r.label }}</button></sc-for>
+            </div>
+          </div>
+          <div style="flex:1 1 400px;min-width:290px;background:#fff;border:1px solid #e2ded6;border-radius:14px;box-shadow:0 4px 24px rgba(0,0,0,.05);padding:24px">
+            <h2 style="margin:0 0 4px;font-family:'Nunito',sans-serif;font-weight:800;font-size:19px">{{ relTitulo }}</h2>
+            <div style="font-size:13px;color:#8a8a8a;margin-bottom:22px">Defina os filtros e gere o relatório.</div>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px">
+              <sc-for list="{{ relFields }}" as="f" hint-placeholder-count="6">
+                <div>
+                  <label style="display:block;font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#7a7a7a;margin-bottom:6px">{{ f.label }}</label>
+                  <sc-if value="{{ f.isSelect }}" hint-placeholder-val="{{ false }}">
+                    <select defaultValue="{{ f.value }}" style="width:100%;padding:11px 13px;font-size:14px;border:1px solid #e2ded6;border-radius:10px;background:#fff">
+                      <sc-for list="{{ f.options }}" as="o" hint-placeholder-count="2"><option value="{{ o }}">{{ o }}</option></sc-for>
+                    </select>
+                  </sc-if>
+                  <sc-if value="{{ f.isInput }}" hint-placeholder-val="{{ true }}">
+                    <input type="text" defaultValue="{{ f.value }}" style="width:100%;padding:11px 13px;font-size:14px;border:1px solid #e2ded6;border-radius:10px" />
+                  </sc-if>
+                </div>
+              </sc-for>
+            </div>
+            <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:24px">
+              <button style="padding:12px 22px;border:1px solid #e2ded6;border-radius:999px;background:#fff;font-size:13.5px;font-weight:600;color:#2A2A2A;cursor:pointer" style-hover="border-color:#C79A3B;color:#8A6318">⎙ Imprimir</button>
+              <button style="padding:12px 24px;border:none;border-radius:999px;background:linear-gradient(160deg,#E0B75C,#B8862B);color:#1a1206;font-weight:700;font-size:13.5px;cursor:pointer;transition:transform 150ms cubic-bezier(.4,0,.2,1)" style-hover="transform:scale(1.03)" style-active="transform:scale(.97)">Visualizar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      </sc-if>
+
+      <sc-if value="{{ isForm }}" hint-placeholder-val="{{ false }}">
+      <div style="animation:gfFade .3s;max-width:960px">
+        <h1 style="margin:0 0 4px;font-family:'Nunito',sans-serif;font-weight:900;font-size:clamp(21px,2.6vw,27px);letter-spacing:-.015em">{{ formTitle }}</h1>
+        <div style="font-size:13.5px;color:#8a8a8a;margin-bottom:16px">{{ formSub }}</div>
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <sc-for list="{{ formSections }}" as="sec" hint-placeholder-count="2">
+            <div style="background:#fff;border:1px solid #e2ded6;border-radius:14px;box-shadow:0 4px 24px rgba(0,0,0,.05);padding:24px">
+              <h3 style="margin:0 0 16px;font-family:'Nunito',sans-serif;font-weight:800;font-size:15px">{{ sec.label }}</h3>
+              <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px">
+                <sc-for list="{{ sec.fields }}" as="f" hint-placeholder-count="4">
+                  <div style="{{ f.wrapStyle }}">
+                    <label style="display:block;font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#7a7a7a;margin-bottom:6px">{{ f.label }}</label>
+                    <sc-if value="{{ f.isSelect }}" hint-placeholder-val="{{ false }}">
+                      <select defaultValue="{{ f.value }}" style="width:100%;padding:11px 13px;font-size:14px;border:1px solid #e2ded6;border-radius:10px;background:#fff">
+                        <sc-for list="{{ f.options }}" as="o" hint-placeholder-count="2"><option value="{{ o }}">{{ o }}</option></sc-for>
+                      </select>
+                    </sc-if>
+                    <sc-if value="{{ f.isInput }}" hint-placeholder-val="{{ true }}">
+                      <input type="text" defaultValue="{{ f.value }}" style="width:100%;padding:11px 13px;font-size:14px;border:1px solid #e2ded6;border-radius:10px" />
+                    </sc-if>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </sc-for>
+
+          <sc-if value="{{ hasFormTable }}" hint-placeholder-val="{{ false }}">
+          <div style="background:#fff;border:1px solid #e2ded6;border-radius:14px;box-shadow:0 4px 24px rgba(0,0,0,.05);overflow:hidden">
+            <div style="display:flex;align-items:center;gap:12px;padding:20px 24px 14px;flex-wrap:wrap">
+              <h3 style="margin:0;font-family:'Nunito',sans-serif;font-weight:800;font-size:15px">Componentes</h3>
+              <button style="margin-left:auto;padding:9px 16px;border:1px solid #e2ded6;border-radius:999px;background:#fff;font-size:13px;font-weight:600;cursor:pointer" style-hover="border-color:#C79A3B;color:#8A6318">+ Adicionar componente</button>
+            </div>
+            <div style="overflow-x:auto">
+              <table style="width:100%;border-collapse:collapse;min-width:620px">
+                <thead>
+                  <tr style="background:#FAF9F7;border-top:1px solid #f0ede8;border-bottom:1px solid #e7e4df">
+                    <sc-for list="{{ formTableCols }}" as="c" hint-placeholder-count="5">
+                      <th style="padding:11px 14px;text-align:left;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:#8a8a8a;font-weight:600">{{ c }}</th>
+                    </sc-for>
+                  </tr>
+                </thead>
+                <tbody>
+                  <sc-for list="{{ formTableRows }}" as="r" hint-placeholder-count="4">
+                    <tr style="border-bottom:1px solid #f2efea">
+                      <sc-for list="{{ r.cells }}" as="c" hint-placeholder-count="5"><td style="{{ c.style }}">{{ c.v }}</td></sc-for>
+                    </tr>
+                  </sc-for>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          </sc-if>
+
+          <div style="display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap">
+            <button style="padding:12px 22px;border:1px solid #e2ded6;border-radius:999px;background:#fff;font-size:14px;font-weight:600;color:#6a6a6a;cursor:pointer">Cancelar</button>
+            <button style="padding:12px 26px;border:none;border-radius:999px;background:linear-gradient(160deg,#E0B75C,#B8862B);color:#1a1206;font-weight:700;font-size:14px;cursor:pointer;transition:transform 150ms cubic-bezier(.4,0,.2,1)" style-hover="transform:scale(1.03)" style-active="transform:scale(.97)">{{ formCta }}</button>
+          </div>
+        </div>
+      </div>
+      </sc-if>
+
+      <sc-if value="{{ isDoc }}" hint-placeholder-val="{{ false }}">
+      <div style="animation:gfFade .3s;max-width:780px">
+        <h1 style="margin:0 0 4px;font-family:'Nunito',sans-serif;font-weight:900;font-size:clamp(21px,2.6vw,27px);letter-spacing:-.015em">Contrato e Termos de Uso</h1>
+        <div style="font-size:13.5px;color:#8a8a8a;margin-bottom:16px">Aceito em 14/04/2026 por alex.gomes · versão 3.2</div>
+        <div style="background:#fff;border:1px solid #e2ded6;border-radius:14px;box-shadow:0 4px 24px rgba(0,0,0,.05);padding:clamp(22px,3vw,34px);display:flex;flex-direction:column;gap:22px">
+          <sc-for list="{{ docBlocks }}" as="b" hint-placeholder-count="4">
+            <div>
+              <h3 style="margin:0 0 7px;font-family:'Nunito',sans-serif;font-weight:800;font-size:15.5px">{{ b.t }}</h3>
+              <p style="margin:0;font-size:14px;line-height:1.7;color:#4a4a4a;text-wrap:pretty">{{ b.p }}</p>
+            </div>
+          </sc-for>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;padding-top:6px;border-top:1px solid #f0ede8">
+            <button style="padding:11px 20px;border:1px solid #e2ded6;border-radius:999px;background:#fff;font-size:13.5px;font-weight:600;cursor:pointer" style-hover="border-color:#C79A3B;color:#8A6318">⤓ Baixar em PDF</button>
+            <button style="padding:11px 20px;border:1px solid #e2ded6;border-radius:999px;background:#fff;font-size:13.5px;font-weight:600;cursor:pointer" style-hover="border-color:#C79A3B;color:#8A6318">⎙ Imprimir</button>
+          </div>
+        </div>
+      </div>
+      </sc-if>
+
+      <sc-if value="{{ isChangelog }}" hint-placeholder-val="{{ false }}">
+      <div style="animation:gfFade .3s;max-width:760px">
+        <h1 style="margin:0 0 4px;font-family:'Nunito',sans-serif;font-weight:900;font-size:clamp(21px,2.6vw,27px);letter-spacing:-.015em">Atualizações</h1>
+        <div style="font-size:13.5px;color:#8a8a8a;margin-bottom:16px">Sistema atualizado — versão 2.4.1 instalada em 12/09/2026</div>
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <sc-for list="{{ changelog }}" as="v" hint-placeholder-count="3">
+            <div style="background:#fff;border:1px solid #e2ded6;border-radius:14px;box-shadow:0 4px 24px rgba(0,0,0,.05);padding:22px 24px">
+              <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap">
+                <span style="font-family:'Nunito',sans-serif;font-weight:900;font-size:17px">Versão {{ v.versao }}</span>
+                <span style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#8a6318;background:rgba(199,154,59,.16);border-radius:8px;padding:4px 9px;font-weight:700">{{ v.data }}</span>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:7px">
+                <sc-for list="{{ v.itens }}" as="i" hint-placeholder-count="3">
+                  <div style="display:flex;gap:10px;font-size:14px;color:#4a4a4a;line-height:1.6">
+                    <span style="color:#C79A3B">—</span><span>{{ i }}</span>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+      </sc-if>
+
+      <sc-if value="{{ isStub }}" hint-placeholder-val="{{ false }}">
+      <div style="animation:gfFade .3s">
+        <h1 style="margin:0 0 16px;font-family:'Nunito',sans-serif;font-weight:900;font-size:clamp(21px,2.6vw,27px);letter-spacing:-.015em">{{ stubTitle }}</h1>
+        <div style="background:#fff;border:1px dashed #d8d3ca;border-radius:14px;padding:clamp(40px,7vw,80px);text-align:center">
+          <div style="font-size:32px;color:#d8cfbd;margin-bottom:14px">{{ stubIcon }}</div>
+          <div style="font-family:'Nunito',sans-serif;font-weight:800;font-size:17px;margin-bottom:6px">Módulo mapeado, ainda não desenhado</div>
+          <div style="font-size:14px;color:#8a8a8a;max-width:420px;margin:0 auto;line-height:1.6">Este item existe na estrutura do sistema. Diga qual é a prioridade e eu desenho a tela completa.</div>
+        </div>
+      </div>
+      </sc-if>
+
+      <sc-if value="{{ showActionBar }}" hint-placeholder-val="{{ false }}">
+      <div class="gf-noprint" style="position:sticky;bottom:0;margin:18px -4px -70px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:12px clamp(8px,1.5vw,16px);background:rgba(239,237,234,.94);backdrop-filter:blur(10px);border-top:1px solid #e2ded6">
+        <sc-for list="{{ actions }}" as="a" hint-placeholder-count="5"><button onClick="{{ a.go }}" style="{{ a.style }}">{{ a.label }}</button></sc-for>
+      </div>
+      </sc-if>
+
+    </div>
+  </main>
+</div>
+</sc-if>
+
+<sc-if value="{{ optionsOpen }}" hint-placeholder-val="{{ false }}">
+<div onClick="{{ closeOptions }}" class="gf-noprint" style="position:fixed;inset:0;z-index:50"></div>
+<div class="gf-noprint" style="position:fixed;right:clamp(12px,3vw,40px);bottom:74px;z-index:55;background:#fff;border:1px solid #e2ded6;border-radius:14px;box-shadow:0 16px 48px rgba(0,0,0,.2);padding:8px;min-width:220px;animation:gfIn .18s cubic-bezier(.4,0,.2,1)">
+  <div style="font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:#a09580;padding:6px 12px 8px;font-weight:600">Transformar em</div>
+  <sc-for list="{{ transformOpts }}" as="o" hint-placeholder-count="3">
+    <button onClick="{{ o.go }}" style="display:block;width:100%;text-align:left;padding:10px 12px;border:none;border-radius:10px;background:none;font-size:14px;color:#2A2A2A;cursor:pointer" style-hover="background:#F5F4F2;color:#8A6318">{{ o.label }}</button>
+  </sc-for>
+</div>
+</sc-if>
+
+<sc-if value="{{ modalOpen }}" hint-placeholder-val="{{ false }}">
+<div class="gf-noprint" style="position:fixed;inset:0;z-index:60;background:rgba(13,13,13,.55);display:flex;align-items:center;justify-content:center;padding:20px;animation:gfFade .18s">
+  <div style="width:100%;max-width:520px;max-height:88vh;overflow-y:auto;background:#fff;border-radius:16px;box-shadow:0 16px 48px rgba(0,0,0,.2);padding:26px;animation:gfIn .22s cubic-bezier(.4,0,.2,1)">
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:18px">
+      <div>
+        <h3 style="margin:0;font-family:'Nunito',sans-serif;font-weight:900;font-size:19px">{{ modalTitle }}</h3>
+        <div style="font-size:13px;color:#8a8a8a;margin-top:3px">{{ modalSub }}</div>
+      </div>
+      <button onClick="{{ closeModal }}" style="background:none;border:none;font-size:22px;color:#a5a5a5;cursor:pointer;line-height:1;padding:0 2px">×</button>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:13px">
+      <sc-for list="{{ modalFields }}" as="f" hint-placeholder-count="4">
+        <div style="{{ f.wrapStyle }}">
+          <label style="display:block;font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#7a7a7a;margin-bottom:6px">{{ f.label }}</label>
+          <sc-if value="{{ f.isSelect }}" hint-placeholder-val="{{ false }}">
+            <select value="{{ f.value }}" onChange="{{ f.onChange }}" style="width:100%;padding:11px 13px;font-size:14.5px;border:1px solid #e2ded6;border-radius:10px;background:#fff">
+              <sc-for list="{{ f.options }}" as="o" hint-placeholder-count="3"><option value="{{ o }}">{{ o }}</option></sc-for>
+            </select>
+          </sc-if>
+          <sc-if value="{{ f.isInput }}" hint-placeholder-val="{{ true }}">
+            <input type="{{ f.type }}" value="{{ f.value }}" onChange="{{ f.onChange }}" placeholder="{{ f.ph }}" style="width:100%;padding:11px 13px;font-size:14.5px;border:1px solid #e2ded6;border-radius:10px;background:#fff" />
+          </sc-if>
+        </div>
+      </sc-for>
+    </div>
+    <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:24px">
+      <button onClick="{{ closeModal }}" style="padding:12px 22px;border:1px solid #e2ded6;border-radius:999px;background:#fff;font-size:14px;font-weight:600;color:#6a6a6a;cursor:pointer">Cancelar</button>
+      <button onClick="{{ saveModal }}" style="padding:12px 26px;border:none;border-radius:999px;background:linear-gradient(160deg,#E0B75C,#B8862B);color:#1a1206;font-weight:700;font-size:14px;cursor:pointer;transition:transform 150ms cubic-bezier(.4,0,.2,1)" style-hover="transform:scale(1.03)" style-active="transform:scale(.97)">Salvar</button>
+    </div>
+  </div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isPrint }}" hint-placeholder-val="{{ false }}">
+<div style="position:fixed;inset:0;z-index:70;background:#2A2A2A;overflow-y:auto;padding:0 0 60px">
+  <div class="gf-noprint" style="position:sticky;top:0;z-index:5;background:#0D0D0D;display:flex;align-items:center;gap:12px;padding:14px clamp(14px,3vw,28px);flex-wrap:wrap">
+    <button onClick="{{ closePrint }}" style="background:none;border:1px solid rgba(255,255,255,.16);border-radius:999px;color:#cfcfcf;padding:9px 18px;font-size:13.5px;cursor:pointer" style-hover="color:#fff;border-color:#C79A3B">← Voltar</button>
+    <div style="font-size:13.5px;color:#8a8a8a">Pré-visualização do documento</div>
+    <button onClick="{{ doPrint }}" style="margin-left:auto;padding:10px 20px;border:none;border-radius:999px;background:linear-gradient(160deg,#E0B75C,#B8862B);color:#1a1206;font-weight:700;font-size:13.5px;cursor:pointer">Imprimir / PDF</button>
+  </div>
+
+  <div id="gf-print" style="max-width:860px;margin:26px auto;background:#fff;padding:clamp(24px,4vw,44px) clamp(22px,4vw,46px);box-shadow:0 16px 48px rgba(0,0,0,.35);color:#16213e;font-size:12.5px;line-height:1.45">
+    <div style="display:grid;grid-template-columns:150px 1fr 1fr;gap:14px;align-items:start">
+      <img src="assets/gessofort-logo.png" alt="Gesso Fort" style="width:150px" />
+      <div style="text-align:center;padding-top:2px">
+        <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:30px;letter-spacing:-.01em;color:#16213e">{{ pTipo }}</div>
+        <div style="font-size:9.5px;font-weight:700;line-height:1.5;margin-top:8px;color:#16213e">
+          NÃO É DOCUMENTO FISCAL - NÃO É VÁLIDO COMO RECIBO E COMO<br />
+          GARANTIA DE MERCADORIA - NÃO COMPROVA PAGAMENTO<br />
+          EXIJA A NOTA OU O CUPOM FISCAL
+        </div>
+      </div>
+      <div style="text-align:right;display:flex;flex-direction:column;gap:7px;padding-top:2px">
+        <div style="font-weight:700;font-size:13.5px">Nº {{ pNumero }}</div>
+        <div>{{ pData }}</div>
+        <div>60.560.384/0001-29</div>
+        <div>Tel: (73) 98832-2798</div>
+        <div>Rua Nina Barreto, nº 74, GALPAO - Nossa Senhora de Fátima</div>
+        <div style="font-weight:700">GESSO FORT ITABUNA</div>
+      </div>
+    </div>
+
+    <div style="border-top:1.5px solid #16213e;margin-top:14px;padding-top:7px">
+      <div style="font-family:'Nunito',sans-serif;font-weight:800;font-size:15px">Cliente</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px 16px;margin-top:8px">
+        <div>{{ pCliNome }}</div>
+        <div></div>
+        <div>CNPJ/CPF: {{ pCliDoc }}</div>
+        <div>Rua: {{ pCliRua }}</div>
+        <div style="text-align:right">Nº: {{ pCliNum }}</div>
+        <div>Bairro: {{ pCliBairro }}</div>
+        <div>Tel: {{ pCliTel }}</div>
+        <div></div>
+        <div></div>
+        <div>Município: {{ pCliMun }}</div>
+        <div style="text-align:center">CEP: {{ pCliCep }}</div>
+        <div style="font-weight:700">Vendedor: {{ pVendedor }}</div>
+      </div>
+    </div>
+
+    <table style="width:100%;border-collapse:collapse;margin-top:14px">
+      <thead>
+        <tr style="border-top:1.5px solid #16213e;border-bottom:1px solid #16213e">
+          <th style="text-align:left;padding:6px 6px;font-family:'Nunito',sans-serif;font-weight:800;font-size:13.5px;white-space:nowrap">Código</th>
+          <th style="text-align:left;padding:6px 10px;font-family:'Nunito',sans-serif;font-weight:800;font-size:13.5px">Descrição</th>
+          <th style="text-align:center;padding:6px 6px;font-family:'Nunito',sans-serif;font-weight:800;font-size:13.5px">Un</th>
+          <th style="text-align:right;padding:6px 6px;font-family:'Nunito',sans-serif;font-weight:800;font-size:13.5px">Qtd</th>
+          <th style="text-align:right;padding:6px 10px;font-family:'Nunito',sans-serif;font-weight:800;font-size:13.5px">Preço</th>
+          <th style="text-align:right;padding:6px 10px;font-family:'Nunito',sans-serif;font-weight:800;font-size:13.5px">Desconto</th>
+          <th style="text-align:right;padding:6px 6px;font-family:'Nunito',sans-serif;font-weight:800;font-size:13.5px">Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        <sc-for list="{{ pItens }}" as="it" hint-placeholder-count="3">
+          <tr>
+            <td style="padding:5px 6px">{{ it.cod }}</td>
+            <td style="padding:5px 10px">{{ it.nome }}</td>
+            <td style="padding:5px 6px;text-align:center">{{ it.un }}</td>
+            <td style="padding:5px 6px;text-align:right">{{ it.qtd }}</td>
+            <td style="padding:5px 10px;text-align:right">{{ it.preco }}</td>
+            <td style="padding:5px 10px;text-align:right">{{ it.desc }}</td>
+            <td style="padding:5px 6px;text-align:right">{{ it.total }}</td>
+          </tr>
+        </sc-for>
+      </tbody>
+    </table>
+
+    <div style="border-top:1px solid #16213e;border-bottom:1.5px solid #16213e;padding:7px 0;display:grid;grid-template-columns:1fr auto auto auto;gap:22px;align-items:baseline">
+      <div>Total Frete: {{ pFrete }}</div>
+      <div style="min-width:110px;text-align:right">{{ pSub }}</div>
+      <div style="min-width:90px;text-align:right">{{ pDesc }}</div>
+      <div style="min-width:110px;text-align:right;font-weight:700">{{ pTotal }}</div>
+    </div>
+
+    <div style="margin-top:12px;display:flex;flex-direction:column;gap:9px">
+      <div style="font-family:'Nunito',sans-serif;font-weight:800;font-size:15px">Transportador</div>
+      <div style="display:grid;grid-template-columns:1fr auto 1fr;gap:16px">
+        <div>Forma Pgto: {{ pFormaPgto }}</div>
+        <div>Validade: {{ pValidade }}</div>
+        <div></div>
+      </div>
+      <div style="font-family:'Nunito',sans-serif;font-weight:800;font-size:15px;margin-top:4px">Observações</div>
+      <div style="white-space:pre-wrap;min-height:46px;border-bottom:1px solid #c9ccd8;padding-bottom:8px">{{ pObs }}</div>
+    </div>
+
+    <div style="margin-top:52px;display:flex;justify-content:center">
+      <div style="width:min(330px,80%);text-align:center">
+        <div style="border-top:1px solid #16213e;padding-top:7px;font-size:12px">{{ pCliNome }}</div>
+        <div style="font-size:10px;letter-spacing:.14em;text-transform:uppercase;margin-top:3px;color:#5a6280">Assinatura do cliente</div>
+      </div>
+    </div>
+  </div>
+</div>
+</sc-if>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:900}}">
+class Component extends DCLogic {
+  state = {
+    logged: false, loginUser: 'alex.gomes', loginPass: '123456',
+    tabs: [{ id: 'home', label: 'Home' }],
+    active: 'home', fly: null, homeTab: 'atalhos',
+    busca: '', campo: 'Todos', de: '2026-06-01', ate: '2026-09-17',
+    colsSel: '9 Coluna(s)', filtro: 'Todos', sel: null, optionsOpen: false,
+    modal: null, form: {}, editId: null, leads: [],
+    novaTipo: 'Orçamento', novaCliente: '', novaObs: '', novaDesc: 0, itens: [], addSel: '',
+    printId: null, seq: 12,
+    materiais: [
+      { id: 'm1', cod: '101', nome: 'Placa de Gesso Standard 1,80 x 1,20m', cat: 'Forros', un: 'pç', preco: 22.5, estoque: 240 },
+      { id: 'm2', cod: '102', nome: 'Placa Drywall ST 1,80 x 1,20m 12,5mm', cat: 'Drywall', un: 'pç', preco: 46.9, estoque: 96 },
+      { id: 'm3', cod: '118', nome: 'Moldura de Gesso Clássica 8cm — 2m', cat: 'Molduras', un: 'barra', preco: 18, estoque: 310 },
+      { id: 'm4', cod: '124', nome: 'Sanca Aberta Pré-moldada 10cm — 2m', cat: 'Sancas', un: 'barra', preco: 34, estoque: 128 },
+      { id: 'm5', cod: '140', nome: 'Placa Parede 3D Onda 50 x 50cm', cat: 'Parede 3D', un: 'm²', preco: 89.9, estoque: 64 },
+      { id: 'm6', cod: '155', nome: 'Perfil Montante 48mm — 3m', cat: 'Divisórias', un: 'barra', preco: 21.4, estoque: 180 },
+      { id: 'm7', cod: '160', nome: 'Massa para Rejunte Drywall 5kg', cat: 'Reboco', un: 'saco', preco: 32, estoque: 75 },
+      { id: 'm8', cod: '171', nome: 'Rosácea Decorativa Ø 40cm', cat: 'Decoração', un: 'un', preco: 62, estoque: 22 }
+    ],
+    servicos: [
+      { id: 's1', cod: 'S01', nome: 'Instalação de forro de gesso liso', cat: 'Forros', un: 'm²', preco: 55, prazo: '2 a 4 dias' },
+      { id: 's2', cod: 'S02', nome: 'Execução de sanca com iluminação', cat: 'Sancas', un: 'm linear', preco: 98, prazo: '3 a 5 dias' },
+      { id: 's3', cod: 'S03', nome: 'Instalação de moldura de gesso', cat: 'Molduras', un: 'm linear', preco: 28, prazo: '1 a 2 dias' },
+      { id: 's4', cod: 'S04', nome: 'Montagem de parede drywall dupla face', cat: 'Drywall', un: 'm²', preco: 135, prazo: '3 a 6 dias' },
+      { id: 's5', cod: 'S05', nome: 'Aplicação de parede 3D', cat: 'Parede 3D', un: 'm²', preco: 145, prazo: '2 a 3 dias' },
+      { id: 's6', cod: 'S06', nome: 'Reboco e acabamento em massa fina', cat: 'Reboco', un: 'm²', preco: 42, prazo: '2 a 4 dias' },
+      { id: 's7', cod: 'S07', nome: 'Divisória em drywall com isolamento', cat: 'Divisórias', un: 'm²', preco: 168, prazo: '4 a 7 dias' }
+    ],
+    clientes: [
+      { id: 'c1', nome: 'Construtora Vale Verde LTDA', fantasia: 'Vale Verde', contato: 'Eng. Rafael Musa', doc: '12.884.301/0001-45', tel: '(73) 3613-2200', cel: '(73) 99114-2200', municipio: 'Itabuna', uf: 'BA', ativo: 'Sim', dtCompra: '09/09/2026', nasc: '—', rua: 'Av. Cinquentenário', num: '1120', bairro: 'Centro', cep: '45600-000', end: 'Av. Cinquentenário, 1120 — Itabuna, BA' },
+      { id: 'c2', nome: 'Marcos Antônio Silveira', fantasia: '—', contato: 'Marcos', doc: '842.115.905-30', tel: '(73) 3615-7702', cel: '(73) 99814-7702', municipio: 'Itabuna', uf: 'BA', ativo: 'Sim', dtCompra: '04/09/2026', nasc: '14/03/1984', rua: 'Rua do Cajueiro', num: '45', bairro: 'São Caetano', cep: '45604-095', end: 'Rua do Cajueiro, 45 — Itabuna, BA' },
+      { id: 'c3', nome: 'Residencial Parque das Palmeiras', fantasia: 'Palmeiras', contato: 'Síndica Ana Lima', doc: '29.774.180/0001-08', tel: '(73) 3212-9080', cel: '(73) 98800-9080', municipio: 'Ilhéus', uf: 'BA', ativo: 'Sim', dtCompra: '02/09/2026', nasc: '—', rua: 'Rod. Ilhéus-Itabuna', num: 'km 8', bairro: 'Iguape', cep: '45650-000', end: 'Rod. Ilhéus-Itabuna, km 8 — Ilhéus, BA' },
+      { id: 'c4', nome: 'Juliana Ferraz Andrade', fantasia: '—', contato: 'Juliana', doc: '017.552.335-91', tel: '—', cel: '(73) 98123-4455', municipio: 'Itabuna', uf: 'BA', ativo: 'Não', dtCompra: '31/08/2026', nasc: '02/11/1991', rua: 'Rua Nina Barreto', num: '210', bairro: 'Alto Maron', cep: '45605-000', end: 'Rua Nina Barreto, 210 — Itabuna, BA' }
+    ],
+    notas: [
+      { id: 'n1', numero: '000011', tipo: 'Orçamento', cliente: 'c1', data: '09/09/2026 12:48', validade: '12/09/2026', sit: 'Pendente', desc: 200, obs: 'Execução em 3 pavimentos. Andaime por conta do contratante.', itens: [{ nome: 'Instalação de forro de gesso liso', un: 'm²', qtd: 120, preco: 55 }, { nome: 'Placa de Gesso Standard 1,80 x 1,20m', un: 'pç', qtd: 85, preco: 22.5 }] },
+      { id: 'n2', numero: '000010', tipo: 'Orçamento', cliente: 'c2', data: '04/09/2026 17:18', validade: '07/09/2026', sit: 'Cancelado', desc: 0, obs: 'Validade de 15 dias.', itens: [{ nome: 'Execução de sanca com iluminação', un: 'm linear', qtd: 32, preco: 98 }] },
+      { id: 'n3', numero: '000009', tipo: 'Pedido de Venda', cliente: 'c3', data: '02/09/2026 17:15', validade: '05/09/2026', sit: 'Importado', desc: 150, obs: '', itens: [{ nome: 'Placa Drywall ST 1,80 x 1,20m 12,5mm', un: 'pç', qtd: 60, preco: 46.9 }, { nome: 'Perfil Montante 48mm — 3m', un: 'barra', qtd: 40, preco: 21.4 }] },
+      { id: 'n4', numero: '000008', tipo: 'Ordem de Serviço', cliente: 'c4', data: '31/08/2026 08:34', validade: '03/09/2026', sit: 'Pendente', desc: 0, obs: 'Pagamento à vista.', itens: [{ nome: 'Aplicação de parede 3D', un: 'm²', qtd: 14, preco: 145 }] },
+      { id: 'n5', numero: '000007', tipo: 'Orçamento', cliente: 'c1', data: '31/08/2026 08:27', validade: '03/09/2026', sit: 'Importado', desc: 0, obs: '', itens: [{ nome: 'Reboco e acabamento em massa fina', un: 'm²', qtd: 62, preco: 42 }] },
+      { id: 'n6', numero: '000006', tipo: 'Pedido de Compra', cliente: 'c3', data: '30/08/2026 01:58', validade: '02/09/2026', sit: 'Pendente', desc: 0, obs: '', itens: [{ nome: 'Massa para Rejunte Drywall 5kg', un: 'saco', qtd: 12, preco: 32 }] },
+      { id: 'n7', numero: '000005', tipo: 'Recibo', cliente: 'c2', data: '30/08/2026 01:32', validade: '02/09/2026', sit: 'Cancelado', desc: 0, obs: '', itens: [{ nome: 'Instalação de moldura de gesso', un: 'm linear', qtd: 25, preco: 28 }] }
+    ]
+  };
+
+  cats = ['Forros', 'Molduras', 'Sancas', 'Divisórias', 'Drywall', 'Parede 3D', 'Reboco', 'Decoração'];
+  tipos = ['Pedido de Compra', 'Orçamento', 'Ordem de Serviço', 'Recibo'];
+
+  seed = {
+    fornecedores: [
+      { cod: '01', nome: 'Gipsita Nordeste Mineração LTDA', cnpj: '08.442.190/0001-22', contato: 'Cláudio Mendes', cidade: 'Araripina/PE', tel: '(87) 3873-1200', ultima: '02/09/2026' },
+      { cod: '02', nome: 'Placol Indústria de Gesso', cnpj: '19.330.744/0001-61', contato: 'Simone Aguiar', cidade: 'Trindade/PE', tel: '(87) 3877-4410', ultima: '28/08/2026' },
+      { cod: '03', nome: 'Knauf do Brasil — Distribuidor BA', cnpj: '61.100.205/0004-70', contato: 'Rogério Pinto', cidade: 'Salvador/BA', tel: '(71) 3342-9900', ultima: '19/08/2026' },
+      { cod: '04', nome: 'Ferragens Maron Materiais', cnpj: '05.774.812/0001-14', contato: 'Elvis Souza', cidade: 'Itabuna/BA', tel: '(73) 3211-0788', ultima: '11/09/2026' }
+    ],
+    transportadoras: [
+      { cod: '01', nome: 'Translitoral Cargas LTDA', cnpj: '14.205.663/0001-90', veiculo: 'Truck · OKP-4C21', cidade: 'Itabuna/BA', tel: '(73) 3614-5000' },
+      { cod: '02', nome: 'Rodo Sul Bahia Transportes', cnpj: '22.881.004/0001-37', veiculo: 'Carreta · PHT-8J55', cidade: 'Vitória da Conquista/BA', tel: '(77) 3422-8100' },
+      { cod: '03', nome: 'Entrega Própria — Gesso Fort', cnpj: '60.560.384/0001-29', veiculo: 'VUC · QMB-1F09', cidade: 'Itabuna/BA', tel: '(73) 98832-2798' }
+    ],
+    vendedores: [
+      { cod: '01', nome: 'Caliane Galdino', com: '3,0 %', meta: 45000, vendas: 38420, sit: 'Ativo' },
+      { cod: '02', nome: 'Alex Gomes', com: '2,0 %', meta: 30000, vendas: 31150, sit: 'Ativo' },
+      { cod: '03', nome: 'Deyse Nascimento', com: '3,5 %', meta: 28000, vendas: 9600, sit: 'Inativo' }
+    ],
+    pedcompra: [
+      { num: '000042', emissao: '11/09/2026 09:12', forn: 'Ferragens Maron Materiais', itens: 7, total: 4820.4, previsao: '18/09/2026', sit: 'Pendente' },
+      { num: '000041', emissao: '02/09/2026 14:40', forn: 'Gipsita Nordeste Mineração LTDA', itens: 3, total: 12960, previsao: '12/09/2026', sit: 'Importado' },
+      { num: '000040', emissao: '28/08/2026 08:05', forn: 'Placol Indústria de Gesso', itens: 5, total: 7315.5, previsao: '05/09/2026', sit: 'Importado' },
+      { num: '000039', emissao: '19/08/2026 16:22', forn: 'Knauf do Brasil — Distribuidor BA', itens: 2, total: 2688, previsao: '29/08/2026', sit: 'Cancelado' }
+    ],
+    notaentrada: [
+      { nf: '118.442', chave: '2926 0908 4421 9000 0122 5500 1000', forn: 'Gipsita Nordeste Mineração LTDA', emissao: '10/09/2026', valor: 12960, itens: 3, sit: 'Escriturada' },
+      { nf: '004.907', chave: '2926 0919 3307 4400 0161 5500 1000', forn: 'Placol Indústria de Gesso', emissao: '03/09/2026', valor: 7315.5, itens: 5, sit: 'Escriturada' },
+      { nf: '772.010', chave: '2926 0861 1002 0500 0470 5500 1000', forn: 'Knauf do Brasil — Distribuidor BA', emissao: '26/08/2026', valor: 2688, itens: 2, sit: 'Pendente' },
+      { nf: '000.318', chave: '2926 0805 7748 1200 0114 5500 1000', forn: 'Ferragens Maron Materiais', emissao: '12/09/2026', valor: 4820.4, itens: 7, sit: 'Pendente' }
+    ],
+    mde: [
+      { chave: '2926 0908 4421 9000 0122 5500 1000 0118 4421', forn: 'Gipsita Nordeste Mineração LTDA', emissao: '10/09/2026', valor: 12960, sit: 'Confirmada' },
+      { chave: '2926 0861 1002 0500 0470 5500 1000 0077 2010', forn: 'Knauf do Brasil — Distribuidor BA', emissao: '26/08/2026', valor: 2688, sit: 'Sem manifestação' },
+      { chave: '2926 0805 7748 1200 0114 5500 1000 0000 0318', forn: 'Ferragens Maron Materiais', emissao: '12/09/2026', valor: 4820.4, sit: 'Ciência' }
+    ],
+    faturamento: [
+      { num: '000019', cliente: 'Construtora Vale Verde LTDA', emissao: '09/09/2026', venc: '09/10/2026', valor: 8462.5, forma: 'Boleto 30 dias', sit: 'Emitida' },
+      { num: '000018', cliente: 'Residencial Parque das Palmeiras', emissao: '02/09/2026', venc: '02/09/2026', valor: 3520, forma: 'Pix', sit: 'Emitida' },
+      { num: '000017', cliente: 'Juliana Ferraz Andrade', emissao: '31/08/2026', venc: '30/09/2026', valor: 2030, forma: 'Cartão 3x', sit: 'Pendente' },
+      { num: '000016', cliente: 'Marcos Antônio Silveira', emissao: '28/08/2026', venc: '28/08/2026', valor: 3136, forma: 'Dinheiro', sit: 'Cancelada' }
+    ],
+    receber: [
+      { doc: '000019/1', cliente: 'Construtora Vale Verde LTDA', venc: '09/10/2026', valor: 8462.5, recebido: 0, sit: 'A receber' },
+      { doc: '000018/1', cliente: 'Residencial Parque das Palmeiras', venc: '02/09/2026', valor: 3520, recebido: 3520, sit: 'Recebido' },
+      { doc: '000017/1', cliente: 'Juliana Ferraz Andrade', venc: '30/09/2026', valor: 676.67, recebido: 0, sit: 'A receber' },
+      { doc: '000017/2', cliente: 'Juliana Ferraz Andrade', venc: '30/10/2026', valor: 676.67, recebido: 0, sit: 'A receber' },
+      { doc: '000015/1', cliente: 'Marcos Antônio Silveira', venc: '05/09/2026', valor: 1480, recebido: 0, sit: 'Vencido' }
+    ],
+    pagar: [
+      { doc: 'NF 118.442', forn: 'Gipsita Nordeste Mineração LTDA', venc: '10/10/2026', valor: 12960, cat: 'Matéria-prima', sit: 'A pagar' },
+      { doc: 'NF 004.907', forn: 'Placol Indústria de Gesso', venc: '03/10/2026', valor: 7315.5, cat: 'Matéria-prima', sit: 'A pagar' },
+      { doc: 'Aluguel 09/2026', forn: 'Imobiliária Alto Maron', venc: '10/09/2026', valor: 3200, cat: 'Ocupação', sit: 'Pago' },
+      { doc: 'Folha 09/2026', forn: 'Equipe de instalação', venc: '05/09/2026', valor: 14800, cat: 'Pessoal', sit: 'Pago' },
+      { doc: 'Energia 08/2026', forn: 'Coelba', venc: '02/09/2026', valor: 1284.9, cat: 'Utilidades', sit: 'Vencido' }
+    ],
+    banco: [
+      { data: '12/09/2026', conta: 'Banco do Brasil · 1234-5', hist: 'Recebimento Pix — Palmeiras', tipo: 'Crédito', valor: 3520, saldo: 41820.3 },
+      { data: '10/09/2026', conta: 'Banco do Brasil · 1234-5', hist: 'Pagamento aluguel setembro', tipo: 'Débito', valor: -3200, saldo: 38300.3 },
+      { data: '05/09/2026', conta: 'Caixa Econômica · 0987-1', hist: 'Folha de pagamento', tipo: 'Débito', valor: -14800, saldo: 23500.3 },
+      { data: '03/09/2026', conta: 'Banco do Brasil · 1234-5', hist: 'Boleto Vale Verde — parcela 1', tipo: 'Crédito', valor: 8462.5, saldo: 31962.8 },
+      { data: '02/09/2026', conta: 'Caixa interno', hist: 'Sangria para depósito', tipo: 'Débito', valor: -1200, saldo: 30762.8 }
+    ],
+    agenda: [
+      { data: '17/09/2026 08:30', comp: 'Medição de forro — 3 pavimentos', cliente: 'Construtora Vale Verde LTDA', resp: 'Alex Gomes', sit: 'Confirmado' },
+      { data: '17/09/2026 14:00', comp: 'Entrega de placas drywall', cliente: 'Residencial Parque das Palmeiras', resp: 'Entrega própria', sit: 'Confirmado' },
+      { data: '18/09/2026 09:00', comp: 'Visita técnica — sanca com LED', cliente: 'Juliana Ferraz Andrade', resp: 'Caliane Galdino', sit: 'Pendente' },
+      { data: '19/09/2026 16:30', comp: 'Cobrança parcela vencida', cliente: 'Marcos Antônio Silveira', resp: 'Financeiro', sit: 'Pendente' }
+    ],
+    tributacoes: [
+      { cod: 'T01', desc: 'Venda de mercadoria — Simples Nacional', cst: '102', cfop: '5102', icms: '0,00 %', pis: '0,00 %', cofins: '0,00 %' },
+      { cod: 'T02', desc: 'Venda interestadual — contribuinte', cst: '102', cfop: '6102', icms: '12,00 %', pis: '0,65 %', cofins: '3,00 %' },
+      { cod: 'T03', desc: 'Prestação de serviço — ISS Itabuna', cst: '—', cfop: '—', icms: '—', pis: '0,65 %', cofins: '3,00 %' },
+      { cod: 'T04', desc: 'Devolução de compra', cst: '202', cfop: '5202', icms: '0,00 %', pis: '0,00 %', cofins: '0,00 %' }
+    ],
+    cfop: [
+      { cod: '5102', desc: 'Venda de mercadoria adquirida de terceiros', tipo: 'Saída', aplic: 'Dentro do estado' },
+      { cod: '6102', desc: 'Venda de mercadoria — outro estado', tipo: 'Saída', aplic: 'Interestadual' },
+      { cod: '1102', desc: 'Compra para comercialização', tipo: 'Entrada', aplic: 'Dentro do estado' },
+      { cod: '5933', desc: 'Prestação de serviço sujeita ao ISSQN', tipo: 'Saída', aplic: 'Serviço' },
+      { cod: '5202', desc: 'Devolução de compra para comercialização', tipo: 'Saída', aplic: 'Devolução' }
+    ],
+    boletos: [
+      { nosso: '000000019-7', cliente: 'Construtora Vale Verde LTDA', venc: '09/10/2026', valor: 8462.5, banco: 'Banco do Brasil', sit: 'Registrado' },
+      { nosso: '000000017-3', cliente: 'Juliana Ferraz Andrade', venc: '30/09/2026', valor: 676.67, banco: 'Banco do Brasil', sit: 'Registrado' },
+      { nosso: '000000015-9', cliente: 'Marcos Antônio Silveira', venc: '05/09/2026', valor: 1480, banco: 'Caixa Econômica', sit: 'Vencido' },
+      { nosso: '000000018-1', cliente: 'Residencial Parque das Palmeiras', venc: '02/09/2026', valor: 3520, banco: 'Banco do Brasil', sit: 'Liquidado' }
+    ],
+    xmls: [
+      { chave: '2926 0960 5603 8400 0129 5500 1000 0000 0019', tipo: 'NF-e saída', emissao: '09/09/2026', valor: 8462.5, sit: 'Autorizada' },
+      { chave: '2926 0960 5603 8400 0129 5500 1000 0000 0018', tipo: 'NF-e saída', emissao: '02/09/2026', valor: 3520, sit: 'Autorizada' },
+      { chave: '2926 0908 4421 9000 0122 5500 1000 0118 4421', tipo: 'NF-e entrada', emissao: '10/09/2026', valor: 12960, sit: 'Autorizada' },
+      { chave: '2926 0960 5603 8400 0129 5500 1000 0000 0016', tipo: 'NF-e saída', emissao: '28/08/2026', valor: 3136, sit: 'Cancelada' }
+    ],
+    usuarios: [
+      { user: 'alex.gomes', nome: 'Alex Gomes', grupo: 'Administradores', acesso: '17/09/2026 07:52', sit: 'Ativo' },
+      { user: 'caliane.galdino', nome: 'Caliane Galdino', grupo: 'Vendas', acesso: '16/09/2026 18:10', sit: 'Ativo' },
+      { user: 'financeiro', nome: 'Eliane Matos', grupo: 'Financeiro', acesso: '16/09/2026 17:34', sit: 'Ativo' },
+      { user: 'deyse.n', nome: 'Deyse Nascimento', grupo: 'Vendas', acesso: '02/08/2026 11:20', sit: 'Bloqueado' }
+    ],
+    grupos: [
+      { grupo: 'Administradores', desc: 'Acesso total ao sistema', users: 1, perms: 'Todos os módulos' },
+      { grupo: 'Vendas', desc: 'Orçamentos, pedidos e clientes', users: 2, perms: 'Vendas · Cadastros' },
+      { grupo: 'Financeiro', desc: 'Contas, caixa e boletos', users: 1, perms: 'Financeiro · Relatórios' }
+    ],
+    caixa: [
+      { hora: '08:04', hist: 'Abertura de caixa', forma: '—', tipo: 'Abertura', valor: 300 },
+      { hora: '09:41', hist: 'Venda 000021 — moldura 8cm', forma: 'Dinheiro', tipo: 'Entrada', valor: 448 },
+      { hora: '11:16', hist: 'Venda 000022 — placas standard', forma: 'Pix', tipo: 'Entrada', valor: 1912.5 },
+      { hora: '13:50', hist: 'Frete entrega Alto Maron', forma: 'Dinheiro', tipo: 'Saída', valor: -180 },
+      { hora: '15:22', hist: 'Sangria para depósito bancário', forma: 'Dinheiro', tipo: 'Saída', valor: -1200 },
+      { hora: '16:05', hist: 'Venda 000023 — sanca pré-moldada', forma: 'Cartão débito', tipo: 'Entrada', valor: 1020 }
+    ]
+  };
+
+  gdefs = {
+    fornecedores: { title: 'Listagem de Fornecedores', campos: ['Todos', 'Razão social', 'CNPJ', 'Cidade'], cols: [['Cód.', 'left', 'cod'], ['Razão social', 'left', 'nome', 0, 1], ['CNPJ', 'left', 'cnpj'], ['Contato', 'left', 'contato'], ['Cidade / UF', 'left', 'cidade'], ['Telefone', 'left', 'tel'], ['Últ. compra', 'left', 'ultima']], seed: 'fornecedores', crud: 1 },
+    transportadoras: { title: 'Listagem de Transportadoras', campos: ['Todos', 'Nome', 'CNPJ', 'Placa'], cols: [['Cód.', 'left', 'cod'], ['Transportadora', 'left', 'nome', 0, 1], ['CNPJ', 'left', 'cnpj'], ['Veículo / Placa', 'left', 'veiculo'], ['Cidade / UF', 'left', 'cidade'], ['Telefone', 'left', 'tel']], seed: 'transportadoras', crud: 1 },
+    vendedores: { title: 'Listagem de Vendedores', campos: ['Todos', 'Nome', 'Situação'], cols: [['Cód.', 'left', 'cod'], ['Vendedor', 'left', 'nome', 0, 1], ['Comissão', 'right', 'com'], ['Meta do mês', 'right', 'meta', 'money'], ['Vendas do mês', 'right', 'vendas', 'money', 1], ['Situação', 'left', 'sit', 'sit']], seed: 'vendedores', crud: 1 },
+    pedcompra: { title: 'Listagem de Pedidos de Compra', campos: ['Todos', 'Número', 'Fornecedor'], filtros: ['Todos', 'Pendente', 'Importado', 'Cancelado'], filtroKey: 'sit', cols: [['Número', 'left', 'num', 0, 1], ['Emissão', 'left', 'emissao'], ['Fornecedor', 'left', 'forn'], ['Itens', 'center', 'itens'], ['Total', 'right', 'total', 'money', 1], ['Previsão', 'left', 'previsao'], ['Situação', 'left', 'sit', 'sit']], seed: 'pedcompra', doc: 1 },
+    notaentrada: { title: 'Listagem de Notas de Entrada', campos: ['Todos', 'Nº NF', 'Chave', 'Fornecedor'], filtros: ['Todos', 'Escriturada', 'Pendente'], filtroKey: 'sit', cols: [['Nº NF', 'left', 'nf', 0, 1], ['Chave de acesso', 'left', 'chave'], ['Fornecedor', 'left', 'forn'], ['Emissão', 'left', 'emissao'], ['Itens', 'center', 'itens'], ['Valor', 'right', 'valor', 'money', 1], ['Situação', 'left', 'sit', 'sit']], seed: 'notaentrada', doc: 1 },
+    mde: { title: 'Manifestação de Documento Eletrônico (MD-e)', campos: ['Todos', 'Chave', 'Fornecedor'], cols: [['Chave de acesso', 'left', 'chave'], ['Emitente', 'left', 'forn', 0, 1], ['Emissão', 'left', 'emissao'], ['Valor', 'right', 'valor', 'money', 1], ['Manifestação', 'left', 'sit', 'sit']], seed: 'mde', actions: [['⊘ Desconhecer', 'ghost'], ['◐ Dar ciência', 'normal'], ['✓ Confirmar operação', 'primary']] },
+    faturamento: { title: 'Listagem de Faturamento', campos: ['Todos', 'Número', 'Cliente'], filtros: ['Todos', 'Emitida', 'Pendente', 'Cancelada'], filtroKey: 'sit', cols: [['Número', 'left', 'num', 0, 1], ['Cliente', 'left', 'cliente'], ['Emissão', 'left', 'emissao'], ['Vencimento', 'left', 'venc'], ['Valor', 'right', 'valor', 'money', 1], ['Forma de pagamento', 'left', 'forma'], ['Situação', 'left', 'sit', 'sit']], seed: 'faturamento', doc: 1 },
+    receber: { title: 'Contas a Receber', campos: ['Todos', 'Documento', 'Cliente'], filtros: ['Todos', 'A receber', 'Recebido', 'Vencido'], filtroKey: 'sit', cols: [['Documento', 'left', 'doc', 0, 1], ['Cliente', 'left', 'cliente'], ['Vencimento', 'left', 'venc'], ['Valor', 'right', 'valor', 'money', 1], ['Recebido', 'right', 'recebido', 'money'], ['Situação', 'left', 'sit', 'sit']], seed: 'receber', actions: [['⊘ Estornar', 'ghost'], ['≡ Opções', 'ghost'], ['⎙ Extrato', 'normal'], ['✓ Receber', 'primary']] },
+    pagar: { title: 'Contas a Pagar', campos: ['Todos', 'Documento', 'Fornecedor'], filtros: ['Todos', 'A pagar', 'Pago', 'Vencido'], filtroKey: 'sit', cols: [['Documento', 'left', 'doc', 0, 1], ['Fornecedor', 'left', 'forn'], ['Vencimento', 'left', 'venc'], ['Valor', 'right', 'valor', 'money', 1], ['Categoria', 'left', 'cat'], ['Situação', 'left', 'sit', 'sit']], seed: 'pagar', actions: [['⊘ Estornar', 'ghost'], ['≡ Opções', 'ghost'], ['⎙ Extrato', 'normal'], ['✓ Pagar', 'primary']] },
+    banco: { title: 'Movimentação Bancária', campos: ['Todos', 'Conta', 'Histórico'], cols: [['Data', 'left', 'data'], ['Conta', 'left', 'conta'], ['Histórico', 'left', 'hist', 0, 1], ['Tipo', 'left', 'tipo', 'sit'], ['Valor', 'right', 'valor', 'money', 1], ['Saldo', 'right', 'saldo', 'money']], seed: 'banco', actions: [['≡ Opções', 'ghost'], ['⎙ Extrato', 'normal'], ['+ Novo lançamento', 'primary']] },
+    agenda: { title: 'Agenda', campos: ['Todos', 'Compromisso', 'Cliente', 'Responsável'], filtros: ['Todos', 'Confirmado', 'Pendente'], filtroKey: 'sit', cols: [['Data / hora', 'left', 'data', 0, 1], ['Compromisso', 'left', 'comp'], ['Cliente', 'left', 'cliente'], ['Responsável', 'left', 'resp'], ['Situação', 'left', 'sit', 'sit']], seed: 'agenda', crud: 1 },
+    tributacoes: { title: 'Tributações', campos: ['Todos', 'Código', 'Descrição'], cols: [['Código', 'left', 'cod', 0, 1], ['Descrição', 'left', 'desc'], ['CST', 'center', 'cst'], ['CFOP', 'center', 'cfop'], ['ICMS', 'right', 'icms'], ['PIS', 'right', 'pis'], ['COFINS', 'right', 'cofins']], seed: 'tributacoes', crud: 1 },
+    cfop: { title: 'Relação CFOP', campos: ['Todos', 'Código', 'Descrição'], cols: [['CFOP', 'left', 'cod', 0, 1], ['Descrição', 'left', 'desc'], ['Tipo', 'left', 'tipo'], ['Aplicação', 'left', 'aplic']], seed: 'cfop' },
+    boletos: { title: 'Gerenciador de Boletos', campos: ['Todos', 'Nosso número', 'Cliente'], filtros: ['Todos', 'Registrado', 'Liquidado', 'Vencido'], filtroKey: 'sit', cols: [['Nosso número', 'left', 'nosso', 0, 1], ['Cliente', 'left', 'cliente'], ['Vencimento', 'left', 'venc'], ['Valor', 'right', 'valor', 'money', 1], ['Banco', 'left', 'banco'], ['Situação', 'left', 'sit', 'sit']], seed: 'boletos', actions: [['⊘ Baixar registro', 'ghost'], ['⎙ Imprimir boleto', 'normal'], ['+ Gerar remessa', 'primary']] },
+    xmls: { title: 'Download de XMLs', campos: ['Todos', 'Chave', 'Tipo'], filtros: ['Todos', 'Autorizada', 'Cancelada'], filtroKey: 'sit', cols: [['Chave de acesso', 'left', 'chave'], ['Tipo', 'left', 'tipo', 0, 1], ['Emissão', 'left', 'emissao'], ['Valor', 'right', 'valor', 'money', 1], ['Situação', 'left', 'sit', 'sit']], seed: 'xmls', actions: [['≡ Opções', 'ghost'], ['⤓ Baixar selecionado', 'normal'], ['⤓ Baixar período', 'primary']] },
+    usuarios: { title: 'Usuários', campos: ['Todos', 'Usuário', 'Grupo'], cols: [['Usuário', 'left', 'user', 0, 1], ['Nome', 'left', 'nome'], ['Grupo', 'left', 'grupo'], ['Último acesso', 'left', 'acesso'], ['Situação', 'left', 'sit', 'sit']], seed: 'usuarios', crud: 1 },
+    grupos: { title: 'Grupos de Permissão', campos: ['Todos', 'Grupo'], cols: [['Grupo', 'left', 'grupo', 0, 1], ['Descrição', 'left', 'desc'], ['Usuários', 'center', 'users'], ['Permissões', 'left', 'perms']], seed: 'grupos', crud: 1 },
+    caixa: { title: 'Caixa — sessão de 17/09/2026', campos: ['Todos', 'Histórico', 'Forma'], cols: [['Hora', 'left', 'hora'], ['Histórico', 'left', 'hist', 0, 1], ['Forma', 'left', 'forma'], ['Tipo', 'left', 'tipo', 'sit'], ['Valor', 'right', 'valor', 'money', 1]], seed: 'caixa', cards: 1, actions: [['⊘ Sangria', 'ghost'], ['≡ Opções', 'ghost'], ['⎙ Fechamento', 'normal'], ['+ Lançamento', 'primary']] }
+  };
+
+  forms = {
+    composicao: { title: 'Montagem de Composição', sub: 'Monte kits e produtos compostos a partir de itens do catálogo.', cta: 'Salvar composição', sections: [
+      { label: 'Produto final', fields: [['Código', 'K01'], ['Descrição da composição', 'Kit Forro 10m² — placa + perfil + massa', 1], ['Unidade', 'kit', 0, ['kit', 'un', 'm²']], ['Quantidade produzida', '1']] },
+      { label: 'Custo e preço', fields: [['Custo dos componentes (R$)', '512,80'], ['Margem (%)', '38'], ['Preço sugerido (R$)', '707,66'], ['Preço de venda (R$)', '699,00']] }
+    ], table: { cols: ['Componente', 'Un.', 'Qtd.', 'Custo un.', 'Total'], rows: [
+      ['Placa de Gesso Standard 1,80 x 1,20m', 'pç', '6', 'R$ 22,50', 'R$ 135,00'],
+      ['Perfil Montante 48mm — 3m', 'barra', '8', 'R$ 21,40', 'R$ 171,20'],
+      ['Massa para Rejunte Drywall 5kg', 'saco', '2', 'R$ 32,00', 'R$ 64,00'],
+      ['Mão de obra — instalação de forro', 'm²', '10', 'R$ 14,26', 'R$ 142,60']
+    ] } },
+    empresa: { title: 'Empresa / Filial', sub: 'Dados usados em documentos, notas e arquivos fiscais.', cta: 'Salvar alterações', sections: [
+      { label: 'Identificação', fields: [['Razão social', 'GESSO FORT ITABUNA LTDA', 1], ['Nome fantasia', 'Gesso Fort'], ['CNPJ', '60.560.384/0001-29'], ['Inscrição estadual', '138.442.901'], ['Regime tributário', 'Simples Nacional', 0, ['Simples Nacional', 'Lucro Presumido', 'MEI']], ['CNAE principal', '4744-0/99']] },
+      { label: 'Endereço e contato', fields: [['CEP', '45605-000'], ['Endereço', 'Rua Nina Barreto, nº 74', 1], ['Bairro', 'Alto Maron'], ['Município / UF', 'Itabuna — BA'], ['Telefone', '(73) 98832-2798'], ['Telefone 2', '(73) 98244-8145'], ['E-mail', 'contato@gessofort.com.br', 1]] },
+      { label: 'Emissão de documentos', fields: [['Série NF-e', '1'], ['Próximo número', '000020'], ['Certificado A1 — validade', '14/04/2027'], ['Ambiente', 'Produção', 0, ['Produção', 'Homologação']]] }
+    ] },
+    sped: { title: 'SPED Fiscal', sub: 'Geração do arquivo da EFD ICMS/IPI para o período selecionado.', cta: 'Gerar arquivo', sections: [
+      { label: 'Parâmetros', fields: [['Período de', '01/08/2026'], ['até', '31/08/2026'], ['Layout', 'Guia Prático 3.1.5', 0, ['Guia Prático 3.1.5', 'Guia Prático 3.1.4']], ['Perfil', 'B', 0, ['A', 'B', 'C']], ['Finalidade', 'Remessa do arquivo original', 1, ['Remessa do arquivo original', 'Retificadora']]] }
+    ] },
+    spedc: { title: 'SPED Contribuições', sub: 'Geração da EFD-Contribuições (PIS/COFINS).', cta: 'Gerar arquivo', sections: [
+      { label: 'Parâmetros', fields: [['Período de', '01/08/2026'], ['até', '31/08/2026'], ['Regime de apuração', 'Caixa', 0, ['Caixa', 'Competência']], ['Indicador de natureza', 'Pessoa jurídica em geral', 1]] }
+    ] },
+    sintegra: { title: 'Sintegra', sub: 'Arquivo magnético Sintegra — disponível apenas para contribuintes obrigados.', cta: 'Gerar arquivo', sections: [
+      { label: 'Parâmetros', fields: [['Período de', '01/08/2026'], ['até', '31/08/2026'], ['Finalidade', 'Normal', 0, ['Normal', 'Retificação total']], ['Convênio', '57/95 versão 6.0', 1]] }
+    ] }
+  };
+
+  reportGroups = {
+    relcad: { grupo: 'Cadastros', itens: ['Ficha Cadastral Cliente', 'Listagem de Clientes', 'Listagem de Fornecedores', 'Listagem de Produtos', 'Saldo Ideal', 'Listagem de Produtos Personalizado', 'Listagem Agenda'] },
+    relest: { grupo: 'Estoque', itens: ['Posição de Estoque', 'Curva ABC de Produtos', 'Inventário para Contagem', 'Movimentação por Produto', 'Produtos sem Giro'] },
+    relent: { grupo: 'Entradas', itens: ['Notas de Entrada por Período', 'Compras por Fornecedor', 'Itens Comprados', 'Divergência de Preço de Compra'] },
+    relsai: { grupo: 'Saídas', itens: ['Vendas por Período', 'Vendas por Cliente', 'Itens Vendidos', 'Serviços Executados', 'Comissão de Vendedores'] },
+    relfin: { grupo: 'Financeiro', itens: ['Contas a Receber por Vencimento', 'Contas a Pagar por Vencimento', 'Fluxo de Caixa Projetado', 'DRE Simplificado'] }
+  };
+
+  contrato = [
+    { t: 'Contrato de licença de uso', p: 'A Gesso Fort Itabuna LTDA, inscrita no CNPJ 60.560.384/0001-29, é licenciada para uso do sistema de retaguarda nos termos aceitos no ato da contratação. A licença é intransferível e vinculada ao CNPJ acima.' },
+    { t: 'Dados e privacidade', p: 'Os dados cadastrais de clientes, fornecedores e movimentações pertencem à empresa licenciada. O tratamento segue a Lei 13.709/2018 (LGPD), com backup diário e retenção mínima de cinco anos para documentos fiscais.' },
+    { t: 'Suporte e atualizações', p: 'Atendimento em dias úteis, de 8h às 18h, pelos canais oficiais. Atualizações de layout fiscal são liberadas automaticamente, sem custo adicional, dentro do plano vigente.' },
+    { t: 'Vigência', p: 'O contrato vigora por prazo indeterminado, podendo ser encerrado por qualquer das partes com aviso prévio de 30 dias. Em caso de encerramento, a exportação integral dos dados é garantida em até 15 dias.' }
+  ];
+
+  changelog = [
+    { versao: '2.4.1', data: '12/09/2026', itens: ['Manifestação de MD-e em lote', 'Correção no cálculo de desconto total do orçamento', 'Novo filtro de situação nas listagens'] },
+    { versao: '2.4.0', data: '28/08/2026', itens: ['Módulo de composição de produtos (kits)', 'Relatório de comissão de vendedores', 'Impressão de documento com logo da empresa'] },
+    { versao: '2.3.6', data: '04/08/2026', itens: ['Gerenciador de boletos com remessa CNAB', 'Ajustes de desempenho nas listagens com mais de 5 mil registros'] }
+  ];
+
+  menus = [
+    { id: 'cad', label: 'Cadastros', short: 'Cad', icon: '▤', items: [
+      { id: 'clientes', label: 'Clientes' }, { id: 'fornecedores', label: 'Fornecedores' }, { id: 'transportadoras', label: 'Transportadoras' },
+      { id: 'vendedores', label: 'Vendedores' }, { id: 'produtos', label: 'Produtos' }, { id: 'servicos', label: 'Serviços' }] },
+    { id: 'com', label: 'Compras', short: 'Com', icon: '⊞', items: [
+      { id: 'pedcompra', label: 'Pedido de Compra' }, { id: 'notaentrada', label: 'Nota de Entrada' },
+      { id: 'composicao', label: 'Montagem Composição' }, { id: 'mde', label: 'MD-e' }] },
+    { id: 'ven', label: 'Vendas', short: 'Ven', icon: '◫', items: [
+      { id: 'leads', label: 'Solicitações do Site' }, { id: 'orcamentos', label: 'Orçamentos' }, { id: 'pedvenda', label: 'Pedido de Venda' }, { id: 'prevenda', label: 'Pré-Venda' },
+      { id: 'os', label: 'Ordem de Serviço' }, { id: 'faturamento', label: 'Faturamento' }, { id: 'notaservico', label: 'Nota de Serviço' },
+      { id: 'mdfe', label: 'MDF-e', lock: 1 }, { id: 'cupom', label: 'Cupom Fiscal', lock: 1 }] },
+    { id: 'fin', label: 'Financeiro', short: 'Fin', icon: '◉', items: [
+      { id: 'receber', label: 'Contas a Receber' }, { id: 'pagar', label: 'Contas a Pagar' },
+      { id: 'caixa', label: 'Caixa' }, { id: 'banco', label: 'Movimentação Bancária' }] },
+    { id: 'uti', label: 'Utilitários', short: 'Util', icon: '⌗', items: [
+      { id: 'agenda', label: 'Agenda' }, { id: 'tributacoes', label: 'Tributações' }, { id: 'cfop', label: 'Relação CFOP' },
+      { id: 'sped', label: 'SPED Fiscal' }, { id: 'spedc', label: 'SPED Contribuições' }, { id: 'sintegra', label: 'Sintegra', lock: 1 },
+      { id: 'boletos', label: 'Gerenciador de Boletos' }, { id: 'xmls', label: 'Download XMLs' }, { id: 'atualizacoes', label: 'Atualizações' }] },
+    { id: 'rel', label: 'Relatórios', short: 'Rel', icon: '▥', items: [
+      { id: 'relcad', label: 'Cadastros' }, { id: 'relest', label: 'Estoque' }, { id: 'relent', label: 'Entradas' },
+      { id: 'relsai', label: 'Saídas' }, { id: 'relfin', label: 'Financeiro', lock: 1 }] },
+    { id: 'seg', label: 'Segurança', short: 'Seg', icon: '◐', items: [
+      { id: 'usuarios', label: 'Usuários' }, { id: 'grupos', label: 'Grupos' }] },
+    { id: 'cfg', label: 'Configurações', short: 'Cfg', icon: '⚙', items: [
+      { id: 'empresa', label: 'Empresa / Filial' }, { id: 'contrato', label: 'Contrato Termos de Uso' }] }
+  ];
+
+  labelOf(id) {
+    if (id === 'home') return 'Home';
+    if (id === 'nova') return 'Novo Documento';
+    if (this.reportGroups[id]) return 'Relatórios';
+    for (const m of this.menus) { const it = m.items.find(x => x.id === id); if (it) return it.label; }
+    return id;
+  }
+
+  loadLeads = () => {
+    let leads = [];
+    try { leads = JSON.parse(localStorage.getItem('gf_site_leads') || '[]'); } catch (e) { leads = []; }
+    this.setState({ leads });
+  };
+
+  saveLeads(leads) {
+    this.setState({ leads });
+    try { localStorage.setItem('gf_site_leads', JSON.stringify(leads)); } catch (e) {}
+  }
+
+  converterLead(lead) {
+    let cli = this.state.clientes.find(c => c.nome.toLowerCase() === lead.nome.toLowerCase());
+    if (!cli) {
+      cli = { id: 'c' + Date.now(), nome: lead.nome, fantasia: '—', contato: lead.nome, doc: '—', tel: lead.tel, cel: lead.tel, municipio: lead.cidade || 'Itabuna', uf: 'BA', ativo: 'Sim', dtCompra: '—', nasc: '—', rua: '', num: '', bairro: '', cep: '', end: lead.cidade || '' };
+      this.setState(st => ({ clientes: [cli, ...st.clientes] }));
+    }
+    this.saveLeads(this.state.leads.map(l => l.protocolo === lead.protocolo ? { ...l, sit: 'Convertido' } : l));
+    this.setState({ novaTipo: 'Orçamento', novaCliente: cli.id, itens: [],
+      novaObs: lead.servico + (lead.metragem ? ' · ' + lead.metragem : '') + (lead.obs ? '\n' + lead.obs : '') + '\nOrigem: site (protocolo ' + lead.protocolo + ')' });
+    this.open('nova');
+  }
+
+  componentDidMount() {
+    this.loadLeads();
+    this._ls = () => this.loadLeads();
+    window.addEventListener('storage', this._ls);
+    window.addEventListener('focus', this._ls);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('storage', this._ls);
+    window.removeEventListener('focus', this._ls);
+  }
+
+  money(n) { return 'R$ ' + (Number(n) || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+  set(k) { return e => this.setState({ [k]: e.target.value }); }
+  setForm(k) { return e => this.setState(s => ({ form: { ...s.form, [k]: e.target.value } })); }
+
+  open(id) {
+    this.setState(s => {
+      const tabs = s.tabs.find(t => t.id === id) ? s.tabs : [...s.tabs, { id, label: this.labelOf(id) }];
+      return { tabs, active: id, fly: null, sel: null, busca: '', filtro: 'Todos', optionsOpen: false };
+    });
+  }
+  closeTab(id) {
+    return e => {
+      e.stopPropagation();
+      this.setState(s => {
+        const tabs = s.tabs.filter(t => t.id !== id);
+        return { tabs, active: s.active === id ? (tabs[tabs.length - 1] || { id: 'home' }).id : s.active };
+      });
+    };
+  }
+
+  notaTotals(n) {
+    const sub = n.itens.reduce((a, i) => a + i.qtd * i.preco, 0);
+    const d = Number(n.desc) || 0;
+    return { sub, d, total: sub - d, qtd: n.itens.reduce((a, i) => a + Number(i.qtd), 0) };
+  }
+  cliNome(id) { const c = this.state.clientes.find(x => x.id === id); return c ? c.nome : 'CLIENTE NÃO CADASTRADO'; }
+
+  openModal(type, item) {
+    const f = item ? { ...item } : (type === 'cliente' ? { nome: '', doc: '', tel: '', end: '' }
+      : { cod: '', nome: '', cat: this.cats[0], un: type === 'material' ? 'pç' : 'm²', preco: '', estoque: '', prazo: '' });
+    this.setState({ modal: type, form: f, editId: item ? item.id : null });
+  }
+  save = () => {
+    const { modal, form, editId } = this.state;
+    const key = modal === 'cliente' ? 'clientes' : modal === 'material' ? 'materiais' : 'servicos';
+    if (!form.nome) { this.setState({ modal: null }); return; }
+    const rec = { ...form, id: editId || key[0] + Date.now(), preco: Number(form.preco) || 0 };
+    this.setState(s => ({ [key]: editId ? s[key].map(x => x.id === editId ? rec : x) : [rec, ...s[key]], modal: null, form: {}, editId: null }));
+  };
+
+  addItem = () => {
+    const id = this.state.addSel; if (!id) return;
+    const src = [...this.state.materiais, ...this.state.servicos].find(x => x.id === id); if (!src) return;
+    this.setState(s => ({ itens: [...s.itens, { key: 'i' + Date.now(), nome: src.nome, un: src.un, cat: src.cat, qtd: 1, preco: src.preco }], addSel: '' }));
+  };
+
+  salvarNota = () => {
+    const s = this.state; if (!s.itens.length) return;
+    const nota = { id: 'n' + Date.now(), numero: String(s.seq).padStart(6, '0'), tipo: s.novaTipo, cliente: s.novaCliente, obs: s.novaObs, desc: Number(s.novaDesc) || 0, sit: 'Pendente', validade: '', data: new Date().toLocaleDateString('pt-BR') + ' ' + new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }), itens: s.itens.map(i => ({ nome: i.nome, un: i.un, qtd: Number(i.qtd) || 0, preco: Number(i.preco) || 0 })) };
+    this.setState(st => ({ notas: [nota, ...st.notas], seq: st.seq + 1, itens: [], novaObs: '', novaDesc: 0, novaCliente: '', printId: nota.id }));
+  };
+
+  novaDe(tipo) { return () => { this.setState({ novaTipo: tipo }); this.open('nova'); }; }
+
+  renderVals() {
+    const s = this.state, M = n => this.money(n), page = s.active;
+    const q = s.busca.toLowerCase();
+
+    const rail = this.menus.map(m => {
+      const on = s.fly === m.id || m.items.some(i => i.id === page);
+      return { icon: m.icon, label: m.label, short: m.short,
+        toggle: () => this.setState(st => ({ fly: st.fly === m.id ? null : m.id })),
+        style: 'display:flex;flex-direction:column;align-items:center;gap:3px;width:48px;padding:8px 0;border:none;border-radius:11px;cursor:pointer;transition:all 150ms cubic-bezier(.4,0,.2,1);background:' + (on ? 'rgba(199,154,59,.16)' : 'transparent') + ';color:' + (on ? '#E0B75C' : '#8a8a8a') };
+    });
+    const flyMenu = this.menus.find(m => m.id === s.fly);
+    const flyIdx = this.menus.findIndex(m => m.id === s.fly);
+    const flyItems = flyMenu ? flyMenu.items.map(i => ({
+      label: i.label, go: () => this.open(i.id),
+      lockStyle: i.lock ? 'margin-left:7px;font-size:11px;color:#c9c0ae' : 'display:none',
+      style: 'display:flex;align-items:center;width:100%;text-align:left;padding:9px 16px;border:none;background:none;font-size:14px;cursor:pointer;color:' + (i.id === page ? '#8A6318' : i.lock ? '#b3aa98' : '#2A2A2A') + ';font-weight:' + (i.id === page ? '600' : '400')
+    })) : [];
+
+    const tabs = s.tabs.map(t => ({
+      label: t.label, closable: t.id !== 'home', go: () => this.setState({ active: t.id, sel: null }), close: this.closeTab(t.id),
+      style: 'display:flex;align-items:center;gap:6px;padding:9px 16px;border-radius:12px 12px 0 0;font-size:13.5px;cursor:pointer;border:1px solid ' + (s.active === t.id ? '#e2ded6' : 'transparent') + ';border-bottom:none;background:' + (s.active === t.id ? '#EFEDEA' : '#FAF9F7') + ';color:' + (s.active === t.id ? '#0D0D0D' : '#8a8a8a') + ';font-weight:' + (s.active === t.id ? '600' : '400')
+    }));
+
+    const atalhos = [
+      { label: 'Clientes', icon: '▤', go: () => this.open('clientes') },
+      { label: 'Produtos', icon: '⊟', go: () => this.open('produtos') },
+      { label: 'Serviços', icon: '◈', go: () => this.open('servicos') },
+      { label: 'Faturamento', icon: '◫', go: () => this.open('faturamento') },
+      { label: 'Orçamentos', icon: '⌸', go: () => this.open('orcamentos') },
+      { label: 'Nota de Entrada', icon: '⊞', go: () => this.open('notaentrada') },
+      { label: 'Pedido de Venda', icon: '⊜', go: () => this.open('pedvenda') },
+      { label: 'Relatórios', icon: '▥', go: () => this.open('relcad') },
+      { label: 'Solicitações do site', icon: '◇', go: () => this.open('leads') }
+    ];
+
+    const totalGeral = s.notas.reduce((a, n) => a + this.notaTotals(n).total, 0);
+    const kpis = [
+      { label: 'Faturamento', value: M(totalGeral), hint: 'Documentos no período' },
+      { label: 'Documentos', value: String(s.notas.length), hint: 'Orçamentos, pedidos e OS' },
+      { label: 'Clientes', value: String(s.clientes.length), hint: 'Cadastros ativos' },
+      { label: 'Catálogo', value: String(s.materiais.length + s.servicos.length), hint: s.materiais.length + ' produtos · ' + s.servicos.length + ' serviços' }
+    ];
+    const porCat = {};
+    s.notas.forEach(n => n.itens.forEach(i => { const c = (s.materiais.concat(s.servicos).find(x => x.nome === i.nome) || {}).cat || 'Outros'; porCat[c] = (porCat[c] || 0) + i.qtd * i.preco; }));
+    const arr = Object.entries(porCat).sort((a, b) => b[1] - a[1]).slice(0, 5);
+    const maxv = arr.length ? arr[0][1] : 1;
+    const barras = arr.map(([nome, v]) => ({ nome, valor: M(v), barStyle: 'height:100%;width:' + Math.max(6, (v / maxv) * 100) + '%;border-radius:999px;background:linear-gradient(90deg,#B8862B,#F0D18A)' }));
+
+    const vendas = s.notas.filter(n => n.sit !== 'Cancelado').reduce((a, n) => a + this.notaTotals(n).total, 0);
+    const receitas = this.seed.receber.reduce((a, r) => a + r.recebido, 0) + this.seed.caixa.filter(m => m.valor > 0).reduce((a, m) => a + m.valor, 0);
+    const despesas = this.seed.pagar.filter(p => p.sit === 'Pago').reduce((a, p) => a + p.valor, 0);
+    const dashCards = [
+      { label: 'Vendas', icon: '◫', value: M(vendas), hint: s.notas.length + ' documentos no período' },
+      { label: 'Receitas', icon: '↑', value: M(receitas), hint: 'Recebimentos confirmados' },
+      { label: 'Despesas', icon: '↓', value: M(despesas), hint: 'Contas pagas no período' },
+      { label: 'Saldo Período', icon: '$', value: M(receitas - despesas), hint: receitas - despesas >= 0 ? 'Resultado positivo' : 'Resultado negativo' }
+    ];
+    const qtdPorItem = {};
+    s.notas.forEach(n => n.itens.forEach(i => { qtdPorItem[i.nome] = (qtdPorItem[i.nome] || 0) + i.qtd; }));
+    const ti = Object.entries(qtdPorItem).sort((a, b) => b[1] - a[1]).slice(0, 5);
+    const tiMax = ti.length ? ti[0][1] : 1;
+    const topItens = ti.map(([nome, qtd]) => ({ nome, valor: qtd.toLocaleString('pt-BR') + ' un.', barStyle: 'height:100%;width:' + Math.max(6, (qtd / tiMax) * 100) + '%;border-radius:999px;background:linear-gradient(90deg,#B8862B,#F0D18A)' }));
+    const porTipo = {};
+    s.notas.forEach(n => { porTipo[n.tipo] = (porTipo[n.tipo] || 0) + 1; });
+    const mt2 = Object.entries(porTipo).sort((a, b) => b[1] - a[1]);
+    const mtMax = mt2.length ? mt2[0][1] : 1;
+    const modelos = mt2.map(([nome, c]) => ({ nome, valor: c + ' doc.', barStyle: 'height:100%;width:' + Math.max(6, (c / mtMax) * 100) + '%;border-radius:999px;background:linear-gradient(90deg,#5c5a56,#b9b4aa)' }));
+
+    // ---- listagens
+    const docPages = { orcamentos: 'Orçamento', pedvenda: 'Pedido de Venda', os: 'Ordem de Serviço', pedcompra: 'Pedido de Compra', notaservico: 'Recibo', prevenda: 'Orçamento', faturamento: null, notaentrada: null };
+    const isDocList = Object.prototype.hasOwnProperty.call(docPages, page) && page !== 'faturamento' && page !== 'notaentrada';
+    const isCadList = page === 'clientes' || page === 'produtos' || page === 'servicos';
+    const isList = isDocList || isCadList;
+
+    const th = a => 'padding:11px 16px;text-align:' + a + ';font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:#8a8a8a;font-weight:600;white-space:nowrap';
+    let cols = [], rows = [], filtros = [], listTitle = '', campoOpts = ['Todos'], colsOpts = ['9 Coluna(s)'];
+
+    if (isDocList) {
+      const tipo = docPages[page];
+      listTitle = 'Listagem de ' + (page === 'orcamentos' ? 'Orçamentos' : page === 'pedvenda' ? 'Pedidos de Venda' : page === 'os' ? 'Ordens de Serviço' : page === 'pedcompra' ? 'Pedidos de Compra' : page === 'prevenda' ? 'Pré-Vendas' : 'Notas de Serviço');
+      campoOpts = ['Todos', 'Número', 'Cliente', 'CNPJ/CPF', 'Vendedor'];
+      colsOpts = ['9 Coluna(s)', '7 Coluna(s)', '5 Coluna(s)'];
+      filtros = ['Todos', 'Pendente', 'Importado', 'Cancelado'].map(f => ({
+        label: f, go: () => this.setState({ filtro: f }),
+        style: 'padding:9px 14px;border-radius:10px;font-size:12.5px;font-weight:600;cursor:pointer;white-space:nowrap;border:1px solid ' + (s.filtro === f ? '#0D0D0D' : '#e2ded6') + ';background:' + (s.filtro === f ? '#0D0D0D' : '#fff') + ';color:' + (s.filtro === f ? '#fff' : '#6a6a6a')
+      }));
+      cols = [{ label: 'Número', style: th('left') }, { label: 'Emissão', style: th('left') }, { label: 'Cliente', style: th('left') }, { label: 'CNPJ/CPF', style: th('left') }, { label: 'Itens', style: th('center') }, { label: 'Total', style: th('right') }, { label: 'Validade', style: th('left') }, { label: 'Vendedor', style: th('left') }, { label: 'Situação', style: th('left') }];
+      const list = s.notas.filter(n => n.tipo === tipo)
+        .filter(n => s.filtro === 'Todos' || n.sit === s.filtro)
+        .filter(n => !q || n.numero.includes(q) || this.cliNome(n.cliente).toLowerCase().includes(q));
+      rows = list.map(n => {
+        const on = s.sel === n.id;
+        const cli = s.clientes.find(x => x.id === n.cliente) || {};
+        const ink = on ? '#fff' : n.sit === 'Cancelado' ? '#8f4a2c' : n.sit === 'Importado' ? '#5e5e5e' : '#2A2A2A';
+        const td = (a, b) => 'padding:12px 16px;text-align:' + a + ';font-size:13px;white-space:nowrap;color:' + ink + (b ? ';font-weight:600' : '');
+        const sitColor = on ? '#E0B75C' : n.sit === 'Cancelado' ? '#A34A24' : n.sit === 'Importado' ? '#5F7052' : '#8A6318';
+        return {
+          select: () => this.setState({ sel: on ? null : n.id }),
+          style: 'cursor:pointer;border-bottom:1px solid #f2efea;background:' + (on ? '#0D0D0D' : 'transparent'),
+          cells: [
+            { v: n.numero, style: td('left', 1) },
+            { v: n.data, style: td('left') },
+            { v: this.cliNome(n.cliente), style: 'padding:12px 16px;font-size:13px;white-space:nowrap;color:' + ink },
+            { v: cli.doc || '—', style: td('left') },
+            { v: String(n.itens.length), style: td('center') },
+            { v: M(this.notaTotals(n).total), style: td('right', 1) },
+            { v: n.validade || '—', style: td('left') },
+            { v: 'CALIANE GALDINO', style: 'padding:12px 16px;font-size:12px;color:' + (on ? '#9a9a9a' : '#9a9a9a') },
+            { v: n.sit, style: 'padding:12px 16px;font-size:12.5px;font-weight:600;color:' + sitColor }
+          ]
+        };
+      });
+    } else if (page === 'clientes') {
+      listTitle = 'Listagem de Clientes';
+      campoOpts = ['Todos', 'Nome', 'CPF/CNPJ', 'Telefone'];
+      colsOpts = ['5 Coluna(s)', '4 Coluna(s)'];
+      colsOpts = ['11 Coluna(s)', '8 Coluna(s)', '5 Coluna(s)'];
+      cols = [{ label: 'Documento', style: th('left') }, { label: 'Nome', style: th('left') }, { label: 'Fantasia', style: th('left') }, { label: 'Contato', style: th('left') }, { label: 'Município', style: th('left') }, { label: 'UF', style: th('center') }, { label: 'Telefone', style: th('left') }, { label: 'Celular', style: th('left') }, { label: 'Ativo', style: th('center') }, { label: 'Dt. Compra', style: th('left') }, { label: 'Dt. Nascimento', style: th('left') }];
+      rows = s.clientes.filter(c => !q || c.nome.toLowerCase().includes(q) || String(c.doc).includes(q)).map(c => {
+        const on = s.sel === c.id, ink = on ? '#fff' : '#2A2A2A';
+        const td = (a, b) => 'padding:12px 16px;text-align:' + a + ';font-size:13px;white-space:nowrap;color:' + ink + (b ? ';font-weight:600' : '');
+        return { select: () => this.setState({ sel: on ? null : c.id }),
+          style: 'cursor:pointer;border-bottom:1px solid #f2efea;background:' + (on ? '#0D0D0D' : 'transparent'),
+          cells: [{ v: c.doc, style: td('left') }, { v: c.nome, style: 'padding:12px 16px;font-size:13px;font-weight:600;white-space:nowrap;color:' + ink }, { v: c.fantasia, style: td('left') }, { v: c.contato, style: td('left') }, { v: c.municipio, style: td('left') }, { v: c.uf, style: td('center') }, { v: c.tel, style: td('left') }, { v: c.cel, style: td('left') }, { v: c.ativo, style: 'padding:12px 16px;text-align:center;font-size:12.5px;font-weight:600;color:' + (on ? '#E0B75C' : c.ativo === 'Sim' ? '#5F7052' : '#A34A24') }, { v: c.dtCompra, style: td('left') }, { v: c.nasc, style: td('left') }] };
+      });
+    } else if (page === 'produtos' || page === 'servicos') {
+      const isMat = page === 'produtos';
+      listTitle = isMat ? 'Listagem de Produtos' : 'Listagem de Serviços';
+      campoOpts = ['Todos', 'Código', 'Descrição', 'Categoria'];
+      colsOpts = ['6 Coluna(s)', '4 Coluna(s)'];
+      filtros = ['Todos', ...this.cats].map(f => ({
+        label: f, go: () => this.setState({ filtro: f }),
+        style: 'padding:9px 13px;border-radius:10px;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;border:1px solid ' + (s.filtro === f ? '#0D0D0D' : '#e2ded6') + ';background:' + (s.filtro === f ? '#0D0D0D' : '#fff') + ';color:' + (s.filtro === f ? '#fff' : '#6a6a6a')
+      }));
+      cols = [{ label: 'Cód.', style: th('left') }, { label: isMat ? 'Produto' : 'Serviço', style: th('left') }, { label: 'Categoria', style: th('left') }, { label: 'Un.', style: th('center') }, { label: isMat ? 'Estoque' : 'Prazo', style: th('right') }, { label: 'Preço', style: th('right') }];
+      rows = (isMat ? s.materiais : s.servicos)
+        .filter(x => (s.filtro === 'Todos' || x.cat === s.filtro) && (!q || x.nome.toLowerCase().includes(q) || String(x.cod).toLowerCase().includes(q)))
+        .map(x => {
+          const on = s.sel === x.id, ink = on ? '#fff' : '#2A2A2A';
+          const td = (a, b) => 'padding:12px 16px;text-align:' + a + ';font-size:13px;color:' + ink + (b ? ';font-weight:600' : '');
+          return { select: () => this.setState({ sel: on ? null : x.id }),
+            style: 'cursor:pointer;border-bottom:1px solid #f2efea;background:' + (on ? '#0D0D0D' : 'transparent'),
+            cells: [{ v: x.cod, style: td('left') }, { v: x.nome, style: td('left', 1) }, { v: x.cat, style: td('left') }, { v: x.un, style: td('center') }, { v: isMat ? String(x.estoque || 0) : (x.prazo || '—'), style: td('right') }, { v: M(x.preco), style: td('right', 1) }] };
+        });
+    }
+
+    // ---- módulos genéricos (cadastros, compras, financeiro, fiscal, segurança)
+    const gd = this.gdefs[page];
+    let listCards = [];
+    if (gd) {
+      listTitle = gd.title;
+      campoOpts = gd.campos || ['Todos'];
+      colsOpts = [gd.cols.length + ' Coluna(s)', Math.max(3, gd.cols.length - 2) + ' Coluna(s)'];
+      if (gd.filtros) filtros = gd.filtros.map(f => ({
+        label: f, go: () => this.setState({ filtro: f }),
+        style: 'padding:9px 14px;border-radius:10px;font-size:12.5px;font-weight:600;cursor:pointer;white-space:nowrap;border:1px solid ' + (s.filtro === f ? '#0D0D0D' : '#e2ded6') + ';background:' + (s.filtro === f ? '#0D0D0D' : '#fff') + ';color:' + (s.filtro === f ? '#fff' : '#6a6a6a')
+      }));
+      cols = gd.cols.map(c => ({ label: c[0], style: th(c[1]) }));
+      const sitInk = (v, on) => {
+        if (on) return '#E0B75C';
+        const bad = ['Cancelado', 'Cancelada', 'Vencido', 'Bloqueado', 'Inativo', 'Débito', 'Saída', 'Sem manifestação'];
+        const good = ['Recebido', 'Pago', 'Liquidado', 'Ativo', 'Confirmado', 'Confirmada', 'Escriturada', 'Autorizada', 'Emitida', 'Crédito', 'Entrada'];
+        return bad.indexOf(v) >= 0 ? '#A34A24' : good.indexOf(v) >= 0 ? '#5F7052' : '#8A6318';
+      };
+      const src = (this.seed[gd.seed] || []).filter(r => !gd.filtroKey || s.filtro === 'Todos' || r[gd.filtroKey] === s.filtro)
+        .filter(r => !q || Object.values(r).some(v => String(v).toLowerCase().includes(q)));
+      rows = src.map((r, idx) => {
+        const rid = page + ':' + idx, on = s.sel === rid, ink = on ? '#fff' : '#2A2A2A';
+        return {
+          select: () => this.setState({ sel: on ? null : rid }),
+          style: 'cursor:pointer;border-bottom:1px solid #f2efea;background:' + (on ? '#0D0D0D' : 'transparent'),
+          cells: gd.cols.map(c => {
+            const raw = r[c[2]];
+            const isSit = c[3] === 'sit';
+            const v = c[3] === 'money' ? M(raw) : String(raw === undefined || raw === '' ? '—' : raw);
+            const color = isSit ? sitInk(raw, on) : (c[3] === 'money' && Number(raw) < 0 && !on) ? '#A34A24' : ink;
+            return { v, style: 'padding:12px 16px;text-align:' + c[1] + ';font-size:' + (c[2] === 'chave' ? '11.5px' : '13px') + ';color:' + color + (c[4] || isSit ? ';font-weight:600' : '') + (c[2] === 'chave' || c[2] === 'desc' || c[2] === 'hist' || c[2] === 'comp' || c[2] === 'perms' ? '' : ';white-space:nowrap') };
+          })
+        };
+      });
+      if (gd.cards) {
+        const cx = this.seed.caixa;
+        const ent = cx.filter(m => m.valor > 0 && m.tipo !== 'Abertura').reduce((a, m) => a + m.valor, 0);
+        const sai = cx.filter(m => m.valor < 0).reduce((a, m) => a + m.valor, 0);
+        listCards = [
+          { label: 'Saldo de abertura', value: M(300), hint: 'Aberto às 08:04' },
+          { label: 'Entradas', value: M(ent), hint: cx.filter(m => m.tipo === 'Entrada').length + ' lançamentos' },
+          { label: 'Saídas', value: M(sai), hint: cx.filter(m => m.tipo === 'Saída').length + ' lançamentos' },
+          { label: 'Saldo atual', value: M(300 + ent + sai), hint: 'Caixa aberto' }
+        ];
+      }
+    }
+
+    // ---- solicitações do site
+    const isLeads = page === 'leads';
+    if (isLeads) {
+      listTitle = 'Solicitações do Site';
+      campoOpts = ['Todos', 'Protocolo', 'Nome', 'Serviço'];
+      colsOpts = ['8 Coluna(s)', '5 Coluna(s)'];
+      filtros = ['Todos', 'Novo', 'Convertido', 'Descartado'].map(ff => ({
+        label: ff, go: () => this.setState({ filtro: ff }),
+        style: 'padding:9px 14px;border-radius:10px;font-size:12.5px;font-weight:600;cursor:pointer;white-space:nowrap;border:1px solid ' + (s.filtro === ff ? '#0D0D0D' : '#e2ded6') + ';background:' + (s.filtro === ff ? '#0D0D0D' : '#fff') + ';color:' + (s.filtro === ff ? '#fff' : '#6a6a6a')
+      }));
+      cols = [{ label: 'Protocolo', style: th('left') }, { label: 'Recebido em', style: th('left') }, { label: 'Nome', style: th('left') }, { label: 'WhatsApp', style: th('left') }, { label: 'Cidade', style: th('left') }, { label: 'Serviço', style: th('left') }, { label: 'Metragem', style: th('right') }, { label: 'Situação', style: th('left') }];
+      rows = s.leads
+        .filter(l => s.filtro === 'Todos' || l.sit === s.filtro)
+        .filter(l => !q || (l.nome + ' ' + l.protocolo + ' ' + l.servico).toLowerCase().includes(q))
+        .map(l => {
+          const on = s.sel === l.protocolo, ink = on ? '#fff' : '#2A2A2A';
+          const td = (a, b) => 'padding:12px 16px;text-align:' + a + ';font-size:13px;white-space:nowrap;color:' + ink + (b ? ';font-weight:600' : '');
+          const sc = on ? '#E0B75C' : l.sit === 'Convertido' ? '#5F7052' : l.sit === 'Descartado' ? '#A34A24' : '#8A6318';
+          return {
+            select: () => this.setState({ sel: on ? null : l.protocolo }),
+            style: 'cursor:pointer;border-bottom:1px solid #f2efea;background:' + (on ? '#0D0D0D' : 'transparent'),
+            cells: [
+              { v: l.protocolo, style: td('left', 1) }, { v: l.data, style: td('left') },
+              { v: l.nome, style: td('left', 1) }, { v: l.tel, style: td('left') },
+              { v: l.cidade || '—', style: td('left') },
+              { v: l.servico, style: 'padding:12px 16px;font-size:13px;color:' + ink },
+              { v: l.metragem || '—', style: td('right') },
+              { v: l.sit, style: 'padding:12px 16px;font-size:12.5px;font-weight:600;color:' + sc }
+            ]
+          };
+        });
+      const novos = s.leads.filter(l => l.sit === 'Novo').length;
+      listCards = [
+        { label: 'Novas solicitações', value: String(novos), hint: 'Aguardando orçamento' },
+        { label: 'Convertidas', value: String(s.leads.filter(l => l.sit === 'Convertido').length), hint: 'Viraram orçamento' },
+        { label: 'Total recebido', value: String(s.leads.length), hint: 'Desde a publicação do site' },
+        { label: 'Origem', value: 'Site', hint: 'gessofort.com.br · formulário' }
+      ];
+    }
+
+    // ---- relatórios
+    const rg = this.reportGroups[page];
+    const relItens = rg ? rg.itens : [];
+    const relAtivo = (s.relSel && relItens.indexOf(s.relSel) >= 0) ? s.relSel : relItens[0];
+    const relGrupos = Object.keys(this.reportGroups).map(k => ({
+      label: this.reportGroups[k].grupo,
+      go: () => this.setState(st => ({ active: k, relSel: null, sel: null, tabs: st.tabs.find(t => t.id === k) ? st.tabs.filter(t => t.id === k || !this.reportGroups[t.id]) : st.tabs.map(t => this.reportGroups[t.id] ? { id: k, label: 'Relatórios' } : t) })),
+      style: 'padding:10px 4px;margin-right:22px;border:none;background:none;font-size:13.5px;cursor:pointer;border-bottom:2px solid ' + (k === page ? '#B8862B' : 'transparent') + ';color:' + (k === page ? '#0D0D0D' : '#8a8a8a') + ';font-weight:' + (k === page ? '600' : '400')
+    }));
+    const relList = relItens.map(r => ({
+      label: r, go: () => this.setState({ relSel: r }),
+      style: 'display:block;width:100%;text-align:left;padding:11px 14px;border:none;border-radius:10px;font-size:13.5px;cursor:pointer;background:' + (r === relAtivo ? '#0D0D0D' : 'transparent') + ';color:' + (r === relAtivo ? '#fff' : '#5a5a5a') + ';font-weight:' + (r === relAtivo ? '600' : '400')
+    }));
+    const relFields = [
+      { label: rg && rg.grupo === 'Financeiro' ? 'Conta / categoria' : rg && rg.grupo === 'Estoque' ? 'Categoria' : 'Cliente', value: 'Todos', isSelect: true, options: ['Todos', 'Selecionar…'] },
+      { label: 'Período de', value: '01/09/2026' },
+      { label: 'até', value: '17/09/2026' },
+      { label: 'Ordenação', value: 'Alfabética', isSelect: true, options: ['Alfabética', 'Por data', 'Por valor'] },
+      { label: 'Situação', value: 'Todas', isSelect: true, options: ['Todas', 'Ativas', 'Inativas'] },
+      { label: 'Formato', value: 'PDF', isSelect: true, options: ['PDF', 'Excel', 'Tela'] }
+    ].map(f => ({ ...f, isInput: !f.isSelect, options: f.options || [], type: 'text', wrapStyle: '' }));
+
+    // ---- formulários / documentos
+    const fd = this.forms[page];
+    const formSections = fd ? fd.sections.map(sec => ({
+      label: sec.label,
+      fields: sec.fields.map(f => ({ label: f[0], value: f[1], wrapStyle: f[2] ? 'grid-column:1/-1' : '', isSelect: !!f[3], isInput: !f[3], options: f[3] || [], type: 'text' }))
+    })) : [];
+
+    // ---- barra de ações
+    const btn = (kind) => kind === 'primary'
+      ? 'display:flex;align-items:center;gap:7px;padding:11px 22px;border:none;border-radius:999px;background:linear-gradient(160deg,#E0B75C,#B8862B);color:#1a1206;font-weight:700;font-size:13.5px;cursor:pointer;transition:transform 150ms cubic-bezier(.4,0,.2,1)'
+      : kind === 'ghost'
+      ? 'display:flex;align-items:center;gap:7px;padding:11px 16px;border:none;background:none;font-size:13.5px;color:#6a6a6a;cursor:pointer'
+      : 'display:flex;align-items:center;gap:7px;padding:11px 18px;border:1px solid #e2ded6;border-radius:999px;background:#fff;font-size:13.5px;color:#2A2A2A;cursor:pointer;font-weight:600';
+
+    let actions = [];
+    if (isLeads) {
+      const lead = s.leads.find(l => l.protocolo === s.sel);
+      actions = [
+        { label: '⟳ Atualizar', style: btn('ghost'), go: this.loadLeads },
+        { label: '⊘ Descartar', style: btn('ghost'), go: () => lead && this.saveLeads(s.leads.map(l => l.protocolo === lead.protocolo ? { ...l, sit: 'Descartado' } : l)) },
+        { label: '⌕ Ver detalhes', style: btn('normal'), go: () => lead && window.alert(lead.protocolo + ' — ' + lead.nome + '\n' + lead.tel + ' · ' + (lead.cidade || '') + '\n' + lead.servico + (lead.metragem ? ' · ' + lead.metragem : '') + (lead.obs ? '\n\n' + lead.obs : '')) },
+        { label: '⤨ Transformar em Orçamento', style: btn('primary'), go: () => lead && this.converterLead(lead) }
+      ];
+    } else if (isDocList) {
+      const selNota = s.notas.find(n => n.id === s.sel);
+      actions = [
+        { label: '⤨ Transformar', style: btn('ghost'), go: () => this.setState({ optionsOpen: true }) },
+        { label: '⊘ Cancelar documento', style: btn('ghost'), go: () => selNota && this.setState(st => ({ notas: st.notas.map(n => n.id === selNota.id ? { ...n, sit: 'Cancelado' } : n) })) },
+        { label: '≡ Opções', style: btn('ghost'), go: () => this.setState({ optionsOpen: true }) },
+        { label: '⎙ Imprimir', style: btn('normal'), go: () => selNota && this.setState({ printId: selNota.id }) },
+        { label: '✎ Editar', style: btn('normal'), go: () => selNota && this.setState({ printId: selNota.id }) },
+        { label: '+ Novo', style: btn('primary'), go: this.novaDe(docPages[page]) }
+      ];
+    } else if (isCadList) {
+      const key = page === 'clientes' ? 'clientes' : page === 'produtos' ? 'materiais' : 'servicos';
+      const type = page === 'clientes' ? 'cliente' : page === 'produtos' ? 'material' : 'servico';
+      const rec = s[key].find(x => x.id === s.sel);
+      actions = [
+        { label: '⊘ Excluir', style: btn('ghost'), go: () => rec && this.setState(st => ({ [key]: st[key].filter(x => x.id !== rec.id), sel: null })) },
+        { label: '≡ Opções', style: btn('ghost'), go: () => {} },
+        { label: '✎ Editar', style: btn('normal'), go: () => rec && this.openModal(type, rec) },
+        { label: '+ Novo', style: btn('primary'), go: () => this.openModal(type) }
+      ];
+    } else if (gd) {
+      if (gd.actions) actions = gd.actions.map(a => ({ label: a[0], style: btn(a[1]), go: () => {} }));
+      else if (gd.doc) actions = [
+        { label: '⤨ Transformar', style: btn('ghost'), go: () => this.setState({ optionsOpen: true }) },
+        { label: '⊘ Cancelar documento', style: btn('ghost'), go: () => {} },
+        { label: '≡ Opções', style: btn('ghost'), go: () => {} },
+        { label: '⎙ Imprimir', style: btn('normal'), go: () => {} },
+        { label: '✎ Editar', style: btn('normal'), go: () => {} },
+        { label: '+ Novo', style: btn('primary'), go: () => {} }
+      ];
+      else actions = [
+        { label: '⊘ Excluir', style: btn('ghost'), go: () => {} },
+        { label: '≡ Opções', style: btn('ghost'), go: () => {} },
+        { label: '✎ Editar', style: btn('normal'), go: () => {} },
+        { label: '+ Novo', style: btn('primary'), go: () => {} }
+      ];
+    }
+
+    // ---- nova nota
+    const tiposDoc = this.tipos.map(tp => ({
+      label: tp, go: () => this.setState({ novaTipo: tp }),
+      style: 'padding:11px 18px;border-radius:999px;font-size:13.5px;font-weight:600;cursor:pointer;border:1px solid ' + (s.novaTipo === tp ? '#B8862B' : '#e2ded6') + ';background:' + (s.novaTipo === tp ? 'linear-gradient(160deg,#E0B75C,#B8862B)' : '#fff') + ';color:' + (s.novaTipo === tp ? '#1a1206' : '#6a6a6a')
+    }));
+    const catalogoOpts = [
+      ...s.materiais.map(m => ({ id: m.id, label: 'PRODUTO · ' + m.nome + ' — ' + M(m.preco) + '/' + m.un })),
+      ...s.servicos.map(x => ({ id: x.id, label: 'SERVIÇO · ' + x.nome + ' — ' + M(x.preco) + '/' + x.un }))
+    ];
+    const itensNova = s.itens.map((i, idx) => ({
+      nome: i.nome, meta: i.cat + ' · ' + i.un, qtd: i.qtd, preco: i.preco, total: M(i.qtd * i.preco),
+      onQtd: e => { const v = e.target.value; this.setState(st => ({ itens: st.itens.map((x, k) => k === idx ? { ...x, qtd: v === '' ? '' : Number(v) } : x) })); },
+      onPreco: e => { const v = e.target.value; this.setState(st => ({ itens: st.itens.map((x, k) => k === idx ? { ...x, preco: v === '' ? '' : Number(v) } : x) })); },
+      del: () => this.setState(st => ({ itens: st.itens.filter((x, k) => k !== idx) }))
+    }));
+    const sub = s.itens.reduce((a, i) => a + (Number(i.qtd) || 0) * (Number(i.preco) || 0), 0);
+    const desc = Number(s.novaDesc) || 0;
+
+    // ---- modal
+    const mt = s.modal;
+    const F = (label, key, o) => ({ label, value: s.form[key] === undefined ? '' : s.form[key], onChange: this.setForm(key), isSelect: !!(o && o.options), isInput: !(o && o.options), options: (o && o.options) || [], type: (o && o.type) || 'text', ph: (o && o.ph) || '', wrapStyle: (o && o.full) ? 'grid-column:1/-1' : '' });
+    let modalFields = [];
+    if (mt === 'cliente') modalFields = [F('Nome / Razão social', 'nome', { full: 1, ph: 'Ex: Construtora Vale Verde LTDA' }), F('CPF / CNPJ', 'doc', { ph: '000.000.000-00' }), F('Telefone', 'tel', { ph: '(73) 00000-0000' }), F('Endereço da obra', 'end', { full: 1, ph: 'Rua, nº, bairro — cidade/UF' })];
+    else if (mt === 'material') modalFields = [F('Código', 'cod', { ph: '101' }), F('Categoria', 'cat', { options: this.cats }), F('Descrição do produto', 'nome', { full: 1, ph: 'Ex: Placa de Gesso Standard 1,80 x 1,20m' }), F('Unidade', 'un', { options: ['pç', 'm²', 'm linear', 'barra', 'saco', 'un', 'kg'] }), F('Preço de venda (R$)', 'preco', { type: 'number', ph: '0,00' }), F('Estoque atual', 'estoque', { type: 'number', ph: '0' })];
+    else if (mt === 'servico') modalFields = [F('Código', 'cod', { ph: 'S01' }), F('Categoria', 'cat', { options: this.cats }), F('Descrição do serviço', 'nome', { full: 1, ph: 'Ex: Instalação de forro de gesso liso' }), F('Unidade de medida', 'un', { options: ['m²', 'm linear', 'un', 'diária', 'obra'] }), F('Valor (R$)', 'preco', { type: 'number', ph: '0,00' }), F('Prazo estimado', 'prazo', { ph: '2 a 4 dias' })];
+    const mTitles = { cliente: ['Cadastro de cliente', 'Dados usados no cabeçalho dos documentos'], material: ['Cadastro de produto', 'Forros, molduras, sancas, drywall e mais'], servico: ['Cadastro de serviço', 'Serviços executados pela equipe Gesso Fort'] };
+    const mTitle = mTitles[mt] || ['', ''];
+
+    // ---- print
+    const pn = s.notas.find(n => n.id === s.printId);
+    let pv = {};
+    if (pn) {
+      const tt = this.notaTotals(pn), c = s.clientes.find(x => x.id === pn.cliente);
+      const cat = s.materiais.concat(s.servicos);
+      pv = {
+        pTipo: pn.tipo, pNumero: pn.numero, pData: (pn.data || '').split(' ')[0], pImpresso: new Date().toLocaleString('pt-BR'),
+        pCliNome: c ? c.nome : 'NÃO CADASTRADO', pCliDoc: c ? c.doc : '—', pCliTel: c ? c.tel : '—',
+        pCliRua: c ? c.rua : '', pCliNum: c ? c.num : '', pCliBairro: c ? c.bairro : '', pCliCep: c ? c.cep : '',
+        pCliMun: c ? (c.municipio + '-' + c.uf) : '', pVendedor: 'CALIANE GALDINO',
+        pItens: pn.itens.map(i => {
+          const ref = cat.find(x => x.nome === i.nome) || {};
+          return { cod: ref.cod || '—', nome: (i.nome || '').toUpperCase(), un: (i.un || 'un').toUpperCase(), qtd: Number(i.qtd).toFixed(1), preco: M(i.preco), desc: M(0), total: M(i.qtd * i.preco) };
+        }),
+        pQtd: String(tt.qtd), pSub: M(tt.sub), pDesc: M(tt.d), pFrete: M(0),
+        pDescPct: (tt.sub ? (tt.d / tt.sub * 100).toFixed(2).replace('.', ',') : '0,00') + ' %',
+        pTotal: M(tt.total), pObs: pn.obs || '', pValidade: pn.validade || '—', pFormaPgto: 'DINHEIRO'
+      };
+    }
+
+    const tg = on => 'padding:8px 18px;border:none;border-radius:999px;font-size:13px;font-weight:600;cursor:pointer;background:' + (on ? '#fff' : 'transparent') + ';color:' + (on ? '#0D0D0D' : '#c5c5c5');
+    const selNota = s.notas.find(n => n.id === s.sel);
+
+    return {
+      isLogin: !s.logged, isApp: s.logged,
+      loginUser: s.loginUser, loginPass: s.loginPass, onLoginUser: this.set('loginUser'), onLoginPass: this.set('loginPass'),
+      doLogin: () => this.setState({ logged: true }), doLogout: () => this.setState({ logged: false, active: 'home', tabs: [{ id: 'home', label: 'Home' }] }),
+      rail, flyOpen: !!flyMenu, flyLabel: flyMenu ? flyMenu.label : '', flyItems,
+      flyStyle: 'position:fixed;z-index:40;left:66px;top:' + Math.min(Math.max(58 + flyIdx * 51, 58), 300) + 'px;min-width:232px;background:#fff;border:1px solid #e2ded6;border-radius:14px;box-shadow:0 16px 48px rgba(0,0,0,.2);padding:10px 0;animation:gfFly .16s cubic-bezier(.4,0,.2,1)',
+      closeFly: () => this.setState({ fly: null }),
+      tabs, agora: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
+      dataLonga: new Date().toLocaleDateString('pt-BR', { weekday: 'long', day: '2-digit', month: 'long', year: 'numeric' }),
+      isHome: page === 'home', homeAtalhos: page === 'home' && s.homeTab === 'atalhos', homeDash: page === 'home' && s.homeTab === 'dash',
+      goAtalhos: () => this.setState({ homeTab: 'atalhos' }), goDash: () => this.setState({ homeTab: 'dash' }),
+      tgAtalhos: tg(s.homeTab === 'atalhos'), tgDash: tg(s.homeTab === 'dash'),
+      atalhos, kpis, barras, dashCards, topItens, modelos,
+      isList: isList || !!gd || isLeads, listTitle, cols, rows, isEmpty: (isList || !!gd || isLeads) && rows.length === 0, rowCount: String(rows.length),
+      hasListCards: listCards.length > 0, listCards,
+      isRel: !!rg, relGrupos, relList, relTitulo: relAtivo || '', relFields,
+      isForm: !!fd, formTitle: fd ? fd.title : '', formSub: fd ? fd.sub : '', formCta: fd ? fd.cta : '', formSections,
+      hasFormTable: !!(fd && fd.table), formTableCols: fd && fd.table ? fd.table.cols : [], formTableRows: fd && fd.table ? fd.table.rows.map(r => ({ cells: r.map((v, i) => ({ v, style: 'padding:11px 14px;font-size:13px;text-align:' + (i > 1 ? 'right' : 'left') + ';color:#2A2A2A' + (i === 0 ? ';font-weight:600' : '') })) })) : [],
+      isDoc: page === 'contrato', isChangelog: page === 'atualizacoes',
+      docBlocks: this.contrato, changelog: this.changelog,
+      selInfo: s.sel ? 'Registro selecionado' : 'Clique em uma linha para selecionar',
+      busca: s.busca, onBusca: this.set('busca'), campo: s.campo, onCampo: this.set('campo'), campoOpts,
+      de: s.de, ate: s.ate, onDe: this.set('de'), onAte: this.set('ate'),
+      colsSel: s.colsSel, onColsSel: this.set('colsSel'), colsOpts,
+      hasFiltros: filtros.length > 0, filtros,
+      showActionBar: actions.length > 0, actions,
+      optionsOpen: s.optionsOpen, closeOptions: () => this.setState({ optionsOpen: false }),
+      transformOpts: [
+        { label: 'Em Pedido de Venda', go: () => { this.setState({ optionsOpen: false }); if (selNota) this.setState(st => ({ notas: st.notas.map(n => n.id === selNota.id ? { ...n, tipo: 'Pedido de Venda', sit: 'Importado' } : n) })); this.open('pedvenda'); } },
+        { label: 'Em Pré-Venda', go: () => { this.setState({ optionsOpen: false }); this.open('prevenda'); } },
+        { label: 'Em Faturamento', go: () => { this.setState({ optionsOpen: false }); this.open('faturamento'); } }
+      ],
+      isNova: page === 'nova', novaTitulo: 'Novo ' + s.novaTipo, tiposDoc, novaTipo: s.novaTipo,
+      clientesOpts: s.clientes, novaCliente: s.novaCliente, onNovaCliente: this.set('novaCliente'),
+      openNovoCliente: () => this.openModal('cliente'),
+      catalogoOpts, addSel: s.addSel, onAddSel: this.set('addSel'), addItem: this.addItem,
+      itensNova, semItens: s.itens.length === 0, novaObs: s.novaObs, onNovaObs: this.set('novaObs'),
+      novaDesc: s.novaDesc, onNovaDesc: this.set('novaDesc'),
+      resumoQtd: String(s.itens.reduce((a, i) => a + (Number(i.qtd) || 0), 0)), resumoSub: M(sub), resumoTotal: M(sub - desc),
+      resumoDescPct: sub ? (desc / sub * 100).toFixed(2).replace('.', ',') + ' %' : '',
+      salvarNota: this.salvarNota,
+      isStub: !isList && !gd && !rg && !fd && !isLeads && page !== 'home' && page !== 'nova' && page !== 'contrato' && page !== 'atualizacoes',
+      stubTitle: this.labelOf(page), stubIcon: '◫',
+      modalOpen: !!mt, modalTitle: mTitle[0], modalSub: mTitle[1], modalFields,
+      closeModal: () => this.setState({ modal: null, form: {}, editId: null }), saveModal: this.save,
+      isPrint: !!pn, closePrint: () => this.setState({ printId: null }), doPrint: () => window.print(),
+      ...pv
+    };
+  }
+}
+</script>
+</body>
+</html>

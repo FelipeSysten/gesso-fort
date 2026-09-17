@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Retaguarda Gesso Fort — Sistema Interno (v1, legado)</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+html,body{margin:0;padding:0}
+body{font-family:'Outfit',system-ui,sans-serif;background:#0D0D0D;color:#0D0D0D;-webkit-font-smoothing:antialiased}
+*{box-sizing:border-box}
+a{color:#B8862B;text-decoration:none}
+a:hover{color:#E0B75C}
+input,select,textarea,button{font-family:inherit}
+input:focus,select:focus,textarea:focus{outline:2px solid #C79A3B;outline-offset:-1px}
+::placeholder{color:#A8A8A8}
+@keyframes gfIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@keyframes gfFade{from{opacity:0}to{opacity:1}}
+@media print{
+  body *{visibility:hidden!important}
+  #gf-print,#gf-print *{visibility:visible!important}
+  #gf-print{position:absolute!important;inset:0!important;padding:0!important;background:#fff!important;overflow:visible!important}
+  .gf-noprint{display:none!important}
+}
+</style>
+</helmet>
+
+<sc-if value="{{ isLogin }}" hint-placeholder-val="{{ true }}">
+<div style="min-height:100vh;display:flex;background:#0D0D0D">
+  <div style="flex:1.1;min-width:0;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:48px 40px;background:radial-gradient(120% 90% at 20% 10%,#1c1a16 0%,#0D0D0D 60%);position:relative">
+    <div style="position:absolute;inset:0;opacity:.5;background:repeating-linear-gradient(135deg,transparent 0 22px,rgba(199,154,59,.05) 22px 23px)"></div>
+    <div style="position:relative;width:100%;max-width:420px;display:flex;flex-direction:column;gap:28px">
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:52px;line-height:.95;letter-spacing:-.02em">
+          <span style="background:linear-gradient(160deg,#fff 10%,#9aa0a6 55%,#e8ecef 90%);-webkit-background-clip:text;background-clip:text;color:transparent">GESSO</span>
+          <span style="background:linear-gradient(160deg,#F0D18A 5%,#B8862B 45%,#E8C46A 95%);-webkit-background-clip:text;background-clip:text;color:transparent"> FORT</span>
+        </div>
+        <div style="font-size:11px;letter-spacing:.42em;color:#7d7d7d;text-transform:uppercase;padding-left:3px">Qualidade que transforma</div>
+      </div>
+      <div style="height:1px;background:linear-gradient(90deg,#C79A3B,rgba(199,154,59,0))"></div>
+      <p style="margin:0;color:#9c9c9c;font-size:16px;line-height:1.55;max-width:360px">Sistema de gestão de materiais, serviços, clientes e emissão de notas.</p>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:4px">
+        <span style="font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#C79A3B;border:1px solid rgba(199,154,59,.35);border-radius:8px;padding:6px 11px">Forros</span>
+        <span style="font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#C79A3B;border:1px solid rgba(199,154,59,.35);border-radius:8px;padding:6px 11px">Molduras</span>
+        <span style="font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#C79A3B;border:1px solid rgba(199,154,59,.35);border-radius:8px;padding:6px 11px">Sancas</span>
+        <span style="font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#C79A3B;border:1px solid rgba(199,154,59,.35);border-radius:8px;padding:6px 11px">Drywall</span>
+        <span style="font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#C79A3B;border:1px solid rgba(199,154,59,.35);border-radius:8px;padding:6px 11px">Parede 3D</span>
+      </div>
+    </div>
+  </div>
+
+  <div style="flex:0 0 clamp(340px,42%,520px);background:#F5F4F2;display:flex;flex-direction:column;justify-content:center;padding:48px clamp(28px,5vw,64px)">
+    <div style="max-width:380px;width:100%;margin:0 auto;animation:gfIn .4s cubic-bezier(.4,0,.2,1)">
+      <img src="assets/gessofort-logo.png" alt="Gesso Fort" style="width:150px;display:block;margin:0 0 26px -8px" />
+      <h1 style="font-family:'Nunito',sans-serif;font-weight:900;font-size:28px;margin:0 0 6px;color:#0D0D0D;letter-spacing:-.01em">Acessar o sistema</h1>
+      <p style="margin:0 0 30px;color:#7a7a7a;font-size:14.5px">Entre com suas credenciais para continuar.</p>
+
+      <label style="display:block;font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#6a6a6a;margin-bottom:7px">Usuário</label>
+      <input type="text" value="{{ loginUser }}" onChange="{{ onLoginUser }}" placeholder="seu.usuario" style="width:100%;padding:13px 15px;font-size:15px;border:1px solid #dcd9d4;border-radius:10px;background:#fff;color:#0D0D0D;margin-bottom:18px" />
+
+      <label style="display:block;font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#6a6a6a;margin-bottom:7px">Senha</label>
+      <input type="password" value="{{ loginPass }}" onChange="{{ onLoginPass }}" placeholder="••••••••" style="width:100%;padding:13px 15px;font-size:15px;border:1px solid #dcd9d4;border-radius:10px;background:#fff;color:#0D0D0D;margin-bottom:14px" />
+
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px">
+        <label style="display:flex;align-items:center;gap:8px;font-size:13.5px;color:#6a6a6a;cursor:pointer">
+          <input type="checkbox" style="width:16px;height:16px;accent-color:#C79A3B" />
+          Manter conectado
+        </label>
+        <a href="#" style="font-size:13.5px">Esqueci a senha</a>
+      </div>
+
+      <button onClick="{{ doLogin }}" style="width:100%;padding:15px;border:none;border-radius:999px;background:linear-gradient(160deg,#E0B75C,#B8862B);color:#1a1206;font-weight:700;font-size:15.5px;letter-spacing:.02em;cursor:pointer;box-shadow:0 6px 20px rgba(184,134,43,.28);transition:transform 150ms cubic-bezier(.4,0,.2,1)" style-hover="transform:scale(1.02)" style-active="transform:scale(.97)">Entrar</button>
+
+      <p style="margin:22px 0 0;font-size:12.5px;color:#9a9a9a;text-align:center">Gesso Fort · CNPJ 60.560.384/0001-29</p>
+    </div>
+  </div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isApp }}" hint-placeholder-val="{{ false }}">
+<div style="min-height:100vh;display:flex;background:#F5F4F2">
+
+  <sc-if value="{{ isDesktop }}" hint-placeholder-val="{{ true }}">
+  <aside class="gf-noprint" style="flex:0 0 250px;background:#0D0D0D;display:flex;flex-direction:column;padding:26px 16px;position:sticky;top:0;height:100vh">
+    <div style="padding:0 10px 22px">
+      <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:23px;line-height:1;letter-spacing:-.01em">
+        <span style="background:linear-gradient(160deg,#fff,#9aa0a6);-webkit-background-clip:text;background-clip:text;color:transparent">GESSO</span><span style="background:linear-gradient(160deg,#F0D18A,#B8862B);-webkit-background-clip:text;background-clip:text;color:transparent"> FORT</span>
+      </div>
+      <div style="font-size:8.5px;letter-spacing:.34em;color:#6b6b6b;text-transform:uppercase;margin-top:5px">Qualidade que transforma</div>
+    </div>
+    <nav style="display:flex;flex-direction:column;gap:3px">
+      <sc-for list="{{ navItems }}" as="it" hint-placeholder-count="5">
+        <button onClick="{{ it.go }}" style="{{ it.style }}">
+          <span style="width:20px;text-align:center;font-size:15px">{{ it.icon }}</span>
+          <span>{{ it.label }}</span>
+        </button>
+      </sc-for>
+    </nav>
+    <div style="height:1px;background:rgba(255,255,255,.08);margin:18px 4px"></div>
+    <button onClick="{{ goNovaNota }}" style="display:flex;align-items:center;justify-content:center;gap:8px;padding:13px;border:none;border-radius:999px;background:linear-gradient(160deg,#E0B75C,#B8862B);color:#1a1206;font-weight:700;font-size:14px;cursor:pointer;transition:transform 150ms cubic-bezier(.4,0,.2,1)" style-hover="transform:scale(1.03)" style-active="transform:scale(.97)">+ Nova nota</button>
+    <div style="margin-top:auto;display:flex;align-items:center;gap:11px;padding:12px 10px;border-radius:14px;background:rgba(255,255,255,.04)">
+      <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(160deg,#E0B75C,#B8862B);display:flex;align-items:center;justify-content:center;font-weight:800;color:#1a1206;font-size:14px">AG</div>
+      <div style="min-width:0">
+        <div style="color:#fff;font-size:13.5px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Alex Gomes</div>
+        <div style="color:#7d7d7d;font-size:11.5px">Administrador</div>
+      </div>
+      <button onClick="{{ doLogout }}" title="Sair" style="margin-left:auto;background:none;border:none;color:#7d7d7d;cursor:pointer;font-size:15px;padding:4px">⏻</button>
+    </div>
+  </aside>
+  </sc-if>
+
+  <main style="flex:1;min-width:0;display:flex;flex-direction:column">
+    <header class="gf-noprint" style="display:flex;align-items:center;gap:16px;padding:18px clamp(16px,3vw,34px);background:#fff;border-bottom:1px solid #e7e4df;position:sticky;top:0;z-index:20;flex-wrap:wrap">
+      <sc-if value="{{ isMobile }}" hint-placeholder-val="{{ false }}">
+        <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:18px">
+          <span style="color:#6d7379">GESSO</span><span style="color:#B8862B"> FORT</span>
+        </div>
+      </sc-if>
+      <div style="min-width:0">
+        <h2 style="margin:0;font-family:'Nunito',sans-serif;font-weight:900;font-size:clamp(18px,2.4vw,24px);letter-spacing:-.01em;color:#0D0D0D">{{ pageTitle }}</h2>
+        <div style="font-size:12.5px;color:#8a8a8a;margin-top:2px">{{ pageSub }}</div>
+      </div>
+      <div style="margin-left:auto;display:flex;align-items:center;gap:10px">
+        <sc-if value="{{ isDesktop }}" hint-placeholder-val="{{ true }}">
+          <div style="font-size:12.5px;color:#8a8a8a;border:1px solid #e7e4df;border-radius:999px;padding:7px 14px">{{ hoje }}</div>
+        </sc-if>
+        <sc-if value="{{ showPrimaryAction }}" hint-placeholder-val="{{ false }}">
+          <button onClick="{{ primaryAction }}" style="padding:10px 18px;border:none;border-radius:999px;background:#0D0D0D;color:#fff;font-weight:600;font-size:13.5px;cursor:pointer;transition:transform 150ms cubic-bezier(.4,0,.2,1)" style-hover="transform:scale(1.03)" style-active="transform:scale(.97)">{{ primaryLabel }}</button>
+        </sc-if>
+      </div>
+    </header>
+
+    <div style="flex:1;padding:clamp(16px,2.6vw,30px) clamp(16px,3vw,34px) 110px">
+
+      <sc-if value="{{ isDash }}" hint-placeholder-val="{{ true }}">
+      <div style="display:flex;flex-direction:column;gap:22px;animation:gfFade .3s">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:16px">
+          <sc-for list="{{ kpis }}" as="k" hint-placeholder-count="4">
+            <div style="background:#fff;border:1px solid rgba(0,0,0,.06);border-radius:16px;padding:22px 24px;box-shadow:0 4px 24px rgba(0,0,0,.05)">
+              <div style="font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:#9a9a9a;font-weight:600">{{ k.label }}</div>
+              <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:30px;color:#0D0D0D;margin-top:10px;letter-spacing:-.02em">{{ k.value }}</div>
+              <div style="font-size:12.5px;color:#B8862B;margin-top:6px">{{ k.hint }}</div>
+            </div>
+          </sc-for>
+        </div>
+
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px">
+          <div style="background:#fff;border:1px solid rgba(0,0,0,.06);border-radius:16px;padding:24px;box-shadow:0 4px 24px rgba(0,0,0,.05)">
+            <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:16px">
+              <h3 style="margin:0;font-family:'Nunito',sans-serif;font-weight:800;font-size:16px">Últimas notas</h3>
+              <button onClick="{{ goNotas }}" style="background:none;border:none;color:#B8862B;font-size:13px;font-weight:600;cursor:pointer;padding:0">Ver todas</button>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:2px">
+              <sc-for list="{{ recentes }}" as="n" hint-placeholder-count="4">
+                <button onClick="{{ n.open }}" style="display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:none;border:none;border-radius:11px;padding:11px 10px;cursor:pointer" style-hover="background:#F5F4F2">
+                  <div style="width:36px;height:36px;border-radius:9px;background:#F5F4F2;border:1px solid rgba(184,134,43,.2);display:flex;align-items:center;justify-content:center;font-family:'Nunito',sans-serif;font-weight:900;font-size:10.5px;letter-spacing:.04em;color:#B8862B">{{ n.icon }}</div>
+                  <div style="min-width:0;flex:1">
+                    <div style="font-size:14px;font-weight:600;color:#0D0D0D;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ n.cliente }}</div>
+                    <div style="font-size:12px;color:#9a9a9a">{{ n.sub }}</div>
+                  </div>
+                  <div style="font-size:14px;font-weight:700;color:#0D0D0D;white-space:nowrap">{{ n.total }}</div>
+                </button>
+              </sc-for>
+            </div>
+          </div>
+
+          <div style="background:#0D0D0D;border-radius:16px;padding:24px;box-shadow:0 4px 24px rgba(0,0,0,.12);display:flex;flex-direction:column">
+            <h3 style="margin:0 0 4px;font-family:'Nunito',sans-serif;font-weight:800;font-size:16px;color:#fff">Faturamento por categoria</h3>
+            <div style="font-size:12.5px;color:#7d7d7d;margin-bottom:20px">Últimos 30 dias</div>
+            <div style="display:flex;flex-direction:column;gap:14px">
+              <sc-for list="{{ barras }}" as="b" hint-placeholder-count="5">
+                <div>
+                  <div style="display:flex;justify-content:space-between;font-size:13px;color:#cfcfcf;margin-bottom:6px">
+                    <span>{{ b.nome }}</span><span style="color:#E0B75C;font-weight:600">{{ b.valor }}</span>
+                  </div>
+                  <div style="height:7px;border-radius:999px;background:rgba(255,255,255,.07);overflow:hidden">
+                    <div style="{{ b.barStyle }}"></div>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+            <button onClick="{{ goNovaNota }}" style="margin-top:auto;margin-bottom:0;padding:13px;border:1px solid rgba(224,183,92,.4);border-radius:999px;background:transparent;color:#E0B75C;font-weight:600;font-size:14px;cursor:pointer;margin-top:24px" style-hover="background:rgba(224,183,92,.1)">Emitir nova nota</button>
+          </div>
+        </div>
+      </div>
+      </sc-if>
+
+      <sc-if value="{{ isCatalogo }}" hint-placeholder-val="{{ false }}">
+      <div style="display:flex;flex-direction:column;gap:16px;animation:gfFade .3s">
+        <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+          <input type="text" value="{{ busca }}" onChange="{{ onBusca }}" placeholder="Buscar..." style="flex:1;min-width:200px;padding:11px 15px;font-size:14.5px;border:1px solid #e0ddd8;border-radius:999px;background:#fff" />
+          <div style="display:flex;gap:7px;flex-wrap:wrap">
+            <sc-for list="{{ filtros }}" as="f" hint-placeholder-count="5">
+              <button onClick="{{ f.go }}" style="{{ f.style }}">{{ f.label }}</button>
+            </sc-for>
+          </div>
+        </div>
+
+        <div style="background:#fff;border:1px solid rgba(0,0,0,.06);border-radius:16px;box-shadow:0 4px 24px rgba(0,0,0,.05);overflow:hidden">
+          <div style="overflow-x:auto">
+            <table style="width:100%;border-collapse:collapse;min-width:640px">
+              <thead>
+                <tr style="background:#FAF9F7">
+                  <sc-for list="{{ cols }}" as="c" hint-placeholder-count="6">
+                    <th style="{{ c.style }}">{{ c.label }}</th>
+                  </sc-for>
+                </tr>
+              </thead>
+              <tbody>
+                <sc-for list="{{ rows }}" as="r" hint-placeholder-count="7">
+                  <tr style="border-top:1px solid #f0ede8">
+                    <sc-for list="{{ r.cells }}" as="c" hint-placeholder-count="6">
+                      <td style="{{ c.style }}">{{ c.v }}</td>
+                    </sc-for>
+                    <td style="padding:13px 18px;text-align:right;white-space:nowrap">
+                      <button onClick="{{ r.edit }}" style="background:none;border:1px solid #e0ddd8;border-radius:8px;padding:5px 10px;font-size:12px;color:#6a6a6a;cursor:pointer;margin-right:6px" style-hover="border-color:#C79A3B;color:#B8862B">Editar</button>
+                      <button onClick="{{ r.del }}" style="background:none;border:1px solid #e0ddd8;border-radius:8px;padding:5px 10px;font-size:12px;color:#a06060;cursor:pointer" style-hover="border-color:#c05555;color:#c05555">Excluir</button>
+                    </td>
+                  </tr>
+                </sc-for>
+              </tbody>
+            </table>
+          </div>
+          <sc-if value="{{ isEmpty }}" hint-placeholder-val="{{ false }}">
+            <div style="padding:46px;text-align:center;color:#9a9a9a;font-size:14px">Nenhum registro encontrado.</div>
+          </sc-if>
+        </div>
+      </div>
+      </sc-if>
+
+      <sc-if value="{{ isNotas }}" hint-placeholder-val="{{ false }}">
+      <div style="display:flex;flex-direction:column;gap:14px;animation:gfFade .3s">
+        <sc-for list="{{ notasList }}" as="n" hint-placeholder-count="4">
+          <div style="background:#fff;border:1px solid rgba(0,0,0,.06);border-radius:16px;box-shadow:0 4px 24px rgba(0,0,0,.05);padding:20px 22px;display:flex;align-items:center;gap:18px;flex-wrap:wrap">
+            <div style="width:46px;height:46px;border-radius:12px;background:#F5F4F2;border:1px solid rgba(184,134,43,.2);display:flex;align-items:center;justify-content:center;font-family:'Nunito',sans-serif;font-weight:900;font-size:13px;letter-spacing:.03em;color:#B8862B">{{ n.icon }}</div>
+            <div style="min-width:170px;flex:1">
+              <div style="display:flex;align-items:center;gap:9px;flex-wrap:wrap">
+                <span style="font-family:'Nunito',sans-serif;font-weight:800;font-size:15.5px">Nº {{ n.numero }}</span>
+                <span style="{{ n.tagStyle }}">{{ n.tipo }}</span>
+              </div>
+              <div style="font-size:13.5px;color:#7a7a7a;margin-top:3px">{{ n.cliente }} · {{ n.data }}</div>
+            </div>
+            <div style="text-align:right">
+              <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:19px">{{ n.total }}</div>
+              <div style="font-size:12px;color:#9a9a9a">{{ n.qtdItens }} itens</div>
+            </div>
+            <div style="display:flex;gap:8px">
+              <button onClick="{{ n.open }}" style="padding:9px 16px;border:1px solid #e0ddd8;border-radius:999px;background:#fff;font-size:13px;font-weight:600;color:#0D0D0D;cursor:pointer" style-hover="border-color:#C79A3B;color:#B8862B">Visualizar</button>
+              <button onClick="{{ n.del }}" style="padding:9px 13px;border:1px solid #e0ddd8;border-radius:999px;background:#fff;font-size:13px;color:#a06060;cursor:pointer" style-hover="border-color:#c05555">Excluir</button>
+            </div>
+          </div>
+        </sc-for>
+        <sc-if value="{{ notasVazio }}" hint-placeholder-val="{{ false }}">
+          <div style="background:#fff;border:1px dashed #ddd9d3;border-radius:16px;padding:56px;text-align:center;color:#9a9a9a">Nenhuma nota emitida ainda.</div>
+        </sc-if>
+      </div>
+      </sc-if>
+
+      <sc-if value="{{ isNova }}" hint-placeholder-val="{{ false }}">
+      <div style="display:flex;gap:18px;flex-wrap:wrap;align-items:flex-start;animation:gfFade .3s">
+
+        <div style="flex:1 1 460px;min-width:300px;display:flex;flex-direction:column;gap:16px">
+          <div style="background:#fff;border:1px solid rgba(0,0,0,.06);border-radius:16px;box-shadow:0 4px 24px rgba(0,0,0,.05);padding:24px">
+            <h3 style="margin:0 0 16px;font-family:'Nunito',sans-serif;font-weight:800;font-size:16px">Tipo de documento</h3>
+            <div style="display:flex;gap:9px;flex-wrap:wrap">
+              <sc-for list="{{ tiposDoc }}" as="t" hint-placeholder-count="4">
+                <button onClick="{{ t.go }}" style="{{ t.style }}">{{ t.label }}</button>
+              </sc-for>
+            </div>
+          </div>
+
+          <div style="background:#fff;border:1px solid rgba(0,0,0,.06);border-radius:16px;box-shadow:0 4px 24px rgba(0,0,0,.05);padding:24px">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+              <h3 style="margin:0;font-family:'Nunito',sans-serif;font-weight:800;font-size:16px">Cliente</h3>
+              <button onClick="{{ openNovoCliente }}" style="background:none;border:none;color:#B8862B;font-size:13px;font-weight:600;cursor:pointer;padding:0">+ Cadastrar cliente</button>
+            </div>
+            <select value="{{ novaCliente }}" onChange="{{ onNovaCliente }}" style="width:100%;padding:12px 14px;font-size:14.5px;border:1px solid #e0ddd8;border-radius:10px;background:#fff;color:#0D0D0D">
+              <option value="">NÃO CADASTRADO</option>
+              <sc-for list="{{ clientesOpts }}" as="c" hint-placeholder-count="4">
+                <option value="{{ c.id }}">{{ c.nome }}</option>
+              </sc-for>
+            </select>
+          </div>
+
+          <div style="background:#fff;border:1px solid rgba(0,0,0,.06);border-radius:16px;box-shadow:0 4px 24px rgba(0,0,0,.05);padding:24px">
+            <h3 style="margin:0 0 14px;font-family:'Nunito',sans-serif;font-weight:800;font-size:16px">Produtos e serviços</h3>
+            <div style="display:flex;gap:9px;flex-wrap:wrap;margin-bottom:16px">
+              <select value="{{ addSel }}" onChange="{{ onAddSel }}" style="flex:1;min-width:200px;padding:12px 14px;font-size:14px;border:1px solid #e0ddd8;border-radius:10px;background:#fff;color:#0D0D0D">
+                <option value="">Selecione um item do catálogo…</option>
+                <sc-for list="{{ catalogoOpts }}" as="o" hint-placeholder-count="6">
+                  <option value="{{ o.id }}">{{ o.label }}</option>
+                </sc-for>
+              </select>
+              <button onClick="{{ addItem }}" style="padding:12px 22px;border:none;border-radius:10px;background:#0D0D0D;color:#fff;font-weight:600;font-size:14px;cursor:pointer" style-hover="background:#2A2A2A">Adicionar</button>
+            </div>
+
+            <div style="display:flex;flex-direction:column;gap:9px">
+              <sc-for list="{{ itensNova }}" as="i" hint-placeholder-count="2">
+                <div style="border:1px solid #eeebe6;border-radius:12px;padding:13px 14px;display:flex;gap:12px;align-items:center;flex-wrap:wrap;background:#FDFCFB">
+                  <div style="flex:1;min-width:150px">
+                    <div style="font-size:14px;font-weight:600;color:#0D0D0D">{{ i.nome }}</div>
+                    <div style="font-size:11.5px;color:#9a9a9a;letter-spacing:.06em;text-transform:uppercase">{{ i.meta }}</div>
+                  </div>
+                  <div style="display:flex;align-items:center;gap:8px">
+                    <div>
+                      <div style="font-size:10px;color:#9a9a9a;text-transform:uppercase;letter-spacing:.1em;margin-bottom:3px">Qtd</div>
+                      <input type="number" value="{{ i.qtd }}" onChange="{{ i.onQtd }}" style="width:74px;padding:8px 10px;font-size:14px;border:1px solid #e0ddd8;border-radius:8px;text-align:right" />
+                    </div>
+                    <div>
+                      <div style="font-size:10px;color:#9a9a9a;text-transform:uppercase;letter-spacing:.1em;margin-bottom:3px">Valor un.</div>
+                      <input type="number" value="{{ i.preco }}" onChange="{{ i.onPreco }}" style="width:92px;padding:8px 10px;font-size:14px;border:1px solid #e0ddd8;border-radius:8px;text-align:right" />
+                    </div>
+                    <div style="text-align:right;min-width:92px">
+                      <div style="font-size:10px;color:#9a9a9a;text-transform:uppercase;letter-spacing:.1em;margin-bottom:3px">Total</div>
+                      <div style="font-size:15px;font-weight:700;padding:8px 0">{{ i.total }}</div>
+                    </div>
+                    <button onClick="{{ i.del }}" title="Remover" style="background:none;border:none;color:#b98080;font-size:17px;cursor:pointer;padding:6px">×</button>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+            <sc-if value="{{ semItens }}" hint-placeholder-val="{{ true }}">
+              <div style="border:1px dashed #ddd9d3;border-radius:12px;padding:34px;text-align:center;color:#a5a5a5;font-size:13.5px">Nenhum item adicionado.</div>
+            </sc-if>
+          </div>
+
+          <div style="background:#fff;border:1px solid rgba(0,0,0,.06);border-radius:16px;box-shadow:0 4px 24px rgba(0,0,0,.05);padding:24px">
+            <h3 style="margin:0 0 14px;font-family:'Nunito',sans-serif;font-weight:800;font-size:16px">Observações</h3>
+            <textarea value="{{ novaObs }}" onChange="{{ onNovaObs }}" rows="3" placeholder="Prazo, condições, detalhes da execução…" style="width:100%;padding:12px 14px;font-size:14.5px;border:1px solid #e0ddd8;border-radius:10px;resize:vertical;line-height:1.5"></textarea>
+          </div>
+        </div>
+
+        <div style="flex:0 1 330px;min-width:280px;position:sticky;top:100px;background:#0D0D0D;border-radius:16px;padding:26px;box-shadow:0 4px 24px rgba(0,0,0,.14)">
+          <div style="font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:#7d7d7d">Resumo</div>
+          <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:22px;color:#fff;margin:6px 0 22px">{{ novaTipo }}</div>
+
+          <div style="display:flex;justify-content:space-between;font-size:14px;color:#b5b5b5;padding:9px 0">
+            <span>Qtd. itens vendidos</span><span style="color:#fff">{{ resumoQtd }}</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;font-size:14px;color:#b5b5b5;padding:9px 0">
+            <span>Total produtos</span><span style="color:#fff">{{ resumoSub }}</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;font-size:14px;color:#b5b5b5;padding:9px 0;gap:10px">
+            <span>Desconto (R$)</span>
+            <input type="number" value="{{ novaDesc }}" onChange="{{ onNovaDesc }}" style="width:100px;padding:7px 10px;font-size:14px;border:1px solid rgba(255,255,255,.15);border-radius:8px;background:rgba(255,255,255,.06);color:#fff;text-align:right" />
+          </div>
+          <div style="display:flex;justify-content:space-between;font-size:12.5px;color:#7d7d7d;padding:0 0 12px">
+            <span></span><span>{{ resumoDescPct }}</span>
+          </div>
+          <div style="height:1px;background:rgba(255,255,255,.1);margin:6px 0 16px"></div>
+          <div style="display:flex;justify-content:space-between;align-items:baseline">
+            <span style="font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:#7d7d7d">Valor total</span>
+            <span style="font-family:'Nunito',sans-serif;font-weight:900;font-size:29px;background:linear-gradient(160deg,#F0D18A,#B8862B);-webkit-background-clip:text;background-clip:text;color:transparent">{{ resumoTotal }}</span>
+          </div>
+
+          <button onClick="{{ salvarNota }}" style="width:100%;margin-top:24px;padding:15px;border:none;border-radius:999px;background:linear-gradient(160deg,#E0B75C,#B8862B);color:#1a1206;font-weight:700;font-size:15px;cursor:pointer;transition:transform 150ms cubic-bezier(.4,0,.2,1)" style-hover="transform:scale(1.02)" style-active="transform:scale(.97)">Gerar documento</button>
+          <button onClick="{{ goNotas }}" style="width:100%;margin-top:9px;padding:13px;border:1px solid rgba(255,255,255,.14);border-radius:999px;background:transparent;color:#9a9a9a;font-size:14px;cursor:pointer" style-hover="color:#fff">Cancelar</button>
+        </div>
+      </div>
+      </sc-if>
+
+    </div>
+  </main>
+
+  <sc-if value="{{ isMobile }}" hint-placeholder-val="{{ false }}">
+  <nav class="gf-noprint" style="position:fixed;left:0;right:0;bottom:0;z-index:40;background:#0D0D0D;display:flex;padding:8px 6px calc(8px + env(safe-area-inset-bottom));gap:2px">
+    <sc-for list="{{ navItems }}" as="it" hint-placeholder-count="5">
+      <button onClick="{{ it.go }}" style="{{ it.mStyle }}">
+        <span style="font-size:17px;line-height:1">{{ it.icon }}</span>
+        <span style="font-size:10px;letter-spacing:.02em">{{ it.short }}</span>
+      </button>
+    </sc-for>
+  </nav>
+  </sc-if>
+</div>
+</sc-if>
+
+<sc-if value="{{ modalOpen }}" hint-placeholder-val="{{ false }}">
+<div class="gf-noprint" style="position:fixed;inset:0;z-index:60;background:rgba(13,13,13,.55);display:flex;align-items:center;justify-content:center;padding:20px;animation:gfFade .18s">
+  <div style="width:100%;max-width:520px;max-height:88vh;overflow-y:auto;background:#fff;border-radius:16px;box-shadow:0 16px 48px rgba(0,0,0,.2);padding:28px;animation:gfIn .22s cubic-bezier(.4,0,.2,1)">
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:20px">
+      <div>
+        <h3 style="margin:0;font-family:'Nunito',sans-serif;font-weight:900;font-size:20px">{{ modalTitle }}</h3>
+        <div style="font-size:13px;color:#8a8a8a;margin-top:3px">{{ modalSub }}</div>
+      </div>
+      <button onClick="{{ closeModal }}" style="background:none;border:none;font-size:22px;color:#a5a5a5;cursor:pointer;line-height:1;padding:0 2px">×</button>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px">
+      <sc-for list="{{ modalFields }}" as="f" hint-placeholder-count="4">
+        <div style="{{ f.wrapStyle }}">
+          <label style="display:block;font-size:11.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#7a7a7a;margin-bottom:6px">{{ f.label }}</label>
+          <sc-if value="{{ f.isSelect }}" hint-placeholder-val="{{ false }}">
+            <select value="{{ f.value }}" onChange="{{ f.onChange }}" style="width:100%;padding:11px 13px;font-size:14.5px;border:1px solid #e0ddd8;border-radius:10px;background:#fff;color:#0D0D0D">
+              <sc-for list="{{ f.options }}" as="o" hint-placeholder-count="3">
+                <option value="{{ o }}">{{ o }}</option>
+              </sc-for>
+            </select>
+          </sc-if>
+          <sc-if value="{{ f.isInput }}" hint-placeholder-val="{{ true }}">
+            <input type="{{ f.type }}" value="{{ f.value }}" onChange="{{ f.onChange }}" placeholder="{{ f.ph }}" style="width:100%;padding:11px 13px;font-size:14.5px;border:1px solid #e0ddd8;border-radius:10px;background:#fff;color:#0D0D0D" />
+          </sc-if>
+        </div>
+      </sc-for>
+    </div>
+
+    <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:26px">
+      <button onClick="{{ closeModal }}" style="padding:12px 22px;border:1px solid #e0ddd8;border-radius:999px;background:#fff;font-size:14px;font-weight:600;color:#6a6a6a;cursor:pointer">Cancelar</button>
+      <button onClick="{{ saveModal }}" style="padding:12px 26px;border:none;border-radius:999px;background:linear-gradient(160deg,#E0B75C,#B8862B);color:#1a1206;font-weight:700;font-size:14px;cursor:pointer;transition:transform 150ms cubic-bezier(.4,0,.2,1)" style-hover="transform:scale(1.03)" style-active="transform:scale(.97)">Salvar</button>
+    </div>
+  </div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isPrint }}" hint-placeholder-val="{{ false }}">
+<div style="position:fixed;inset:0;z-index:70;background:#2A2A2A;overflow-y:auto;padding:0 0 60px">
+  <div class="gf-noprint" style="position:sticky;top:0;z-index:5;background:#0D0D0D;display:flex;align-items:center;gap:12px;padding:14px clamp(14px,3vw,28px);flex-wrap:wrap">
+    <button onClick="{{ closePrint }}" style="background:none;border:1px solid rgba(255,255,255,.16);border-radius:999px;color:#cfcfcf;padding:9px 18px;font-size:13.5px;cursor:pointer" style-hover="color:#fff;border-color:#C79A3B">← Voltar</button>
+    <div style="font-size:13.5px;color:#8a8a8a">Pré-visualização do documento</div>
+    <div style="margin-left:auto;display:flex;gap:9px">
+      <button onClick="{{ doPrint }}" style="padding:10px 20px;border:none;border-radius:999px;background:linear-gradient(160deg,#E0B75C,#B8862B);color:#1a1206;font-weight:700;font-size:13.5px;cursor:pointer">Imprimir / PDF</button>
+    </div>
+  </div>
+
+  <div id="gf-print" style="max-width:820px;margin:26px auto;background:#fff;padding:clamp(26px,5vw,54px) clamp(22px,5vw,58px);box-shadow:0 16px 48px rgba(0,0,0,.35)">
+    <div style="text-align:center;margin-bottom:26px">
+      <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:23px;letter-spacing:-.01em;color:#0D0D0D">{{ pTipo }}</div>
+      <div style="font-family:'Nunito',sans-serif;font-weight:800;font-size:17px;color:#B8862B;margin-top:2px">Nº {{ pNumero }}</div>
+    </div>
+
+    <div style="display:flex;gap:22px;align-items:center;flex-wrap:wrap;padding-bottom:18px;border-bottom:2px solid #0D0D0D">
+      <img src="assets/gessofort-logo.png" alt="Gesso Fort" style="width:132px;flex:none" />
+      <div style="flex:1;min-width:210px;font-size:12.5px;line-height:1.65;color:#2A2A2A">
+        <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:15.5px;color:#0D0D0D;letter-spacing:.01em">GESSO FORT</div>
+        <div>CNPJ: 60.560.384/0001-29</div>
+        <div>Rua Nina Barreto, nº 74, Alto Maron — Itabuna, BA</div>
+        <div>(73) 98832-2798 · (73) 98244-8145</div>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:4px 26px;font-size:12px;color:#3a3a3a;padding:14px 0;border-bottom:1px solid #d8d5d0">
+      <div><span style="color:#8a8a8a">Data de emissão:</span> {{ pData }}</div>
+      <div><span style="color:#8a8a8a">Responsável:</span> Alex Gomes</div>
+      <div><span style="color:#8a8a8a">Nº do documento:</span> {{ pNumero }}</div>
+      <div><span style="color:#8a8a8a">Impresso em:</span> {{ pImpresso }}</div>
+    </div>
+
+    <div style="text-align:center;font-family:'Nunito',sans-serif;font-weight:800;font-size:15px;margin:22px 0 10px">Dados do Cliente</div>
+    <div style="border-top:1px solid #d8d5d0;border-bottom:1px solid #d8d5d0;padding:12px 0;font-size:12.5px;line-height:1.7;color:#2A2A2A">
+      <div><span style="color:#8a8a8a">Nome:</span> {{ pCliNome }}</div>
+      <div><span style="color:#8a8a8a">Documento:</span> {{ pCliDoc }} · <span style="color:#8a8a8a">Telefone:</span> {{ pCliTel }}</div>
+      <div><span style="color:#8a8a8a">Endereço:</span> {{ pCliEnd }}</div>
+    </div>
+
+    <div style="text-align:center;font-family:'Nunito',sans-serif;font-weight:800;font-size:15px;margin:24px 0 10px">Produtos e Serviços</div>
+    <table style="width:100%;border-collapse:collapse;font-size:12.5px">
+      <thead>
+        <tr style="border-top:1px solid #0D0D0D;border-bottom:1px solid #0D0D0D">
+          <th style="text-align:left;padding:9px 6px;font-weight:600;color:#3a3a3a">Descrição</th>
+          <th style="text-align:center;padding:9px 6px;font-weight:600;color:#3a3a3a;white-space:nowrap">Un.</th>
+          <th style="text-align:right;padding:9px 6px;font-weight:600;color:#3a3a3a">Qtd.</th>
+          <th style="text-align:right;padding:9px 6px;font-weight:600;color:#3a3a3a">Valor</th>
+          <th style="text-align:right;padding:9px 6px;font-weight:600;color:#3a3a3a">Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        <sc-for list="{{ pItens }}" as="it" hint-placeholder-count="2">
+          <tr style="border-bottom:1px solid #eae7e2">
+            <td style="padding:10px 6px;color:#0D0D0D">{{ it.nome }}</td>
+            <td style="padding:10px 6px;text-align:center;color:#5a5a5a">{{ it.un }}</td>
+            <td style="padding:10px 6px;text-align:right;color:#0D0D0D">{{ it.qtd }}</td>
+            <td style="padding:10px 6px;text-align:right;color:#0D0D0D">{{ it.preco }}</td>
+            <td style="padding:10px 6px;text-align:right;font-weight:600;color:#0D0D0D">{{ it.total }}</td>
+          </tr>
+        </sc-for>
+      </tbody>
+    </table>
+
+    <div style="display:flex;justify-content:flex-end;margin-top:18px">
+      <div style="width:min(320px,100%);font-size:13px">
+        <div style="display:flex;justify-content:space-between;padding:7px 0;color:#4a4a4a"><span>Qtd. itens vendidos</span><span>{{ pQtd }}</span></div>
+        <div style="display:flex;justify-content:space-between;padding:7px 0;color:#4a4a4a"><span>Total produtos</span><span>{{ pSub }}</span></div>
+        <div style="display:flex;justify-content:space-between;padding:7px 0;color:#4a4a4a"><span>Desconto</span><span>{{ pDesc }} · {{ pDescPct }}</span></div>
+        <div style="display:flex;justify-content:space-between;align-items:baseline;padding:12px 0 0;margin-top:7px;border-top:2px solid #0D0D0D">
+          <span style="font-family:'Nunito',sans-serif;font-weight:800;font-size:14px">Valor Total</span>
+          <span style="font-family:'Nunito',sans-serif;font-weight:900;font-size:22px;color:#B8862B">{{ pTotal }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:28px">
+      <div style="font-family:'Nunito',sans-serif;font-weight:800;font-size:14px;margin-bottom:7px">Observações</div>
+      <div style="border-top:1px solid #d8d5d0;padding-top:10px;font-size:12.5px;line-height:1.7;color:#3a3a3a;min-height:44px;white-space:pre-wrap">{{ pObs }}</div>
+    </div>
+
+    <div style="margin-top:22px">
+      <div style="font-family:'Nunito',sans-serif;font-weight:800;font-size:14px;margin-bottom:7px">Atenção</div>
+      <div style="border-top:1px solid #d8d5d0;padding-top:10px;font-size:11.5px;line-height:1.75;color:#5a5a5a">
+        Este documento não vale como nota fiscal.<br />
+        Materiais entregues no térreo. Serviços executados conforme cronograma acordado em contrato.
+      </div>
+    </div>
+
+    <div style="margin-top:64px;display:flex;justify-content:center">
+      <div style="width:min(330px,80%);text-align:center">
+        <div style="border-top:1px solid #0D0D0D;padding-top:9px;font-size:12.5px;color:#3a3a3a">{{ pCliNome }}</div>
+        <div style="font-size:10.5px;color:#9a9a9a;letter-spacing:.14em;text-transform:uppercase;margin-top:4px">Assinatura do cliente</div>
+      </div>
+    </div>
+
+    <div style="margin-top:38px;padding-top:14px;border-top:1px solid #e6e3de;text-align:center;font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:#a5a5a5">Acabamento que impacta. Qualidade que fica.</div>
+  </div>
+</div>
+</sc-if>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:900}}">
+class Component extends DCLogic {
+  state = {
+    logged: false, loginUser: 'alex.gomes', loginPass: '123456',
+    page: 'dash', isMobile: false, busca: '', filtro: 'Todos',
+    modal: null, form: {}, editId: null,
+    novaTipo: 'Pedido de Compra', novaCliente: '', novaObs: '', novaDesc: 0,
+    itens: [], addSel: '', printId: null,
+    seq: 5,
+    materiais: [
+      { id: 'm1', cod: '101', nome: 'Placa de Gesso Standard 1,80 x 1,20m', cat: 'Forros', un: 'pç', preco: 22.5, estoque: 240 },
+      { id: 'm2', cod: '102', nome: 'Placa Drywall ST 1,80 x 1,20m 12,5mm', cat: 'Drywall', un: 'pç', preco: 46.9, estoque: 96 },
+      { id: 'm3', cod: '118', nome: 'Moldura de Gesso Clássica 8cm — 2m', cat: 'Molduras', un: 'barra', preco: 18.0, estoque: 310 },
+      { id: 'm4', cod: '124', nome: 'Sanca Aberta Pré-moldada 10cm — 2m', cat: 'Sancas', un: 'barra', preco: 34.0, estoque: 128 },
+      { id: 'm5', cod: '140', nome: 'Placa Parede 3D Onda 50 x 50cm', cat: 'Parede 3D', un: 'm²', preco: 89.9, estoque: 64 },
+      { id: 'm6', cod: '155', nome: 'Perfil Montante 48mm — 3m', cat: 'Divisórias', un: 'barra', preco: 21.4, estoque: 180 },
+      { id: 'm7', cod: '160', nome: 'Massa para Rejunte Drywall 5kg', cat: 'Reboco', un: 'saco', preco: 32.0, estoque: 75 },
+      { id: 'm8', cod: '171', nome: 'Rosácea Decorativa Ø 40cm', cat: 'Decoração', un: 'un', preco: 62.0, estoque: 22 }
+    ],
+    servicos: [
+      { id: 's1', cod: 'S01', nome: 'Instalação de forro de gesso liso', cat: 'Forros', un: 'm²', preco: 55.0, prazo: '2 a 4 dias' },
+      { id: 's2', cod: 'S02', nome: 'Execução de sanca com iluminação', cat: 'Sancas', un: 'm linear', preco: 98.0, prazo: '3 a 5 dias' },
+      { id: 's3', cod: 'S03', nome: 'Instalação de moldura de gesso', cat: 'Molduras', un: 'm linear', preco: 28.0, prazo: '1 a 2 dias' },
+      { id: 's4', cod: 'S04', nome: 'Montagem de parede drywall dupla face', cat: 'Drywall', un: 'm²', preco: 135.0, prazo: '3 a 6 dias' },
+      { id: 's5', cod: 'S05', nome: 'Aplicação de parede 3D', cat: 'Parede 3D', un: 'm²', preco: 145.0, prazo: '2 a 3 dias' },
+      { id: 's6', cod: 'S06', nome: 'Reboco e acabamento em massa fina', cat: 'Reboco', un: 'm²', preco: 42.0, prazo: '2 a 4 dias' },
+      { id: 's7', cod: 'S07', nome: 'Divisória em drywall com isolamento', cat: 'Divisórias', un: 'm²', preco: 168.0, prazo: '4 a 7 dias' }
+    ],
+    clientes: [
+      { id: 'c1', nome: 'Construtora Vale Verde LTDA', doc: '12.884.301/0001-45', tel: '(73) 3613-2200', end: 'Av. Cinquentenário, 1120 — Itabuna, BA' },
+      { id: 'c2', nome: 'Marcos Antônio Silveira', doc: '842.115.905-30', tel: '(73) 99814-7702', end: 'Rua do Cajueiro, 45 — Itabuna, BA' },
+      { id: 'c3', nome: 'Residencial Parque das Palmeiras', doc: '29.774.180/0001-08', tel: '(73) 3212-9080', end: 'Rod. Ilhéus-Itabuna, km 8 — Ilhéus, BA' },
+      { id: 'c4', nome: 'Juliana Ferraz Andrade', doc: '017.552.335-91', tel: '(73) 98123-4455', end: 'Rua Nina Barreto, 210 — Itabuna, BA' }
+    ],
+    notas: [
+      { id: 'n1', numero: '2026.0004', tipo: 'Ordem de Serviço', cliente: 'c1', data: '18/08/2026', obs: 'Execução em 3 pavimentos. Andaime por conta do contratante.', desc: 200, itens: [ { nome: 'Instalação de forro de gesso liso', un: 'm²', qtd: 120, preco: 55 }, { nome: 'Placa de Gesso Standard 1,80 x 1,20m', un: 'pç', qtd: 85, preco: 22.5 } ] },
+      { id: 'n2', numero: '2026.0003', tipo: 'Orçamento', cliente: 'c2', data: '17/08/2026', obs: 'Validade de 15 dias.', desc: 0, itens: [ { nome: 'Execução de sanca com iluminação', un: 'm linear', qtd: 32, preco: 98 } ] },
+      { id: 'n3', numero: '2026.0002', tipo: 'Pedido de Compra', cliente: 'c3', data: '15/08/2026', obs: '', desc: 150, itens: [ { nome: 'Placa Drywall ST 1,80 x 1,20m 12,5mm', un: 'pç', qtd: 60, preco: 46.9 }, { nome: 'Perfil Montante 48mm — 3m', un: 'barra', qtd: 40, preco: 21.4 } ] },
+      { id: 'n4', numero: '2026.0001', tipo: 'Recibo', cliente: 'c4', data: '12/08/2026', obs: 'Pagamento à vista.', desc: 0, itens: [ { nome: 'Aplicação de parede 3D', un: 'm²', qtd: 14, preco: 145 } ] }
+    ]
+  };
+
+  cats = ['Forros', 'Molduras', 'Sancas', 'Divisórias', 'Drywall', 'Parede 3D', 'Reboco', 'Decoração'];
+  tipos = ['Pedido de Compra', 'Orçamento', 'Ordem de Serviço', 'Recibo'];
+  icons = { 'Pedido de Compra': 'PC', 'Orçamento': 'ORÇ', 'Ordem de Serviço': 'OS', 'Recibo': 'REC' };
+
+  componentDidMount() {
+    this._r = () => this.setState({ isMobile: window.innerWidth < 860 });
+    this._r(); window.addEventListener('resize', this._r);
+  }
+  componentWillUnmount() { window.removeEventListener('resize', this._r); }
+
+  money(n) { return 'R$ ' + (Number(n) || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+  set(k) { return e => this.setState({ [k]: e.target.value }); }
+  setForm(k) { return e => this.setState(s => ({ form: { ...s.form, [k]: e.target.value } })); }
+  nav(p) { return () => this.setState({ page: p, busca: '', filtro: 'Todos' }); }
+
+  notaTotals(n) {
+    const sub = n.itens.reduce((a, i) => a + i.qtd * i.preco, 0);
+    const d = Number(n.desc) || 0;
+    return { sub, d, total: sub - d, qtd: n.itens.reduce((a, i) => a + Number(i.qtd), 0) };
+  }
+  cliNome(id) { const c = this.state.clientes.find(x => x.id === id); return c ? c.nome : 'NÃO CADASTRADO'; }
+
+  openModal(type, item) {
+    const f = item ? { ...item } : (type === 'cliente' ? { nome: '', doc: '', tel: '', end: '' }
+      : { cod: '', nome: '', cat: this.cats[0], un: type === 'material' ? 'pç' : 'm²', preco: '', estoque: '', prazo: '' });
+    this.setState({ modal: type, form: f, editId: item ? item.id : null });
+  }
+
+  save = () => {
+    const { modal, form, editId } = this.state;
+    const key = modal === 'cliente' ? 'clientes' : modal === 'material' ? 'materiais' : 'servicos';
+    if (!form.nome) { this.setState({ modal: null }); return; }
+    const rec = { ...form, id: editId || key[0] + Date.now(), preco: Number(form.preco) || 0 };
+    this.setState(s => ({
+      [key]: editId ? s[key].map(x => x.id === editId ? rec : x) : [rec, ...s[key]],
+      modal: null, form: {}, editId: null
+    }));
+  };
+
+  addItem = () => {
+    const id = this.state.addSel; if (!id) return;
+    const src = [...this.state.materiais, ...this.state.servicos].find(x => x.id === id); if (!src) return;
+    this.setState(s => ({ itens: [...s.itens, { key: 'i' + Date.now(), nome: src.nome, un: src.un, cat: src.cat, qtd: 1, preco: src.preco }], addSel: '' }));
+  };
+
+  salvarNota = () => {
+    const s = this.state;
+    if (!s.itens.length) return;
+    const numero = '2026.' + String(s.seq).padStart(4, '0');
+    const nota = { id: 'n' + Date.now(), numero, tipo: s.novaTipo, cliente: s.novaCliente, obs: s.novaObs, desc: Number(s.novaDesc) || 0, data: new Date().toLocaleDateString('pt-BR'), itens: s.itens.map(i => ({ nome: i.nome, un: i.un, qtd: Number(i.qtd) || 0, preco: Number(i.preco) || 0 })) };
+    this.setState(st => ({ notas: [nota, ...st.notas], seq: st.seq + 1, itens: [], novaObs: '', novaDesc: 0, novaCliente: '', printId: nota.id }));
+  };
+
+  renderVals() {
+    const s = this.state, M = n => this.money(n);
+    const isMobile = s.isMobile, isDesktop = !isMobile;
+    const page = s.page;
+
+    const navDefs = [
+      { id: 'dash', label: 'Dashboard', short: 'Início', icon: '◧' },
+      { id: 'materiais', label: 'Materiais', short: 'Materiais', icon: '▤' },
+      { id: 'servicos', label: 'Serviços', short: 'Serviços', icon: '◈' },
+      { id: 'clientes', label: 'Clientes', short: 'Clientes', icon: '◉' },
+      { id: 'notas', label: 'Notas', short: 'Notas', icon: '⬒' }
+    ];
+    const navItems = navDefs.map(n => {
+      const on = page === n.id || (n.id === 'notas' && page === 'nova');
+      return {
+        ...n, go: this.nav(n.id),
+        style: 'display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:11px 12px;border:none;border-radius:11px;cursor:pointer;font-size:14.5px;font-weight:' + (on ? '600' : '400') + ';background:' + (on ? 'rgba(199,154,59,.14)' : 'transparent') + ';color:' + (on ? '#E0B75C' : '#9a9a9a') + ';transition:all 150ms cubic-bezier(.4,0,.2,1)',
+        mStyle: 'flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;padding:9px 2px;border:none;border-radius:11px;cursor:pointer;background:' + (on ? 'rgba(199,154,59,.14)' : 'transparent') + ';color:' + (on ? '#E0B75C' : '#8a8a8a')
+      };
+    });
+
+    const titles = { dash: ['Dashboard', 'Visão geral da operação'], materiais: ['Materiais', 'Catálogo de produtos e insumos'], servicos: ['Serviços', 'Serviços executados pela equipe'], clientes: ['Clientes', 'Cadastro de clientes e obras'], notas: ['Notas emitidas', 'Histórico de documentos'], nova: ['Nova nota', 'Monte o documento e gere o PDF'] };
+    const t = titles[page] || ['', ''];
+
+    const primaryMap = {
+      materiais: ['+ Novo material', () => this.openModal('material')],
+      servicos: ['+ Novo serviço', () => this.openModal('servico')],
+      clientes: ['+ Novo cliente', () => this.openModal('cliente')],
+      notas: ['+ Nova nota', this.nav('nova')],
+      dash: ['+ Nova nota', this.nav('nova')]
+    };
+    const pa = primaryMap[page];
+
+    // catálogo
+    const isCat = page === 'materiais' || page === 'servicos' || page === 'clientes';
+    let cols = [], rows = [], filtros = [];
+    const th = (a) => 'padding:13px 18px;text-align:' + a + ';font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:#8a8a8a;font-weight:600;white-space:nowrap';
+    const td = (a, b) => 'padding:13px 18px;text-align:' + a + ';font-size:14px;color:' + (b ? '#0D0D0D' : '#5a5a5a') + (b ? ';font-weight:600' : '');
+    const q = s.busca.toLowerCase();
+
+    if (page === 'clientes') {
+      cols = [{ label: 'Cliente', style: th('left') }, { label: 'CPF / CNPJ', style: th('left') }, { label: 'Telefone', style: th('left') }, { label: 'Endereço', style: th('left') }, { label: '', style: th('right') }];
+      rows = s.clientes.filter(c => c.nome.toLowerCase().includes(q)).map(c => ({
+        cells: [{ v: c.nome, style: td('left', 1) }, { v: c.doc, style: td('left') }, { v: c.tel, style: td('left') }, { v: c.end, style: td('left') }],
+        edit: () => this.openModal('cliente', c),
+        del: () => this.setState(st => ({ clientes: st.clientes.filter(x => x.id !== c.id) }))
+      }));
+    } else if (isCat) {
+      const isMat = page === 'materiais';
+      const list = isMat ? s.materiais : s.servicos;
+      filtros = ['Todos', ...this.cats].map(f => ({
+        label: f, go: () => this.setState({ filtro: f }),
+        style: 'padding:9px 15px;border-radius:999px;font-size:12.5px;font-weight:600;cursor:pointer;white-space:nowrap;border:1px solid ' + (s.filtro === f ? '#0D0D0D' : '#e0ddd8') + ';background:' + (s.filtro === f ? '#0D0D0D' : '#fff') + ';color:' + (s.filtro === f ? '#fff' : '#6a6a6a')
+      }));
+      cols = [{ label: 'Cód.', style: th('left') }, { label: isMat ? 'Material' : 'Serviço', style: th('left') }, { label: 'Categoria', style: th('left') }, { label: 'Un.', style: th('center') }, { label: isMat ? 'Estoque' : 'Prazo', style: th('right') }, { label: 'Preço', style: th('right') }, { label: '', style: th('right') }];
+      rows = list.filter(x => (s.filtro === 'Todos' || x.cat === s.filtro) && (x.nome.toLowerCase().includes(q) || String(x.cod).includes(q))).map(x => ({
+        cells: [
+          { v: x.cod, style: td('left') },
+          { v: x.nome, style: td('left', 1) },
+          { v: x.cat, style: td('left') },
+          { v: x.un, style: td('center') },
+          { v: isMat ? String(x.estoque || 0) : (x.prazo || '—'), style: td('right') },
+          { v: M(x.preco), style: td('right', 1) }
+        ],
+        edit: () => this.openModal(isMat ? 'material' : 'servico', x),
+        del: () => this.setState(st => ({ [isMat ? 'materiais' : 'servicos']: st[isMat ? 'materiais' : 'servicos'].filter(y => y.id !== x.id) }))
+      }));
+    }
+
+    // dashboard
+    const totalMes = s.notas.reduce((a, n) => a + this.notaTotals(n).total, 0);
+    const kpis = [
+      { label: 'Faturamento', value: M(totalMes), hint: 'Notas emitidas no período' },
+      { label: 'Notas', value: String(s.notas.length), hint: 'Documentos no histórico' },
+      { label: 'Clientes', value: String(s.clientes.length), hint: 'Cadastros ativos' },
+      { label: 'Catálogo', value: String(s.materiais.length + s.servicos.length), hint: s.materiais.length + ' materiais · ' + s.servicos.length + ' serviços' }
+    ];
+    const recentes = s.notas.slice(0, 4).map(n => ({
+      icon: this.icons[n.tipo] || 'DOC', cliente: this.cliNome(n.cliente),
+      sub: n.tipo + ' · Nº ' + n.numero, total: M(this.notaTotals(n).total),
+      open: () => this.setState({ printId: n.id })
+    }));
+    const porCat = {};
+    s.notas.forEach(n => n.itens.forEach(i => { const c = (this.state.materiais.concat(this.state.servicos).find(x => x.nome === i.nome) || {}).cat || 'Outros'; porCat[c] = (porCat[c] || 0) + i.qtd * i.preco; }));
+    const arr = Object.entries(porCat).sort((a, b) => b[1] - a[1]).slice(0, 5);
+    const max = arr.length ? arr[0][1] : 1;
+    const barras = arr.map(([nome, v]) => ({ nome, valor: M(v), barStyle: 'height:100%;width:' + Math.max(6, (v / max) * 100) + '%;border-radius:999px;background:linear-gradient(90deg,#B8862B,#F0D18A)' }));
+
+    // notas
+    const tag = tp => 'font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;padding:4px 9px;border-radius:8px;background:' + (tp === 'Orçamento' ? '#F2EFE9' : tp === 'Recibo' ? '#EAF1EC' : tp === 'Ordem de Serviço' ? '#0D0D0D' : 'rgba(199,154,59,.16)') + ';color:' + (tp === 'Ordem de Serviço' ? '#E0B75C' : tp === 'Recibo' ? '#4a7a58' : tp === 'Orçamento' ? '#7a6f5a' : '#8a6318');
+    const notasList = s.notas.map(n => {
+      const tt = this.notaTotals(n);
+      return { numero: n.numero, tipo: n.tipo, tagStyle: tag(n.tipo), icon: this.icons[n.tipo] || 'DOC', cliente: this.cliNome(n.cliente), data: n.data, total: M(tt.total), qtdItens: n.itens.length, open: () => this.setState({ printId: n.id }), del: () => this.setState(st => ({ notas: st.notas.filter(x => x.id !== n.id) })) };
+    });
+
+    // nova nota
+    const tiposDoc = this.tipos.map(tp => ({
+      label: tp, go: () => this.setState({ novaTipo: tp }),
+      style: 'padding:11px 18px;border-radius:999px;font-size:13.5px;font-weight:600;cursor:pointer;border:1px solid ' + (s.novaTipo === tp ? '#B8862B' : '#e0ddd8') + ';background:' + (s.novaTipo === tp ? 'linear-gradient(160deg,#E0B75C,#B8862B)' : '#fff') + ';color:' + (s.novaTipo === tp ? '#1a1206' : '#6a6a6a')
+    }));
+    const catalogoOpts = [
+      ...s.materiais.map(m => ({ id: m.id, label: 'MATERIAL · ' + m.nome + ' — ' + M(m.preco) + '/' + m.un })),
+      ...s.servicos.map(x => ({ id: x.id, label: 'SERVIÇO · ' + x.nome + ' — ' + M(x.preco) + '/' + x.un }))
+    ];
+    const itensNova = s.itens.map((i, idx) => ({
+      nome: i.nome, meta: i.cat + ' · ' + i.un, qtd: i.qtd, preco: i.preco, total: M(i.qtd * i.preco),
+      onQtd: e => { const v = e.target.value; this.setState(st => ({ itens: st.itens.map((x, k) => k === idx ? { ...x, qtd: v === '' ? '' : Number(v) } : x) })); },
+      onPreco: e => { const v = e.target.value; this.setState(st => ({ itens: st.itens.map((x, k) => k === idx ? { ...x, preco: v === '' ? '' : Number(v) } : x) })); },
+      del: () => this.setState(st => ({ itens: st.itens.filter((x, k) => k !== idx) }))
+    }));
+    const sub = s.itens.reduce((a, i) => a + (Number(i.qtd) || 0) * (Number(i.preco) || 0), 0);
+    const desc = Number(s.novaDesc) || 0;
+
+    // modal
+    const mt = s.modal;
+    const fw = { wrapStyle: 'grid-column:1/-1' };
+    let modalFields = [];
+    const F = (label, key, opts) => ({ label, value: s.form[key] === undefined ? '' : s.form[key], onChange: this.setForm(key), isSelect: !!(opts && opts.options), isInput: !(opts && opts.options), options: (opts && opts.options) || [], type: (opts && opts.type) || 'text', ph: (opts && opts.ph) || '', wrapStyle: (opts && opts.full) ? 'grid-column:1/-1' : '' });
+    if (mt === 'cliente') modalFields = [F('Nome / Razão social', 'nome', { full: 1, ph: 'Ex: Construtora Vale Verde LTDA' }), F('CPF / CNPJ', 'doc', { ph: '000.000.000-00' }), F('Telefone', 'tel', { ph: '(73) 00000-0000' }), F('Endereço da obra', 'end', { full: 1, ph: 'Rua, nº, bairro — cidade/UF' })];
+    else if (mt === 'material') modalFields = [F('Código', 'cod', { ph: '101' }), F('Categoria', 'cat', { options: this.cats }), F('Descrição do material', 'nome', { full: 1, ph: 'Ex: Placa de Gesso Standard 1,80 x 1,20m' }), F('Unidade', 'un', { options: ['pç', 'm²', 'm linear', 'barra', 'saco', 'un', 'kg'] }), F('Preço de venda (R$)', 'preco', { type: 'number', ph: '0,00' }), F('Estoque atual', 'estoque', { type: 'number', ph: '0' })];
+    else if (mt === 'servico') modalFields = [F('Código', 'cod', { ph: 'S01' }), F('Categoria', 'cat', { options: this.cats }), F('Descrição do serviço', 'nome', { full: 1, ph: 'Ex: Instalação de forro de gesso liso' }), F('Unidade de medida', 'un', { options: ['m²', 'm linear', 'un', 'diária', 'obra'] }), F('Valor (R$)', 'preco', { type: 'number', ph: '0,00' }), F('Prazo estimado', 'prazo', { ph: '2 a 4 dias' })];
+    const modalTitles = { cliente: ['Cadastro de cliente', 'Dados usados no cabeçalho das notas'], material: ['Cadastro de material', 'Forros, molduras, sancas, drywall e mais'], servico: ['Cadastro de serviço', 'Serviços executados pela equipe Gesso Fort'] };
+    const mTitle = modalTitles[mt] || ['', ''];
+
+    // print
+    const pn = s.notas.find(n => n.id === s.printId);
+    let pv = {};
+    if (pn) {
+      const tt = this.notaTotals(pn);
+      const c = s.clientes.find(x => x.id === pn.cliente);
+      pv = {
+        pTipo: (pn.tipo || '').toUpperCase(), pNumero: pn.numero, pData: pn.data,
+        pImpresso: new Date().toLocaleString('pt-BR'),
+        pCliNome: c ? c.nome : 'NÃO CADASTRADO', pCliDoc: c ? c.doc : '—', pCliTel: c ? c.tel : '—', pCliEnd: c ? c.end : '—',
+        pItens: pn.itens.map(i => ({ nome: i.nome, un: i.un, qtd: String(i.qtd), preco: M(i.preco), total: M(i.qtd * i.preco) })),
+        pQtd: String(tt.qtd), pSub: M(tt.sub), pDesc: M(tt.d),
+        pDescPct: (tt.sub ? (tt.d / tt.sub * 100).toFixed(2).replace('.', ',') : '0,00') + ' %',
+        pTotal: M(tt.total), pObs: pn.obs || '—'
+      };
+    }
+
+    return {
+      isLogin: !s.logged, isApp: s.logged, isMobile, isDesktop,
+      loginUser: s.loginUser, loginPass: s.loginPass,
+      onLoginUser: this.set('loginUser'), onLoginPass: this.set('loginPass'),
+      doLogin: () => this.setState({ logged: true }), doLogout: () => this.setState({ logged: false, page: 'dash' }),
+      navItems, pageTitle: t[0], pageSub: t[1],
+      hoje: new Date().toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' }),
+      showPrimaryAction: !!pa, primaryLabel: pa ? pa[0] : '', primaryAction: pa ? pa[1] : null,
+      goNotas: this.nav('notas'), goNovaNota: this.nav('nova'),
+      isDash: page === 'dash', isCatalogo: isCat, isNotas: page === 'notas', isNova: page === 'nova',
+      kpis, recentes, barras,
+      busca: s.busca, onBusca: this.set('busca'), filtros, cols, rows, isEmpty: isCat && rows.length === 0,
+      notasList, notasVazio: s.notas.length === 0,
+      tiposDoc, novaTipo: s.novaTipo,
+      clientesOpts: s.clientes, novaCliente: s.novaCliente, onNovaCliente: this.set('novaCliente'),
+      openNovoCliente: () => this.openModal('cliente'),
+      catalogoOpts, addSel: s.addSel, onAddSel: this.set('addSel'), addItem: this.addItem,
+      itensNova, semItens: s.itens.length === 0,
+      novaObs: s.novaObs, onNovaObs: this.set('novaObs'),
+      novaDesc: s.novaDesc, onNovaDesc: this.set('novaDesc'),
+      resumoQtd: String(s.itens.reduce((a, i) => a + (Number(i.qtd) || 0), 0)),
+      resumoSub: M(sub), resumoTotal: M(sub - desc),
+      resumoDescPct: sub ? (desc / sub * 100).toFixed(2).replace('.', ',') + ' %' : '',
+      salvarNota: this.salvarNota,
+      modalOpen: !!mt, modalTitle: mTitle[0], modalSub: mTitle[1], modalFields,
+      closeModal: () => this.setState({ modal: null, form: {}, editId: null }), saveModal: this.save,
+      isPrint: !!pn, closePrint: () => this.setState({ printId: null, page: 'notas' }),
+      doPrint: () => window.print(),
+      ...pv
+    };
+  }
+}
+</script>
+</body>
+</html>
