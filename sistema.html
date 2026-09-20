@@ -85,6 +85,12 @@ input:focus,select:focus,textarea:focus{outline:2px solid #C79A3B;outline-offset
 <sc-if value="{{ isApp }}" hint-placeholder-val="{{ false }}">
 <div style="min-height:100vh;display:flex;background:#EFEDEA">
 
+  <sc-if value="{{ avisoBanco }}" hint-placeholder-val="{{ false }}">
+    <div class="gf-noprint" style="position:fixed;left:0;right:0;bottom:0;z-index:80;background:#A34A24;color:#fff;font-size:12.5px;padding:8px 16px;text-align:center">
+      Não foi possível carregar os dados do banco — mostrando dados de demonstração. Detalhe: {{ avisoBanco }}
+    </div>
+  </sc-if>
+
   <aside class="gf-noprint" style="flex:0 0 62px;background:#0D0D0D;display:flex;flex-direction:column;align-items:center;padding:14px 0 12px;position:sticky;top:0;height:100vh;z-index:30">
     <div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(160deg,#E0B75C,#B8862B);display:flex;align-items:center;justify-content:center;font-family:'Nunito',sans-serif;font-weight:900;font-size:13px;color:#1a1206;margin-bottom:16px">GF</div>
     <nav style="display:flex;flex-direction:column;gap:4px;width:100%;align-items:center">
@@ -711,7 +717,7 @@ input:focus,select:focus,textarea:focus{outline:2px solid #C79A3B;outline-offset
 <script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:900}}">
 class Component extends DCLogic {
   state = {
-    logged: false, loginUser: 'alex.gomes', loginPass: '', loginErro: false, loginCarregando: false,
+    logged: false, loginUser: 'alex.gomes', loginPass: '', loginErro: false, loginCarregando: false, avisoBanco: null,
     tabs: [{ id: 'home', label: 'Home' }],
     active: 'home', fly: null, homeTab: 'atalhos',
     busca: '', campo: 'Todos', de: '2026-06-01', ate: '2026-09-17',
@@ -976,12 +982,24 @@ class Component extends DCLogic {
 
   api = async (url, opts) => {
     const r = await fetch(url, { headers: { 'Content-Type': 'application/json' }, ...opts });
-    if (!r.ok) throw new Error('api ' + url + ' -> ' + r.status);
+    if (!r.ok) {
+      let msg = 'HTTP ' + r.status;
+      try { const j = await r.json(); if (j && j.error) msg = j.error; } catch (e) {}
+      const err = new Error(msg);
+      err.status = r.status;
+      throw err;
+    }
     return r.status === 204 ? null : r.json();
   };
 
   loadLeads = async () => {
-    try { this.setState({ leads: await this.api('/api/leads') }); return; } catch (e) {}
+    try {
+      const leads = await this.api('/api/leads');
+      this.setState({ leads, avisoBanco: null });
+      return;
+    } catch (e) {
+      if (e.status !== 401) this.setState({ avisoBanco: 'leads: ' + e.message });
+    }
     let leads = [];
     try { leads = JSON.parse(localStorage.getItem('gf_site_leads') || '[]'); } catch (e) { leads = []; }
     this.setState({ leads });
@@ -990,15 +1008,19 @@ class Component extends DCLogic {
   loadClientes = async () => {
     try {
       const clientes = await this.api('/api/clientes');
-      if (clientes && clientes.length) this.setState({ clientes });
-    } catch (e) {}
+      this.setState({ clientes, avisoBanco: null });
+    } catch (e) {
+      if (e.status !== 401) this.setState({ avisoBanco: 'clientes: ' + e.message });
+    }
   };
 
   loadNotas = async () => {
     try {
       const notas = await this.api('/api/notas');
-      if (notas && notas.length) this.setState({ notas });
-    } catch (e) {}
+      this.setState({ notas, avisoBanco: null });
+    } catch (e) {
+      if (e.status !== 401) this.setState({ avisoBanco: 'notas: ' + e.message });
+    }
   };
 
   saveLeads(leads) {
@@ -1036,6 +1058,11 @@ class Component extends DCLogic {
     try {
       await this.api('/api/auth/login', { method: 'POST', body: JSON.stringify({ usuario: this.state.loginUser, senha: this.state.loginPass }) });
       this.setState({ logged: true, loginCarregando: false, loginPass: '' });
+      // so agora existe cookie de sessao: busca os dados reais (antes do login toda
+      // chamada autenticada dava 401 e ficava so no fallback de demonstracao)
+      this.loadClientes();
+      this.loadNotas();
+      this.loadLeads();
     } catch (e) {
       this.setState({ loginErro: true, loginCarregando: false });
     }
@@ -1503,6 +1530,7 @@ class Component extends DCLogic {
       isLogin: !s.logged, isApp: s.logged,
       loginUser: s.loginUser, loginPass: s.loginPass, onLoginUser: this.set('loginUser'), onLoginPass: this.set('loginPass'),
       loginErro: s.loginErro, loginCarregando: s.loginCarregando, loginBtnLabel: s.loginCarregando ? 'Entrando…' : 'Entrar',
+      avisoBanco: s.avisoBanco,
       doLogin: this.doLogin, doLogout: this.doLogout,
       rail, flyOpen: !!flyMenu, flyLabel: flyMenu ? flyMenu.label : '', flyItems,
       flyStyle: 'position:fixed;z-index:40;left:66px;top:' + Math.min(Math.max(58 + flyIdx * 51, 58), 300) + 'px;min-width:232px;background:#fff;border:1px solid #e2ded6;border-radius:14px;box-shadow:0 16px 48px rgba(0,0,0,.2);padding:10px 0;animation:gfFly .16s cubic-bezier(.4,0,.2,1)',
