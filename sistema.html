@@ -70,9 +70,9 @@ input:focus,select:focus,textarea:focus{outline:2px solid #C79A3B;outline-offset
 
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:22px">
         <label style="display:flex;align-items:center;gap:8px;font-size:13.5px;color:#6a6a6a;cursor:pointer">
-          <input type="checkbox" style="width:16px;height:16px;accent-color:#C79A3B" /> Manter conectado
+          <input type="checkbox" checked="{{ loginManter }}" onChange="{{ onLoginManter }}" style="width:16px;height:16px;accent-color:#C79A3B" /> Manter conectado
         </label>
-        <a href="#" style="font-size:13.5px">Esqueci a senha</a>
+        <a onClick="{{ esqueciSenha }}" style="font-size:13.5px;cursor:pointer">Esqueci a senha</a>
       </div>
 
       <button onClick="{{ doLogin }}" disabled="{{ loginCarregando }}" style="width:100%;padding:14px;border:none;border-radius:999px;background:linear-gradient(160deg,#E0B75C,#B8862B);color:#1a1206;font-weight:700;font-size:15.5px;cursor:pointer;box-shadow:0 6px 20px rgba(184,134,43,.28);transition:transform 150ms cubic-bezier(.4,0,.2,1)" style-hover="transform:scale(1.02)" style-active="transform:scale(.97)">{{ loginBtnLabel }}</button>
@@ -86,8 +86,9 @@ input:focus,select:focus,textarea:focus{outline:2px solid #C79A3B;outline-offset
 <div style="min-height:100vh;display:flex;background:#EFEDEA">
 
   <sc-if value="{{ avisoBanco }}" hint-placeholder-val="{{ false }}">
-    <div class="gf-noprint" style="position:fixed;left:0;right:0;bottom:0;z-index:80;background:#A34A24;color:#fff;font-size:12.5px;padding:8px 16px;text-align:center">
-      Não foi possível carregar os dados do banco — mostrando dados de demonstração. Detalhe: {{ avisoBanco }}
+    <div class="gf-noprint" style="position:fixed;right:16px;bottom:16px;z-index:80;max-width:min(360px,calc(100vw - 32px));background:#A34A24;color:#fff;font-size:12px;line-height:1.5;padding:12px 14px;border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,.25);display:flex;gap:10px;align-items:flex-start">
+      <span style="flex:1">Não foi possível carregar os dados do banco — mostrando dados de demonstração. Detalhe: {{ avisoBanco }}</span>
+      <button onClick="{{ fecharAviso }}" style="background:none;border:none;color:#fff;opacity:.8;font-size:15px;line-height:1;cursor:pointer;padding:0">×</button>
     </div>
   </sc-if>
 
@@ -109,7 +110,7 @@ input:focus,select:focus,textarea:focus{outline:2px solid #C79A3B;outline-offset
     <div style="{{ flyStyle }}">
       <div style="font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:#a09580;padding:4px 16px 8px;font-weight:600">{{ flyLabel }}</div>
       <sc-for list="{{ flyItems }}" as="f" hint-placeholder-count="5">
-        <button onClick="{{ f.go }}" style="{{ f.style }}">{{ f.label }}<span style="{{ f.lockStyle }}">⌁</span></button>
+        <button onClick="{{ f.go }}" style="{{ f.style }}"><span style="width:16px;display:inline-block;text-align:center;margin-right:9px;opacity:.55;font-size:12px">{{ f.icon }}</span>{{ f.label }}<span style="{{ f.lockStyle }}">⌁</span></button>
       </sc-for>
     </div>
   </sc-if>
@@ -265,7 +266,7 @@ input:focus,select:focus,textarea:focus{outline:2px solid #C79A3B;outline-offset
             <div style="font-size:10px;color:#a5a5a5;letter-spacing:.06em">até</div>
             <input type="date" value="{{ ate }}" onChange="{{ onAte }}" style="border:none;background:none;font-size:13px;color:#2A2A2A;padding:2px 0;width:100%" />
           </div>
-          <button title="Pesquisar" style="flex:none;padding:0 20px;border:none;border-left:1px solid #eeebe6;background:#FAF9F7;color:#8A6318;font-size:16px;cursor:pointer" style-hover="background:#F5F4F2">⌕</button>
+          <button onClick="{{ resetFiltros }}" title="Limpar busca e filtros" style="flex:none;padding:0 20px;border:none;border-left:1px solid #eeebe6;background:#FAF9F7;color:#8A6318;font-size:16px;cursor:pointer" style-hover="background:#F5F4F2">{{ resetIcon }}</button>
         </div>
 
         <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap">
@@ -279,7 +280,7 @@ input:focus,select:focus,textarea:focus{outline:2px solid #C79A3B;outline-offset
               </sc-for>
             </div>
           </sc-if>
-          <button style="margin-left:auto;display:flex;align-items:center;gap:7px;padding:9px 16px;border:1px solid #e2ded6;border-radius:10px;background:#fff;font-size:13px;color:#4a4a4a;cursor:pointer" style-hover="border-color:#C79A3B;color:#8A6318">⤓ Exportar</button>
+          <button onClick="{{ exportarLista }}" style="margin-left:auto;display:flex;align-items:center;gap:7px;padding:9px 16px;border:1px solid #e2ded6;border-radius:10px;background:#fff;font-size:13px;color:#4a4a4a;cursor:pointer" style-hover="border-color:#C79A3B;color:#8A6318">⤓ Exportar</button>
         </div>
 
         <div style="background:#fff;border:1px solid #e2ded6;border-radius:14px;box-shadow:0 4px 24px rgba(0,0,0,.05);overflow:hidden">
@@ -393,7 +394,7 @@ input:focus,select:focus,textarea:focus{outline:2px solid #C79A3B;outline-offset
               <span style="font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:#7d7d7d">Valor total</span>
               <span style="font-family:'Nunito',sans-serif;font-weight:900;font-size:27px;background:linear-gradient(160deg,#F0D18A,#B8862B);-webkit-background-clip:text;background-clip:text;color:transparent">{{ resumoTotal }}</span>
             </div>
-            <button onClick="{{ salvarNota }}" style="width:100%;margin-top:22px;padding:14px;border:none;border-radius:999px;background:linear-gradient(160deg,#E0B75C,#B8862B);color:#1a1206;font-weight:700;font-size:15px;cursor:pointer;transition:transform 150ms cubic-bezier(.4,0,.2,1)" style-hover="transform:scale(1.02)" style-active="transform:scale(.97)">Gerar documento</button>
+            <button onClick="{{ salvarNota }}" style="width:100%;margin-top:22px;padding:14px;border:none;border-radius:999px;background:linear-gradient(160deg,#E0B75C,#B8862B);color:#1a1206;font-weight:700;font-size:15px;cursor:pointer;transition:transform 150ms cubic-bezier(.4,0,.2,1)" style-hover="transform:scale(1.02)" style-active="transform:scale(.97)">{{ salvarNotaLabel }}</button>
           </div>
         </div>
       </div>
@@ -434,8 +435,8 @@ input:focus,select:focus,textarea:focus{outline:2px solid #C79A3B;outline-offset
               </sc-for>
             </div>
             <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:24px">
-              <button style="padding:12px 22px;border:1px solid #e2ded6;border-radius:999px;background:#fff;font-size:13.5px;font-weight:600;color:#2A2A2A;cursor:pointer" style-hover="border-color:#C79A3B;color:#8A6318">⎙ Imprimir</button>
-              <button style="padding:12px 24px;border:none;border-radius:999px;background:linear-gradient(160deg,#E0B75C,#B8862B);color:#1a1206;font-weight:700;font-size:13.5px;cursor:pointer;transition:transform 150ms cubic-bezier(.4,0,.2,1)" style-hover="transform:scale(1.03)" style-active="transform:scale(.97)">Visualizar</button>
+              <button onClick="{{ doPrint }}" style="padding:12px 22px;border:1px solid #e2ded6;border-radius:999px;background:#fff;font-size:13.5px;font-weight:600;color:#2A2A2A;cursor:pointer" style-hover="border-color:#C79A3B;color:#8A6318">⎙ Imprimir</button>
+              <button onClick="{{ visualizarRelatorio }}" style="padding:12px 24px;border:none;border-radius:999px;background:linear-gradient(160deg,#E0B75C,#B8862B);color:#1a1206;font-weight:700;font-size:13.5px;cursor:pointer;transition:transform 150ms cubic-bezier(.4,0,.2,1)" style-hover="transform:scale(1.03)" style-active="transform:scale(.97)">Visualizar</button>
             </div>
           </div>
         </div>
@@ -472,7 +473,7 @@ input:focus,select:focus,textarea:focus{outline:2px solid #C79A3B;outline-offset
           <div style="background:#fff;border:1px solid #e2ded6;border-radius:14px;box-shadow:0 4px 24px rgba(0,0,0,.05);overflow:hidden">
             <div style="display:flex;align-items:center;gap:12px;padding:20px 24px 14px;flex-wrap:wrap">
               <h3 style="margin:0;font-family:'Nunito',sans-serif;font-weight:800;font-size:15px">Componentes</h3>
-              <button style="margin-left:auto;padding:9px 16px;border:1px solid #e2ded6;border-radius:999px;background:#fff;font-size:13px;font-weight:600;cursor:pointer" style-hover="border-color:#C79A3B;color:#8A6318">+ Adicionar componente</button>
+              <button onClick="{{ adicionarComponente }}" style="margin-left:auto;padding:9px 16px;border:1px solid #e2ded6;border-radius:999px;background:#fff;font-size:13px;font-weight:600;cursor:pointer" style-hover="border-color:#C79A3B;color:#8A6318">+ Adicionar componente</button>
             </div>
             <div style="overflow-x:auto">
               <table style="width:100%;border-collapse:collapse;min-width:620px">
@@ -496,8 +497,8 @@ input:focus,select:focus,textarea:focus{outline:2px solid #C79A3B;outline-offset
           </sc-if>
 
           <div style="display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap">
-            <button style="padding:12px 22px;border:1px solid #e2ded6;border-radius:999px;background:#fff;font-size:14px;font-weight:600;color:#6a6a6a;cursor:pointer">Cancelar</button>
-            <button style="padding:12px 26px;border:none;border-radius:999px;background:linear-gradient(160deg,#E0B75C,#B8862B);color:#1a1206;font-weight:700;font-size:14px;cursor:pointer;transition:transform 150ms cubic-bezier(.4,0,.2,1)" style-hover="transform:scale(1.03)" style-active="transform:scale(.97)">{{ formCta }}</button>
+            <button onClick="{{ cancelarForm }}" style="padding:12px 22px;border:1px solid #e2ded6;border-radius:999px;background:#fff;font-size:14px;font-weight:600;color:#6a6a6a;cursor:pointer">Cancelar</button>
+            <button onClick="{{ salvarForm }}" style="padding:12px 26px;border:none;border-radius:999px;background:linear-gradient(160deg,#E0B75C,#B8862B);color:#1a1206;font-weight:700;font-size:14px;cursor:pointer;transition:transform 150ms cubic-bezier(.4,0,.2,1)" style-hover="transform:scale(1.03)" style-active="transform:scale(.97)">{{ formCta }}</button>
           </div>
         </div>
       </div>
@@ -515,8 +516,8 @@ input:focus,select:focus,textarea:focus{outline:2px solid #C79A3B;outline-offset
             </div>
           </sc-for>
           <div style="display:flex;gap:10px;flex-wrap:wrap;padding-top:6px;border-top:1px solid #f0ede8">
-            <button style="padding:11px 20px;border:1px solid #e2ded6;border-radius:999px;background:#fff;font-size:13.5px;font-weight:600;cursor:pointer" style-hover="border-color:#C79A3B;color:#8A6318">⤓ Baixar em PDF</button>
-            <button style="padding:11px 20px;border:1px solid #e2ded6;border-radius:999px;background:#fff;font-size:13.5px;font-weight:600;cursor:pointer" style-hover="border-color:#C79A3B;color:#8A6318">⎙ Imprimir</button>
+            <button onClick="{{ doPrint }}" style="padding:11px 20px;border:1px solid #e2ded6;border-radius:999px;background:#fff;font-size:13.5px;font-weight:600;cursor:pointer" style-hover="border-color:#C79A3B;color:#8A6318">⤓ Baixar em PDF</button>
+            <button onClick="{{ doPrint }}" style="padding:11px 20px;border:1px solid #e2ded6;border-radius:999px;background:#fff;font-size:13.5px;font-weight:600;cursor:pointer" style-hover="border-color:#C79A3B;color:#8A6318">⎙ Imprimir</button>
           </div>
         </div>
       </div>
@@ -715,56 +716,7 @@ input:focus,select:focus,textarea:focus{outline:2px solid #C79A3B;outline-offset
 
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:900}}">
-class Component extends DCLogic {
-  state = {
-    logged: false, loginUser: 'alex.gomes', loginPass: '', loginErro: false, loginCarregando: false, avisoBanco: null,
-    tabs: [{ id: 'home', label: 'Home' }],
-    active: 'home', fly: null, homeTab: 'atalhos',
-    busca: '', campo: 'Todos', de: '2026-06-01', ate: '2026-09-17',
-    colsSel: '9 Coluna(s)', filtro: 'Todos', sel: null, optionsOpen: false,
-    modal: null, form: {}, editId: null, leads: [],
-    novaTipo: 'Orçamento', novaCliente: '', novaObs: '', novaDesc: 0, itens: [], addSel: '',
-    printId: null, seq: 12,
-    materiais: [
-      { id: 'm1', cod: '101', nome: 'Placa de Gesso Standard 1,80 x 1,20m', cat: 'Forros', un: 'pç', preco: 22.5, estoque: 240 },
-      { id: 'm2', cod: '102', nome: 'Placa Drywall ST 1,80 x 1,20m 12,5mm', cat: 'Drywall', un: 'pç', preco: 46.9, estoque: 96 },
-      { id: 'm3', cod: '118', nome: 'Moldura de Gesso Clássica 8cm — 2m', cat: 'Molduras', un: 'barra', preco: 18, estoque: 310 },
-      { id: 'm4', cod: '124', nome: 'Sanca Aberta Pré-moldada 10cm — 2m', cat: 'Sancas', un: 'barra', preco: 34, estoque: 128 },
-      { id: 'm5', cod: '140', nome: 'Placa Parede 3D Onda 50 x 50cm', cat: 'Parede 3D', un: 'm²', preco: 89.9, estoque: 64 },
-      { id: 'm6', cod: '155', nome: 'Perfil Montante 48mm — 3m', cat: 'Divisórias', un: 'barra', preco: 21.4, estoque: 180 },
-      { id: 'm7', cod: '160', nome: 'Massa para Rejunte Drywall 5kg', cat: 'Reboco', un: 'saco', preco: 32, estoque: 75 },
-      { id: 'm8', cod: '171', nome: 'Rosácea Decorativa Ø 40cm', cat: 'Decoração', un: 'un', preco: 62, estoque: 22 }
-    ],
-    servicos: [
-      { id: 's1', cod: 'S01', nome: 'Instalação de forro de gesso liso', cat: 'Forros', un: 'm²', preco: 55, prazo: '2 a 4 dias' },
-      { id: 's2', cod: 'S02', nome: 'Execução de sanca com iluminação', cat: 'Sancas', un: 'm linear', preco: 98, prazo: '3 a 5 dias' },
-      { id: 's3', cod: 'S03', nome: 'Instalação de moldura de gesso', cat: 'Molduras', un: 'm linear', preco: 28, prazo: '1 a 2 dias' },
-      { id: 's4', cod: 'S04', nome: 'Montagem de parede drywall dupla face', cat: 'Drywall', un: 'm²', preco: 135, prazo: '3 a 6 dias' },
-      { id: 's5', cod: 'S05', nome: 'Aplicação de parede 3D', cat: 'Parede 3D', un: 'm²', preco: 145, prazo: '2 a 3 dias' },
-      { id: 's6', cod: 'S06', nome: 'Reboco e acabamento em massa fina', cat: 'Reboco', un: 'm²', preco: 42, prazo: '2 a 4 dias' },
-      { id: 's7', cod: 'S07', nome: 'Divisória em drywall com isolamento', cat: 'Divisórias', un: 'm²', preco: 168, prazo: '4 a 7 dias' }
-    ],
-    clientes: [
-      { id: 'c1', nome: 'Construtora Vale Verde LTDA', fantasia: 'Vale Verde', contato: 'Eng. Rafael Musa', doc: '12.884.301/0001-45', tel: '(73) 3613-2200', cel: '(73) 99114-2200', municipio: 'Itabuna', uf: 'BA', ativo: 'Sim', dtCompra: '09/09/2026', nasc: '—', rua: 'Av. Cinquentenário', num: '1120', bairro: 'Centro', cep: '45600-000', end: 'Av. Cinquentenário, 1120 — Itabuna, BA' },
-      { id: 'c2', nome: 'Marcos Antônio Silveira', fantasia: '—', contato: 'Marcos', doc: '842.115.905-30', tel: '(73) 3615-7702', cel: '(73) 99814-7702', municipio: 'Itabuna', uf: 'BA', ativo: 'Sim', dtCompra: '04/09/2026', nasc: '14/03/1984', rua: 'Rua do Cajueiro', num: '45', bairro: 'São Caetano', cep: '45604-095', end: 'Rua do Cajueiro, 45 — Itabuna, BA' },
-      { id: 'c3', nome: 'Residencial Parque das Palmeiras', fantasia: 'Palmeiras', contato: 'Síndica Ana Lima', doc: '29.774.180/0001-08', tel: '(73) 3212-9080', cel: '(73) 98800-9080', municipio: 'Ilhéus', uf: 'BA', ativo: 'Sim', dtCompra: '02/09/2026', nasc: '—', rua: 'Rod. Ilhéus-Itabuna', num: 'km 8', bairro: 'Iguape', cep: '45650-000', end: 'Rod. Ilhéus-Itabuna, km 8 — Ilhéus, BA' },
-      { id: 'c4', nome: 'Juliana Ferraz Andrade', fantasia: '—', contato: 'Juliana', doc: '017.552.335-91', tel: '—', cel: '(73) 98123-4455', municipio: 'Itabuna', uf: 'BA', ativo: 'Não', dtCompra: '31/08/2026', nasc: '02/11/1991', rua: 'Rua Nina Barreto', num: '210', bairro: 'Alto Maron', cep: '45605-000', end: 'Rua Nina Barreto, 210 — Itabuna, BA' }
-    ],
-    notas: [
-      { id: 'n1', numero: '000011', tipo: 'Orçamento', cliente: 'c1', data: '09/09/2026 12:48', validade: '12/09/2026', sit: 'Pendente', desc: 200, obs: 'Execução em 3 pavimentos. Andaime por conta do contratante.', itens: [{ nome: 'Instalação de forro de gesso liso', un: 'm²', qtd: 120, preco: 55 }, { nome: 'Placa de Gesso Standard 1,80 x 1,20m', un: 'pç', qtd: 85, preco: 22.5 }] },
-      { id: 'n2', numero: '000010', tipo: 'Orçamento', cliente: 'c2', data: '04/09/2026 17:18', validade: '07/09/2026', sit: 'Cancelado', desc: 0, obs: 'Validade de 15 dias.', itens: [{ nome: 'Execução de sanca com iluminação', un: 'm linear', qtd: 32, preco: 98 }] },
-      { id: 'n3', numero: '000009', tipo: 'Pedido de Venda', cliente: 'c3', data: '02/09/2026 17:15', validade: '05/09/2026', sit: 'Importado', desc: 150, obs: '', itens: [{ nome: 'Placa Drywall ST 1,80 x 1,20m 12,5mm', un: 'pç', qtd: 60, preco: 46.9 }, { nome: 'Perfil Montante 48mm — 3m', un: 'barra', qtd: 40, preco: 21.4 }] },
-      { id: 'n4', numero: '000008', tipo: 'Ordem de Serviço', cliente: 'c4', data: '31/08/2026 08:34', validade: '03/09/2026', sit: 'Pendente', desc: 0, obs: 'Pagamento à vista.', itens: [{ nome: 'Aplicação de parede 3D', un: 'm²', qtd: 14, preco: 145 }] },
-      { id: 'n5', numero: '000007', tipo: 'Orçamento', cliente: 'c1', data: '31/08/2026 08:27', validade: '03/09/2026', sit: 'Importado', desc: 0, obs: '', itens: [{ nome: 'Reboco e acabamento em massa fina', un: 'm²', qtd: 62, preco: 42 }] },
-      { id: 'n6', numero: '000006', tipo: 'Pedido de Compra', cliente: 'c3', data: '30/08/2026 01:58', validade: '02/09/2026', sit: 'Pendente', desc: 0, obs: '', itens: [{ nome: 'Massa para Rejunte Drywall 5kg', un: 'saco', qtd: 12, preco: 32 }] },
-      { id: 'n7', numero: '000005', tipo: 'Recibo', cliente: 'c2', data: '30/08/2026 01:32', validade: '02/09/2026', sit: 'Cancelado', desc: 0, obs: '', itens: [{ nome: 'Instalação de moldura de gesso', un: 'm linear', qtd: 25, preco: 28 }] }
-    ]
-  };
-
-  cats = ['Forros', 'Molduras', 'Sancas', 'Divisórias', 'Drywall', 'Parede 3D', 'Reboco', 'Decoração'];
-  tipos = ['Pedido de Compra', 'Orçamento', 'Ordem de Serviço', 'Recibo'];
-
-  seed = {
+const SEED_DATA = {
     fornecedores: [
       { cod: '01', nome: 'Gipsita Nordeste Mineração LTDA', cnpj: '08.442.190/0001-22', contato: 'Cláudio Mendes', cidade: 'Araripina/PE', tel: '(87) 3873-1200', ultima: '02/09/2026' },
       { cod: '02', nome: 'Placol Indústria de Gesso', cnpj: '19.330.744/0001-61', contato: 'Simone Aguiar', cidade: 'Trindade/PE', tel: '(87) 3877-4410', ultima: '28/08/2026' },
@@ -875,7 +827,57 @@ class Component extends DCLogic {
       { hora: '15:22', hist: 'Sangria para depósito bancário', forma: 'Dinheiro', tipo: 'Saída', valor: -1200 },
       { hora: '16:05', hist: 'Venda 000023 — sanca pré-moldada', forma: 'Cartão débito', tipo: 'Entrada', valor: 1020 }
     ]
+};
+
+class Component extends DCLogic {
+  state = {
+    seed: SEED_DATA,
+    logged: false, loginUser: 'alex.gomes', loginPass: '', loginManter: true, loginErro: false, loginCarregando: false, avisoBanco: null,
+    tabs: [{ id: 'home', label: 'Home' }],
+    active: 'home', fly: null, homeTab: 'atalhos',
+    busca: '', campo: 'Todos', de: '2026-06-01', ate: '2026-09-17',
+    colsSel: '9 Coluna(s)', filtro: 'Todos', sel: null, optionsOpen: false,
+    modal: null, form: {}, editId: null, leads: [],
+    novaTipo: 'Orçamento', novaCliente: '', novaObs: '', novaDesc: 0, itens: [], addSel: '', editingNotaId: null,
+    printId: null, seq: 12,
+    materiais: [
+      { id: 'm1', cod: '101', nome: 'Placa de Gesso Standard 1,80 x 1,20m', cat: 'Forros', un: 'pç', preco: 22.5, estoque: 240 },
+      { id: 'm2', cod: '102', nome: 'Placa Drywall ST 1,80 x 1,20m 12,5mm', cat: 'Drywall', un: 'pç', preco: 46.9, estoque: 96 },
+      { id: 'm3', cod: '118', nome: 'Moldura de Gesso Clássica 8cm — 2m', cat: 'Molduras', un: 'barra', preco: 18, estoque: 310 },
+      { id: 'm4', cod: '124', nome: 'Sanca Aberta Pré-moldada 10cm — 2m', cat: 'Sancas', un: 'barra', preco: 34, estoque: 128 },
+      { id: 'm5', cod: '140', nome: 'Placa Parede 3D Onda 50 x 50cm', cat: 'Parede 3D', un: 'm²', preco: 89.9, estoque: 64 },
+      { id: 'm6', cod: '155', nome: 'Perfil Montante 48mm — 3m', cat: 'Divisórias', un: 'barra', preco: 21.4, estoque: 180 },
+      { id: 'm7', cod: '160', nome: 'Massa para Rejunte Drywall 5kg', cat: 'Reboco', un: 'saco', preco: 32, estoque: 75 },
+      { id: 'm8', cod: '171', nome: 'Rosácea Decorativa Ø 40cm', cat: 'Decoração', un: 'un', preco: 62, estoque: 22 }
+    ],
+    servicos: [
+      { id: 's1', cod: 'S01', nome: 'Instalação de forro de gesso liso', cat: 'Forros', un: 'm²', preco: 55, prazo: '2 a 4 dias' },
+      { id: 's2', cod: 'S02', nome: 'Execução de sanca com iluminação', cat: 'Sancas', un: 'm linear', preco: 98, prazo: '3 a 5 dias' },
+      { id: 's3', cod: 'S03', nome: 'Instalação de moldura de gesso', cat: 'Molduras', un: 'm linear', preco: 28, prazo: '1 a 2 dias' },
+      { id: 's4', cod: 'S04', nome: 'Montagem de parede drywall dupla face', cat: 'Drywall', un: 'm²', preco: 135, prazo: '3 a 6 dias' },
+      { id: 's5', cod: 'S05', nome: 'Aplicação de parede 3D', cat: 'Parede 3D', un: 'm²', preco: 145, prazo: '2 a 3 dias' },
+      { id: 's6', cod: 'S06', nome: 'Reboco e acabamento em massa fina', cat: 'Reboco', un: 'm²', preco: 42, prazo: '2 a 4 dias' },
+      { id: 's7', cod: 'S07', nome: 'Divisória em drywall com isolamento', cat: 'Divisórias', un: 'm²', preco: 168, prazo: '4 a 7 dias' }
+    ],
+    clientes: [
+      { id: 'c1', nome: 'Construtora Vale Verde LTDA', fantasia: 'Vale Verde', contato: 'Eng. Rafael Musa', doc: '12.884.301/0001-45', tel: '(73) 3613-2200', cel: '(73) 99114-2200', municipio: 'Itabuna', uf: 'BA', ativo: 'Sim', dtCompra: '09/09/2026', nasc: '—', rua: 'Av. Cinquentenário', num: '1120', bairro: 'Centro', cep: '45600-000', end: 'Av. Cinquentenário, 1120 — Itabuna, BA' },
+      { id: 'c2', nome: 'Marcos Antônio Silveira', fantasia: '—', contato: 'Marcos', doc: '842.115.905-30', tel: '(73) 3615-7702', cel: '(73) 99814-7702', municipio: 'Itabuna', uf: 'BA', ativo: 'Sim', dtCompra: '04/09/2026', nasc: '14/03/1984', rua: 'Rua do Cajueiro', num: '45', bairro: 'São Caetano', cep: '45604-095', end: 'Rua do Cajueiro, 45 — Itabuna, BA' },
+      { id: 'c3', nome: 'Residencial Parque das Palmeiras', fantasia: 'Palmeiras', contato: 'Síndica Ana Lima', doc: '29.774.180/0001-08', tel: '(73) 3212-9080', cel: '(73) 98800-9080', municipio: 'Ilhéus', uf: 'BA', ativo: 'Sim', dtCompra: '02/09/2026', nasc: '—', rua: 'Rod. Ilhéus-Itabuna', num: 'km 8', bairro: 'Iguape', cep: '45650-000', end: 'Rod. Ilhéus-Itabuna, km 8 — Ilhéus, BA' },
+      { id: 'c4', nome: 'Juliana Ferraz Andrade', fantasia: '—', contato: 'Juliana', doc: '017.552.335-91', tel: '—', cel: '(73) 98123-4455', municipio: 'Itabuna', uf: 'BA', ativo: 'Não', dtCompra: '31/08/2026', nasc: '02/11/1991', rua: 'Rua Nina Barreto', num: '210', bairro: 'Alto Maron', cep: '45605-000', end: 'Rua Nina Barreto, 210 — Itabuna, BA' }
+    ],
+    notas: [
+      { id: 'n1', numero: '000011', tipo: 'Orçamento', cliente: 'c1', data: '09/09/2026 12:48', validade: '12/09/2026', sit: 'Pendente', desc: 200, obs: 'Execução em 3 pavimentos. Andaime por conta do contratante.', itens: [{ nome: 'Instalação de forro de gesso liso', un: 'm²', qtd: 120, preco: 55 }, { nome: 'Placa de Gesso Standard 1,80 x 1,20m', un: 'pç', qtd: 85, preco: 22.5 }] },
+      { id: 'n2', numero: '000010', tipo: 'Orçamento', cliente: 'c2', data: '04/09/2026 17:18', validade: '07/09/2026', sit: 'Cancelado', desc: 0, obs: 'Validade de 15 dias.', itens: [{ nome: 'Execução de sanca com iluminação', un: 'm linear', qtd: 32, preco: 98 }] },
+      { id: 'n3', numero: '000009', tipo: 'Pedido de Venda', cliente: 'c3', data: '02/09/2026 17:15', validade: '05/09/2026', sit: 'Importado', desc: 150, obs: '', itens: [{ nome: 'Placa Drywall ST 1,80 x 1,20m 12,5mm', un: 'pç', qtd: 60, preco: 46.9 }, { nome: 'Perfil Montante 48mm — 3m', un: 'barra', qtd: 40, preco: 21.4 }] },
+      { id: 'n4', numero: '000008', tipo: 'Ordem de Serviço', cliente: 'c4', data: '31/08/2026 08:34', validade: '03/09/2026', sit: 'Pendente', desc: 0, obs: 'Pagamento à vista.', itens: [{ nome: 'Aplicação de parede 3D', un: 'm²', qtd: 14, preco: 145 }] },
+      { id: 'n5', numero: '000007', tipo: 'Orçamento', cliente: 'c1', data: '31/08/2026 08:27', validade: '03/09/2026', sit: 'Importado', desc: 0, obs: '', itens: [{ nome: 'Reboco e acabamento em massa fina', un: 'm²', qtd: 62, preco: 42 }] },
+      { id: 'n6', numero: '000006', tipo: 'Pedido de Compra', cliente: 'c3', data: '30/08/2026 01:58', validade: '02/09/2026', sit: 'Pendente', desc: 0, obs: '', itens: [{ nome: 'Massa para Rejunte Drywall 5kg', un: 'saco', qtd: 12, preco: 32 }] },
+      { id: 'n7', numero: '000005', tipo: 'Recibo', cliente: 'c2', data: '30/08/2026 01:32', validade: '02/09/2026', sit: 'Cancelado', desc: 0, obs: '', itens: [{ nome: 'Instalação de moldura de gesso', un: 'm linear', qtd: 25, preco: 28 }] }
+    ]
   };
+
+  cats = ['Forros', 'Molduras', 'Sancas', 'Divisórias', 'Drywall', 'Parede 3D', 'Reboco', 'Decoração'];
+  tipos = ['Pedido de Compra', 'Orçamento', 'Ordem de Serviço', 'Recibo'];
 
   gdefs = {
     fornecedores: { title: 'Listagem de Fornecedores', campos: ['Todos', 'Razão social', 'CNPJ', 'Cidade'], cols: [['Cód.', 'left', 'cod'], ['Razão social', 'left', 'nome', 0, 1], ['CNPJ', 'left', 'cnpj'], ['Contato', 'left', 'contato'], ['Cidade / UF', 'left', 'cidade'], ['Telefone', 'left', 'tel'], ['Últ. compra', 'left', 'ultima']], seed: 'fornecedores', crud: 1 },
@@ -1044,7 +1046,7 @@ class Component extends DCLogic {
       this.setState(st => ({ clientes: [cli, ...st.clientes] }));
     }
     await this.setLeadSit(lead, 'Convertido');
-    this.setState({ novaTipo: 'Orçamento', novaCliente: cli.id, itens: [],
+    this.setState({ novaTipo: 'Orçamento', novaCliente: cli.id, itens: [], novaDesc: 0, editingNotaId: null,
       novaObs: lead.servico + (lead.metragem ? ' · ' + lead.metragem : '') + (lead.obs ? '\n' + lead.obs : '') + '\nOrigem: site (protocolo ' + lead.protocolo + ')' });
     this.open('nova');
   };
@@ -1056,7 +1058,7 @@ class Component extends DCLogic {
   doLogin = async () => {
     this.setState({ loginErro: false, loginCarregando: true });
     try {
-      await this.api('/api/auth/login', { method: 'POST', body: JSON.stringify({ usuario: this.state.loginUser, senha: this.state.loginPass }) });
+      await this.api('/api/auth/login', { method: 'POST', body: JSON.stringify({ usuario: this.state.loginUser, senha: this.state.loginPass, manter: this.state.loginManter }) });
       this.setState({ logged: true, loginCarregando: false, loginPass: '' });
       // so agora existe cookie de sessao: busca os dados reais (antes do login toda
       // chamada autenticada dava 401 e ficava so no fallback de demonstracao)
@@ -1116,12 +1118,30 @@ class Component extends DCLogic {
   cliNome(id) { const c = this.state.clientes.find(x => x.id === id); return c ? c.nome : 'CLIENTE NÃO CADASTRADO'; }
 
   openModal(type, item) {
+    if (typeof type === 'string' && type.indexOf('gd:') === 0) {
+      const page = type.slice(3);
+      const f = {};
+      this.gdefs[page].cols.forEach(c => { f[c[2]] = item ? item.rec[c[2]] : ''; });
+      this.setState({ modal: type, form: f, editId: item ? item.idx : null, sel: null });
+      return;
+    }
     const f = item ? { ...item } : (type === 'cliente' ? { nome: '', doc: '', tel: '', end: '' }
       : { cod: '', nome: '', cat: this.cats[0], un: type === 'material' ? 'pç' : 'm²', preco: '', estoque: '', prazo: '' });
     this.setState({ modal: type, form: f, editId: item ? item.id : null });
   }
   save = async () => {
     const { modal, form, editId } = this.state;
+    if (typeof modal === 'string' && modal.indexOf('gd:') === 0) {
+      const page = modal.slice(3);
+      const key = this.gdefs[page].seed;
+      const rec = { ...form };
+      this.setState(st => {
+        const arr = (st.seed[key] || []).slice();
+        if (editId !== null && editId !== undefined) arr[editId] = rec; else arr.unshift(rec);
+        return { seed: { ...st.seed, [key]: arr }, modal: null, form: {}, editId: null, sel: null };
+      });
+      return;
+    }
     if (!form.nome) { this.setState({ modal: null }); return; }
     if (modal === 'cliente') {
       try {
@@ -1138,6 +1158,71 @@ class Component extends DCLogic {
     this.setState(s => ({ [key]: editId ? s[key].map(x => x.id === editId ? rec : x) : [rec, ...s[key]], modal: null, form: {}, editId: null }));
   };
 
+  excluirCliente = async (rec) => {
+    try { await this.api('/api/clientes/' + rec.id, { method: 'DELETE' }); } catch (e) {}
+    this.setState(st => ({ clientes: st.clientes.filter(x => x.id !== rec.id), sel: null }));
+  };
+
+  gdSel(page) {
+    const s = this.state;
+    if (typeof s.sel !== 'string') return null;
+    const i = s.sel.lastIndexOf(':');
+    if (i < 0 || s.sel.slice(0, i) !== page) return null;
+    const idx = Number(s.sel.slice(i + 1));
+    const arr = s.seed[this.gdefs[page].seed] || [];
+    return arr[idx] !== undefined ? { idx, rec: arr[idx] } : null;
+  }
+  gdPatch = (page, idx, patch) => {
+    const key = this.gdefs[page].seed;
+    this.setState(st => ({ seed: { ...st.seed, [key]: st.seed[key].map((r, i) => i === idx ? { ...r, ...patch } : r) } }));
+  };
+  gdExcluir = (page, idx) => {
+    const key = this.gdefs[page].seed;
+    this.setState(st => ({ seed: { ...st.seed, [key]: st.seed[key].filter((r, i) => i !== idx) }, sel: null }));
+  };
+  gdSangria = (page) => {
+    const v = window.prompt('Valor da sangria (R$)');
+    if (!v) return;
+    const n = Number(String(v).replace(',', '.'));
+    if (!n || n <= 0) { window.alert('Informe um valor válido.'); return; }
+    const key = this.gdefs[page].seed;
+    const hora = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+    const rec = { hora, conta: 'Caixa interno', hist: 'Sangria para depósito bancário', forma: 'Dinheiro', tipo: 'Saída', valor: -Math.abs(n) };
+    this.setState(st => ({ seed: { ...st.seed, [key]: [rec, ...st.seed[key]] } }));
+  };
+
+  exportCsv = (filename, cols, rows) => {
+    if (!rows.length) { window.alert('Nada para exportar — a lista está vazia.'); return; }
+    const esc = v => '"' + String(v === undefined || v === null ? '' : v).replace(/"/g, '""') + '"';
+    const header = cols.map(c => esc(c.label)).join(';');
+    const lines = rows.map(r => r.cells.map(c => esc(c.v)).join(';'));
+    const csv = '﻿' + [header, ...lines].join('\r\n');
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = filename; document.body.appendChild(a); a.click();
+    document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  };
+
+  patchNota = async (id, patch) => {
+    try {
+      const nota = await this.api('/api/notas/' + id, { method: 'PATCH', body: JSON.stringify(patch) });
+      this.setState(st => ({ notas: st.notas.map(n => n.id === id ? nota : n) }));
+      return;
+    } catch (e) {}
+    this.setState(st => ({ notas: st.notas.map(n => n.id === id ? { ...n, ...patch } : n) }));
+  };
+
+  editarNota = (nota) => {
+    this.setState({
+      novaTipo: nota.tipo, novaCliente: nota.cliente || '', novaObs: nota.obs || '', novaDesc: nota.desc || 0,
+      itens: nota.itens.map((i, idx) => ({ key: 'e' + idx + '_' + Date.now(), nome: i.nome, un: i.un, cat: '', qtd: i.qtd, preco: i.preco })),
+      editingNotaId: nota.id
+    });
+    this.open('nova');
+  };
+
   addItem = () => {
     const id = this.state.addSel; if (!id) return;
     const src = [...this.state.materiais, ...this.state.servicos].find(x => x.id === id); if (!src) return;
@@ -1147,8 +1232,24 @@ class Component extends DCLogic {
   salvarNota = async () => {
     const s = this.state; if (!s.itens.length) return;
     const itens = s.itens.map(i => ({ nome: i.nome, un: i.un, qtd: Number(i.qtd) || 0, preco: Number(i.preco) || 0 }));
+    const payload = { tipo: s.novaTipo, clienteId: s.novaCliente, obs: s.novaObs, desc: Number(s.novaDesc) || 0, itens };
+
+    if (s.editingNotaId) {
+      const editId = s.editingNotaId;
+      try {
+        const nota = await this.api('/api/notas/' + editId, { method: 'PATCH', body: JSON.stringify(payload) });
+        this.setState(st => ({ notas: st.notas.map(n => n.id === editId ? nota : n), itens: [], novaObs: '', novaDesc: 0, novaCliente: '', editingNotaId: null, printId: nota.id }));
+        return;
+      } catch (e) {}
+      this.setState(st => ({
+        notas: st.notas.map(n => n.id === editId ? { ...n, tipo: payload.tipo, cliente: payload.clienteId, obs: payload.obs, desc: payload.desc, itens } : n),
+        itens: [], novaObs: '', novaDesc: 0, novaCliente: '', editingNotaId: null
+      }));
+      return;
+    }
+
     try {
-      const nota = await this.api('/api/notas', { method: 'POST', body: JSON.stringify({ tipo: s.novaTipo, clienteId: s.novaCliente, obs: s.novaObs, desc: Number(s.novaDesc) || 0, itens }) });
+      const nota = await this.api('/api/notas', { method: 'POST', body: JSON.stringify(payload) });
       this.setState(st => ({ notas: [nota, ...st.notas], itens: [], novaObs: '', novaDesc: 0, novaCliente: '', printId: nota.id }));
       return;
     } catch (e) {}
@@ -1156,7 +1257,7 @@ class Component extends DCLogic {
     this.setState(st => ({ notas: [nota, ...st.notas], seq: st.seq + 1, itens: [], novaObs: '', novaDesc: 0, novaCliente: '', printId: nota.id }));
   };
 
-  novaDe(tipo) { return () => { this.setState({ novaTipo: tipo }); this.open('nova'); }; }
+  novaDe(tipo) { return () => { this.setState({ novaTipo: tipo, itens: [], novaCliente: '', novaObs: '', novaDesc: 0, editingNotaId: null }); this.open('nova'); }; }
 
   renderVals() {
     const s = this.state, M = n => this.money(n), page = s.active;
@@ -1170,8 +1271,17 @@ class Component extends DCLogic {
     });
     const flyMenu = this.menus.find(m => m.id === s.fly);
     const flyIdx = this.menus.findIndex(m => m.id === s.fly);
+    const ITEM_ICONS = {
+      clientes: '▤', produtos: '⊟', servicos: '◈', faturamento: '◫', orcamentos: '⌸',
+      notaentrada: '⊞', pedvenda: '⊜', leads: '◇', receber: '↑', pagar: '↓', caixa: '$', agenda: '◷',
+      pedcompra: '⊕', fornecedores: '⊡', transportadoras: '▣', vendedores: '◎',
+      composicao: '▦', mde: '◪', prevenda: '◔', os: '◑', notaservico: '▧', mdfe: '⊹', cupom: '⊚',
+      banco: '⊙', tributacoes: '%', cfop: '#', sped: '▣', spedc: '▩', sintegra: '▥',
+      boletos: '⎙', xmls: '⤓', atualizacoes: '⟳', usuarios: '◐', grupos: '⌗',
+      empresa: '⚙', contrato: '▧'
+    };
     const flyItems = flyMenu ? flyMenu.items.map(i => ({
-      label: i.label, go: () => this.open(i.id),
+      label: i.label, icon: ITEM_ICONS[i.id] || flyMenu.icon, go: () => this.open(i.id),
       lockStyle: i.lock ? 'margin-left:7px;font-size:11px;color:#c9c0ae' : 'display:none',
       style: 'display:flex;align-items:center;width:100%;text-align:left;padding:9px 16px;border:none;background:none;font-size:14px;cursor:pointer;color:' + (i.id === page ? '#8A6318' : i.lock ? '#b3aa98' : '#2A2A2A') + ';font-weight:' + (i.id === page ? '600' : '400')
     })) : [];
@@ -1207,8 +1317,8 @@ class Component extends DCLogic {
     const barras = arr.map(([nome, v]) => ({ nome, valor: M(v), barStyle: 'height:100%;width:' + Math.max(6, (v / maxv) * 100) + '%;border-radius:999px;background:linear-gradient(90deg,#B8862B,#F0D18A)' }));
 
     const vendas = s.notas.filter(n => n.sit !== 'Cancelado').reduce((a, n) => a + this.notaTotals(n).total, 0);
-    const receitas = this.seed.receber.reduce((a, r) => a + r.recebido, 0) + this.seed.caixa.filter(m => m.valor > 0).reduce((a, m) => a + m.valor, 0);
-    const despesas = this.seed.pagar.filter(p => p.sit === 'Pago').reduce((a, p) => a + p.valor, 0);
+    const receitas = s.seed.receber.reduce((a, r) => a + r.recebido, 0) + s.seed.caixa.filter(m => m.valor > 0).reduce((a, m) => a + m.valor, 0);
+    const despesas = s.seed.pagar.filter(p => p.sit === 'Pago').reduce((a, p) => a + p.valor, 0);
     const dashCards = [
       { label: 'Vendas', icon: '◫', value: M(vendas), hint: s.notas.length + ' documentos no período' },
       { label: 'Receitas', icon: '↑', value: M(receitas), hint: 'Recebimentos confirmados' },
@@ -1266,7 +1376,7 @@ class Component extends DCLogic {
             { v: M(this.notaTotals(n).total), style: td('right', 1) },
             { v: n.validade || '—', style: td('left') },
             { v: 'CALIANE GALDINO', style: 'padding:12px 16px;font-size:12px;color:' + (on ? '#9a9a9a' : '#9a9a9a') },
-            { v: n.sit, style: 'padding:12px 16px;font-size:12.5px;font-weight:600;color:' + sitColor }
+            { v: (n.sit === 'Importado' ? '✓ ' : n.sit === 'Cancelado' ? '⊘ ' : '● ') + n.sit, style: 'padding:12px 16px;font-size:12.5px;font-weight:600;color:' + sitColor }
           ]
         };
       });
@@ -1281,7 +1391,7 @@ class Component extends DCLogic {
         const td = (a, b) => 'padding:12px 16px;text-align:' + a + ';font-size:13px;white-space:nowrap;color:' + ink + (b ? ';font-weight:600' : '');
         return { select: () => this.setState({ sel: on ? null : c.id }),
           style: 'cursor:pointer;border-bottom:1px solid #f2efea;background:' + (on ? '#0D0D0D' : 'transparent'),
-          cells: [{ v: c.doc, style: td('left') }, { v: c.nome, style: 'padding:12px 16px;font-size:13px;font-weight:600;white-space:nowrap;color:' + ink }, { v: c.fantasia, style: td('left') }, { v: c.contato, style: td('left') }, { v: c.municipio, style: td('left') }, { v: c.uf, style: td('center') }, { v: c.tel, style: td('left') }, { v: c.cel, style: td('left') }, { v: c.ativo, style: 'padding:12px 16px;text-align:center;font-size:12.5px;font-weight:600;color:' + (on ? '#E0B75C' : c.ativo === 'Sim' ? '#5F7052' : '#A34A24') }, { v: c.dtCompra, style: td('left') }, { v: c.nasc, style: td('left') }] };
+          cells: [{ v: c.doc, style: td('left') }, { v: c.nome, style: 'padding:12px 16px;font-size:13px;font-weight:600;white-space:nowrap;color:' + ink }, { v: c.fantasia, style: td('left') }, { v: c.contato, style: td('left') }, { v: c.municipio, style: td('left') }, { v: c.uf, style: td('center') }, { v: c.tel, style: td('left') }, { v: c.cel, style: td('left') }, { v: (c.ativo === 'Sim' ? '✓ ' : '⊘ ') + c.ativo, style: 'padding:12px 16px;text-align:center;font-size:12.5px;font-weight:600;color:' + (on ? '#E0B75C' : c.ativo === 'Sim' ? '#5F7052' : '#A34A24') }, { v: c.dtCompra, style: td('left') }, { v: c.nasc, style: td('left') }] };
       });
     } else if (page === 'produtos' || page === 'servicos') {
       const isMat = page === 'produtos';
@@ -1316,13 +1426,11 @@ class Component extends DCLogic {
         style: 'padding:9px 14px;border-radius:10px;font-size:12.5px;font-weight:600;cursor:pointer;white-space:nowrap;border:1px solid ' + (s.filtro === f ? '#0D0D0D' : '#e2ded6') + ';background:' + (s.filtro === f ? '#0D0D0D' : '#fff') + ';color:' + (s.filtro === f ? '#fff' : '#6a6a6a')
       }));
       cols = gd.cols.map(c => ({ label: c[0], style: th(c[1]) }));
-      const sitInk = (v, on) => {
-        if (on) return '#E0B75C';
-        const bad = ['Cancelado', 'Cancelada', 'Vencido', 'Bloqueado', 'Inativo', 'Débito', 'Saída', 'Sem manifestação'];
-        const good = ['Recebido', 'Pago', 'Liquidado', 'Ativo', 'Confirmado', 'Confirmada', 'Escriturada', 'Autorizada', 'Emitida', 'Crédito', 'Entrada'];
-        return bad.indexOf(v) >= 0 ? '#A34A24' : good.indexOf(v) >= 0 ? '#5F7052' : '#8A6318';
-      };
-      const src = (this.seed[gd.seed] || []).filter(r => !gd.filtroKey || s.filtro === 'Todos' || r[gd.filtroKey] === s.filtro)
+      const sitBad = ['Cancelado', 'Cancelada', 'Vencido', 'Bloqueado', 'Inativo', 'Débito', 'Saída', 'Sem manifestação'];
+      const sitGood = ['Recebido', 'Pago', 'Liquidado', 'Ativo', 'Confirmado', 'Confirmada', 'Escriturada', 'Autorizada', 'Emitida', 'Crédito', 'Entrada'];
+      const sitInk = (v, on) => on ? '#E0B75C' : sitBad.indexOf(v) >= 0 ? '#A34A24' : sitGood.indexOf(v) >= 0 ? '#5F7052' : '#8A6318';
+      const sitIcon = v => sitGood.indexOf(v) >= 0 ? '✓ ' : sitBad.indexOf(v) >= 0 ? '⊘ ' : '● ';
+      const src = (s.seed[gd.seed] || []).filter(r => !gd.filtroKey || s.filtro === 'Todos' || r[gd.filtroKey] === s.filtro)
         .filter(r => !q || Object.values(r).some(v => String(v).toLowerCase().includes(q)));
       rows = src.map((r, idx) => {
         const rid = page + ':' + idx, on = s.sel === rid, ink = on ? '#fff' : '#2A2A2A';
@@ -1332,14 +1440,14 @@ class Component extends DCLogic {
           cells: gd.cols.map(c => {
             const raw = r[c[2]];
             const isSit = c[3] === 'sit';
-            const v = c[3] === 'money' ? M(raw) : String(raw === undefined || raw === '' ? '—' : raw);
+            const v = isSit ? sitIcon(raw) + String(raw || '—') : c[3] === 'money' ? M(raw) : String(raw === undefined || raw === '' ? '—' : raw);
             const color = isSit ? sitInk(raw, on) : (c[3] === 'money' && Number(raw) < 0 && !on) ? '#A34A24' : ink;
             return { v, style: 'padding:12px 16px;text-align:' + c[1] + ';font-size:' + (c[2] === 'chave' ? '11.5px' : '13px') + ';color:' + color + (c[4] || isSit ? ';font-weight:600' : '') + (c[2] === 'chave' || c[2] === 'desc' || c[2] === 'hist' || c[2] === 'comp' || c[2] === 'perms' ? '' : ';white-space:nowrap') };
           })
         };
       });
       if (gd.cards) {
-        const cx = this.seed.caixa;
+        const cx = s.seed.caixa;
         const ent = cx.filter(m => m.valor > 0 && m.tipo !== 'Abertura').reduce((a, m) => a + m.valor, 0);
         const sai = cx.filter(m => m.valor < 0).reduce((a, m) => a + m.valor, 0);
         listCards = [
@@ -1378,7 +1486,7 @@ class Component extends DCLogic {
               { v: l.cidade || '—', style: td('left') },
               { v: l.servico, style: 'padding:12px 16px;font-size:13px;color:' + ink },
               { v: l.metragem || '—', style: td('right') },
-              { v: l.sit, style: 'padding:12px 16px;font-size:12.5px;font-weight:600;color:' + sc }
+              { v: (l.sit === 'Convertido' ? '✓ ' : l.sit === 'Descartado' ? '⊘ ' : '● ') + l.sit, style: 'padding:12px 16px;font-size:12.5px;font-weight:600;color:' + sc }
             ]
           };
         });
@@ -1439,11 +1547,10 @@ class Component extends DCLogic {
     } else if (isDocList) {
       const selNota = s.notas.find(n => n.id === s.sel);
       actions = [
-        { label: '⤨ Transformar', style: btn('ghost'), go: () => this.setState({ optionsOpen: true }) },
-        { label: '⊘ Cancelar documento', style: btn('ghost'), go: () => selNota && this.setState(st => ({ notas: st.notas.map(n => n.id === selNota.id ? { ...n, sit: 'Cancelado' } : n) })) },
-        { label: '≡ Opções', style: btn('ghost'), go: () => this.setState({ optionsOpen: true }) },
+        { label: '⤨ Transformar', style: btn('ghost'), go: () => selNota && this.setState({ optionsOpen: true }) },
+        { label: '⊘ Cancelar documento', style: btn('ghost'), go: () => selNota && this.patchNota(selNota.id, { sit: 'Cancelado' }) },
         { label: '⎙ Imprimir', style: btn('normal'), go: () => selNota && this.setState({ printId: selNota.id }) },
-        { label: '✎ Editar', style: btn('normal'), go: () => selNota && this.setState({ printId: selNota.id }) },
+        { label: '✎ Editar', style: btn('normal'), go: () => selNota && this.editarNota(selNota) },
         { label: '+ Novo', style: btn('primary'), go: this.novaDe(docPages[page]) }
       ];
     } else if (isCadList) {
@@ -1451,27 +1558,63 @@ class Component extends DCLogic {
       const type = page === 'clientes' ? 'cliente' : page === 'produtos' ? 'material' : 'servico';
       const rec = s[key].find(x => x.id === s.sel);
       actions = [
-        { label: '⊘ Excluir', style: btn('ghost'), go: () => rec && this.setState(st => ({ [key]: st[key].filter(x => x.id !== rec.id), sel: null })) },
-        { label: '≡ Opções', style: btn('ghost'), go: () => {} },
+        { label: '⊘ Excluir', style: btn('ghost'), go: () => rec && (key === 'clientes' ? this.excluirCliente(rec) : this.setState(st => ({ [key]: st[key].filter(x => x.id !== rec.id), sel: null }))) },
         { label: '✎ Editar', style: btn('normal'), go: () => rec && this.openModal(type, rec) },
         { label: '+ Novo', style: btn('primary'), go: () => this.openModal(type) }
       ];
     } else if (gd) {
-      if (gd.actions) actions = gd.actions.map(a => ({ label: a[0], style: btn(a[1]), go: () => {} }));
-      else if (gd.doc) actions = [
-        { label: '⤨ Transformar', style: btn('ghost'), go: () => this.setState({ optionsOpen: true }) },
-        { label: '⊘ Cancelar documento', style: btn('ghost'), go: () => {} },
-        { label: '≡ Opções', style: btn('ghost'), go: () => {} },
-        { label: '⎙ Imprimir', style: btn('normal'), go: () => {} },
-        { label: '✎ Editar', style: btn('normal'), go: () => {} },
-        { label: '+ Novo', style: btn('primary'), go: () => {} }
-      ];
-      else actions = [
-        { label: '⊘ Excluir', style: btn('ghost'), go: () => {} },
-        { label: '≡ Opções', style: btn('ghost'), go: () => {} },
-        { label: '✎ Editar', style: btn('normal'), go: () => {} },
-        { label: '+ Novo', style: btn('primary'), go: () => {} }
-      ];
+      const selGd = this.gdSel(page);
+      const money = M;
+      if (gd.actions) {
+        if (page === 'mde') actions = [
+          { label: '⊘ Desconhecer', style: btn('ghost'), go: () => selGd && this.gdPatch(page, selGd.idx, { sit: 'Desconhecida' }) },
+          { label: '◐ Dar ciência', style: btn('normal'), go: () => selGd && this.gdPatch(page, selGd.idx, { sit: 'Ciência' }) },
+          { label: '✓ Confirmar operação', style: btn('primary'), go: () => selGd && this.gdPatch(page, selGd.idx, { sit: 'Confirmada' }) }
+        ];
+        else if (page === 'receber') actions = [
+          { label: '⊘ Estornar', style: btn('ghost'), go: () => selGd && this.gdPatch(page, selGd.idx, { sit: 'A receber', recebido: 0 }) },
+          { label: '⎙ Extrato', style: btn('normal'), go: () => selGd && window.alert(selGd.rec.doc + ' — ' + selGd.rec.cliente + '\nVencimento: ' + selGd.rec.venc + '\nValor: ' + money(selGd.rec.valor) + '\nRecebido: ' + money(selGd.rec.recebido) + '\nSituação: ' + selGd.rec.sit) },
+          { label: '✓ Receber', style: btn('primary'), go: () => selGd && this.gdPatch(page, selGd.idx, { sit: 'Recebido', recebido: selGd.rec.valor }) }
+        ];
+        else if (page === 'pagar') actions = [
+          { label: '⊘ Estornar', style: btn('ghost'), go: () => selGd && this.gdPatch(page, selGd.idx, { sit: 'A pagar' }) },
+          { label: '⎙ Extrato', style: btn('normal'), go: () => selGd && window.alert(selGd.rec.doc + ' — ' + selGd.rec.forn + '\nVencimento: ' + selGd.rec.venc + '\nValor: ' + money(selGd.rec.valor) + '\nCategoria: ' + selGd.rec.cat + '\nSituação: ' + selGd.rec.sit) },
+          { label: '✓ Pagar', style: btn('primary'), go: () => selGd && this.gdPatch(page, selGd.idx, { sit: 'Pago' }) }
+        ];
+        else if (page === 'banco') actions = [
+          { label: '⎙ Extrato', style: btn('normal'), go: () => selGd && window.alert(selGd.rec.data + ' — ' + selGd.rec.conta + '\n' + selGd.rec.hist + '\nValor: ' + money(selGd.rec.valor) + '\nSaldo: ' + money(selGd.rec.saldo)) },
+          { label: '+ Novo lançamento', style: btn('primary'), go: () => this.openModal('gd:' + page) }
+        ];
+        else if (page === 'boletos') actions = [
+          { label: '⊘ Baixar registro', style: btn('ghost'), go: () => selGd && this.gdPatch(page, selGd.idx, { sit: 'Liquidado' }) },
+          { label: '⎙ Imprimir boleto', style: btn('normal'), go: () => selGd && window.alert('Boleto ' + selGd.rec.nosso + '\nCliente: ' + selGd.rec.cliente + '\nVencimento: ' + selGd.rec.venc + '\nValor: ' + money(selGd.rec.valor) + '\nBanco: ' + selGd.rec.banco) },
+          { label: '+ Gerar remessa', style: btn('primary'), go: () => window.alert('Geração de remessa CNAB requer integração bancária real — não disponível nesta versão.') }
+        ];
+        else if (page === 'xmls') actions = [
+          { label: '⤓ Baixar selecionado', style: btn('normal'), go: () => selGd
+            ? this.exportCsv('xml-selecionado.csv', gd.cols.map(c => ({ label: c[0] })), [{ cells: gd.cols.map(c => ({ v: selGd.rec[c[2]] })) }])
+            : window.alert('Selecione um documento na lista.') },
+          { label: '⤓ Baixar período', style: btn('primary'), go: () => this.exportCsv('xmls-periodo.csv', cols, rows) }
+        ];
+        else if (page === 'caixa') actions = [
+          { label: '⊘ Sangria', style: btn('ghost'), go: () => this.gdSangria(page) },
+          { label: '⎙ Fechamento', style: btn('normal'), go: () => window.alert(listCards.map(c => c.label + ': ' + c.value).join('\n')) },
+          { label: '+ Lançamento', style: btn('primary'), go: () => this.openModal('gd:' + page) }
+        ];
+      } else if (gd.doc) {
+        actions = [
+          { label: '⊘ Cancelar documento', style: btn('ghost'), go: () => selGd && this.gdPatch(page, selGd.idx, { sit: 'Cancelado' }) },
+          { label: '⎙ Imprimir', style: btn('normal'), go: () => selGd && window.alert(gd.cols.map(c => c[0] + ': ' + (selGd.rec[c[2]] === undefined || selGd.rec[c[2]] === '' ? '—' : (c[3] === 'money' ? money(selGd.rec[c[2]]) : selGd.rec[c[2]]))).join('\n')) },
+          { label: '✎ Editar', style: btn('normal'), go: () => selGd && this.openModal('gd:' + page, selGd) },
+          { label: '+ Novo', style: btn('primary'), go: () => this.openModal('gd:' + page) }
+        ];
+      } else {
+        actions = [
+          { label: '⊘ Excluir', style: btn('ghost'), go: () => selGd && this.gdExcluir(page, selGd.idx) },
+          { label: '✎ Editar', style: btn('normal'), go: () => selGd && this.openModal('gd:' + page, selGd) },
+          { label: '+ Novo', style: btn('primary'), go: () => this.openModal('gd:' + page) }
+        ];
+      }
     }
 
     // ---- nova nota
@@ -1499,8 +1642,21 @@ class Component extends DCLogic {
     if (mt === 'cliente') modalFields = [F('Nome / Razão social', 'nome', { full: 1, ph: 'Ex: Construtora Vale Verde LTDA' }), F('CPF / CNPJ', 'doc', { ph: '000.000.000-00' }), F('Telefone', 'tel', { ph: '(73) 00000-0000' }), F('Endereço da obra', 'end', { full: 1, ph: 'Rua, nº, bairro — cidade/UF' })];
     else if (mt === 'material') modalFields = [F('Código', 'cod', { ph: '101' }), F('Categoria', 'cat', { options: this.cats }), F('Descrição do produto', 'nome', { full: 1, ph: 'Ex: Placa de Gesso Standard 1,80 x 1,20m' }), F('Unidade', 'un', { options: ['pç', 'm²', 'm linear', 'barra', 'saco', 'un', 'kg'] }), F('Preço de venda (R$)', 'preco', { type: 'number', ph: '0,00' }), F('Estoque atual', 'estoque', { type: 'number', ph: '0' })];
     else if (mt === 'servico') modalFields = [F('Código', 'cod', { ph: 'S01' }), F('Categoria', 'cat', { options: this.cats }), F('Descrição do serviço', 'nome', { full: 1, ph: 'Ex: Instalação de forro de gesso liso' }), F('Unidade de medida', 'un', { options: ['m²', 'm linear', 'un', 'diária', 'obra'] }), F('Valor (R$)', 'preco', { type: 'number', ph: '0,00' }), F('Prazo estimado', 'prazo', { ph: '2 a 4 dias' })];
+    else if (typeof mt === 'string' && mt.indexOf('gd:') === 0) {
+      const gdef = this.gdefs[mt.slice(3)];
+      const fullKeys = ['nome', 'desc', 'hist', 'comp', 'perms', 'endereco', 'end'];
+      modalFields = gdef.cols.map(c => {
+        const key = c[2], isMoney = c[3] === 'money';
+        const isSit = c[3] === 'sit' && gdef.filtroKey === key && gdef.filtros;
+        return isSit ? F(c[0], key, { options: gdef.filtros.filter(x => x !== 'Todos') }) : F(c[0], key, { type: isMoney ? 'number' : 'text', full: fullKeys.indexOf(key) >= 0 ? 1 : 0 });
+      });
+    }
     const mTitles = { cliente: ['Cadastro de cliente', 'Dados usados no cabeçalho dos documentos'], material: ['Cadastro de produto', 'Forros, molduras, sancas, drywall e mais'], servico: ['Cadastro de serviço', 'Serviços executados pela equipe Gesso Fort'] };
-    const mTitle = mTitles[mt] || ['', ''];
+    let mTitle = mTitles[mt] || ['', ''];
+    if (typeof mt === 'string' && mt.indexOf('gd:') === 0) {
+      const short = this.gdefs[mt.slice(3)].title.replace(/^Listagem de /, '').replace(/^Relação /, '').replace(/^Gerenciador de /, '').replace(/^Download de /, '');
+      mTitle = [(s.editId !== null && s.editId !== undefined ? 'Editar' : 'Novo') + ' — ' + short, ''];
+    }
 
     // ---- print
     const pn = s.notas.find(n => n.id === s.printId);
@@ -1530,7 +1686,9 @@ class Component extends DCLogic {
       isLogin: !s.logged, isApp: s.logged,
       loginUser: s.loginUser, loginPass: s.loginPass, onLoginUser: this.set('loginUser'), onLoginPass: this.set('loginPass'),
       loginErro: s.loginErro, loginCarregando: s.loginCarregando, loginBtnLabel: s.loginCarregando ? 'Entrando…' : 'Entrar',
-      avisoBanco: s.avisoBanco,
+      loginManter: s.loginManter, onLoginManter: e => this.setState({ loginManter: e.target.checked }),
+      esqueciSenha: () => window.alert('Fale com o administrador do sistema (grupo Administradores) para redefinir sua senha de acesso.'),
+      avisoBanco: s.avisoBanco, fecharAviso: () => this.setState({ avisoBanco: null }),
       doLogin: this.doLogin, doLogout: this.doLogout,
       rail, flyOpen: !!flyMenu, flyLabel: flyMenu ? flyMenu.label : '', flyItems,
       flyStyle: 'position:fixed;z-index:40;left:66px;top:' + Math.min(Math.max(58 + flyIdx * 51, 58), 300) + 'px;min-width:232px;background:#fff;border:1px solid #e2ded6;border-radius:14px;box-shadow:0 16px 48px rgba(0,0,0,.2);padding:10px 0;animation:gfFly .16s cubic-bezier(.4,0,.2,1)',
@@ -1543,8 +1701,30 @@ class Component extends DCLogic {
       atalhos, kpis, barras, dashCards, topItens, modelos,
       isList: isList || !!gd || isLeads, listTitle, cols, rows, isEmpty: (isList || !!gd || isLeads) && rows.length === 0, rowCount: String(rows.length),
       hasListCards: listCards.length > 0, listCards,
+      resetFiltros: () => this.setState({ busca: '', filtro: 'Todos', campo: 'Todos' }), resetIcon: s.busca ? '✕' : '⌕',
+      exportarLista: () => this.exportCsv(((listTitle || 'lista').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || 'lista') + '.csv', cols, rows),
       isRel: !!rg, relGrupos, relList, relTitulo: relAtivo || '', relFields,
+      visualizarRelatorio: () => {
+        const relExportMap = {
+          'Listagem de Clientes': () => ({ filename: 'clientes.csv', cols: [{ label: 'Nome' }, { label: 'Documento' }, { label: 'Telefone' }, { label: 'Município' }, { label: 'Situação' }], rows: s.clientes.map(c => ({ cells: [{ v: c.nome }, { v: c.doc }, { v: c.tel }, { v: c.municipio }, { v: c.ativo }] })) }),
+          'Listagem de Fornecedores': () => ({ filename: 'fornecedores.csv', cols: this.gdefs.fornecedores.cols.map(c => ({ label: c[0] })), rows: s.seed.fornecedores.map(r => ({ cells: this.gdefs.fornecedores.cols.map(c => ({ v: r[c[2]] })) })) }),
+          'Listagem de Produtos': () => ({ filename: 'produtos.csv', cols: [{ label: 'Código' }, { label: 'Produto' }, { label: 'Categoria' }, { label: 'Unidade' }, { label: 'Estoque' }, { label: 'Preço' }], rows: s.materiais.map(m => ({ cells: [{ v: m.cod }, { v: m.nome }, { v: m.cat }, { v: m.un }, { v: m.estoque }, { v: m.preco }] })) }),
+          'Listagem Agenda': () => ({ filename: 'agenda.csv', cols: this.gdefs.agenda.cols.map(c => ({ label: c[0] })), rows: s.seed.agenda.map(r => ({ cells: this.gdefs.agenda.cols.map(c => ({ v: r[c[2]] })) })) }),
+          'Comissão de Vendedores': () => ({ filename: 'comissao-vendedores.csv', cols: this.gdefs.vendedores.cols.map(c => ({ label: c[0] })), rows: s.seed.vendedores.map(r => ({ cells: this.gdefs.vendedores.cols.map(c => ({ v: r[c[2]] })) })) }),
+          'Contas a Receber por Vencimento': () => ({ filename: 'contas-a-receber.csv', cols: this.gdefs.receber.cols.map(c => ({ label: c[0] })), rows: s.seed.receber.map(r => ({ cells: this.gdefs.receber.cols.map(c => ({ v: r[c[2]] })) })) }),
+          'Contas a Pagar por Vencimento': () => ({ filename: 'contas-a-pagar.csv', cols: this.gdefs.pagar.cols.map(c => ({ label: c[0] })), rows: s.seed.pagar.map(r => ({ cells: this.gdefs.pagar.cols.map(c => ({ v: r[c[2]] })) })) })
+        };
+        const f = relExportMap[relAtivo];
+        if (f) { const d = f(); this.exportCsv(d.filename, d.cols, d.rows); }
+        else window.alert('O relatório "' + (relAtivo || '') + '" ainda não está implementado nesta versão.');
+      },
       isForm: !!fd, formTitle: fd ? fd.title : '', formSub: fd ? fd.sub : '', formCta: fd ? fd.cta : '', formSections,
+      cancelarForm: () => this.open('home'),
+      adicionarComponente: () => window.alert('Adicionar novos componentes à composição estará disponível em uma próxima etapa.'),
+      salvarForm: () => {
+        if (page === 'sped' || page === 'spedc' || page === 'sintegra') window.alert('Geração de arquivo fiscal requer dados fiscais reais e certificado digital — não disponível nesta versão.');
+        else window.alert('Alterações salvas (dados de demonstração — não persistem após recarregar a página).');
+      },
       hasFormTable: !!(fd && fd.table), formTableCols: fd && fd.table ? fd.table.cols : [], formTableRows: fd && fd.table ? fd.table.rows.map(r => ({ cells: r.map((v, i) => ({ v, style: 'padding:11px 14px;font-size:13px;text-align:' + (i > 1 ? 'right' : 'left') + ';color:#2A2A2A' + (i === 0 ? ';font-weight:600' : '') })) })) : [],
       isDoc: page === 'contrato', isChangelog: page === 'atualizacoes',
       docBlocks: this.contrato, changelog: this.changelog,
@@ -1556,11 +1736,12 @@ class Component extends DCLogic {
       showActionBar: actions.length > 0, actions,
       optionsOpen: s.optionsOpen, closeOptions: () => this.setState({ optionsOpen: false }),
       transformOpts: [
-        { label: 'Em Pedido de Venda', go: () => { this.setState({ optionsOpen: false }); if (selNota) this.setState(st => ({ notas: st.notas.map(n => n.id === selNota.id ? { ...n, tipo: 'Pedido de Venda', sit: 'Importado' } : n) })); this.open('pedvenda'); } },
+        { label: 'Em Pedido de Venda', go: () => { this.setState({ optionsOpen: false }); if (selNota) this.patchNota(selNota.id, { tipo: 'Pedido de Venda', sit: 'Importado' }); this.open('pedvenda'); } },
         { label: 'Em Pré-Venda', go: () => { this.setState({ optionsOpen: false }); this.open('prevenda'); } },
-        { label: 'Em Faturamento', go: () => { this.setState({ optionsOpen: false }); this.open('faturamento'); } }
+        { label: 'Em Faturamento', go: () => { this.setState({ optionsOpen: false }); if (selNota) this.patchNota(selNota.id, { sit: 'Importado' }); this.open('faturamento'); } }
       ],
-      isNova: page === 'nova', novaTitulo: 'Novo ' + s.novaTipo, tiposDoc, novaTipo: s.novaTipo,
+      isNova: page === 'nova', novaTitulo: (s.editingNotaId ? 'Editar ' : 'Novo ') + s.novaTipo, tiposDoc, novaTipo: s.novaTipo,
+      salvarNotaLabel: s.editingNotaId ? 'Salvar alterações' : 'Gerar documento',
       clientesOpts: s.clientes, novaCliente: s.novaCliente, onNovaCliente: this.set('novaCliente'),
       openNovoCliente: () => this.openModal('cliente'),
       catalogoOpts, addSel: s.addSel, onAddSel: this.set('addSel'), addItem: this.addItem,
