@@ -44,7 +44,12 @@ module.exports = async (req, res) => {
       return res.status(200).json(toJson(rows[0]));
     }
 
-    res.setHeader('Allow', 'PUT');
+    if (req.method === 'DELETE') {
+      await sql`DELETE FROM clientes WHERE id = ${id}`;
+      return res.status(200).json({ ok: true });
+    }
+
+    res.setHeader('Allow', 'PUT, DELETE');
     return res.status(405).end();
   } catch (err) {
     if (err.code === 'DB_NOT_CONFIGURED') {

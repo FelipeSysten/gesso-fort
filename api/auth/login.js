@@ -10,11 +10,11 @@ module.exports = async (req, res) => {
     res.setHeader('Allow', 'POST');
     return res.status(405).end();
   }
-  const { senha } = req.body || {};
+  const { senha, manter } = req.body || {};
   const esperado = process.env.SISTEMA_SENHA || SENHA_PADRAO;
   if (!senha || senha !== esperado) {
     return res.status(401).json({ error: 'Usuário ou senha incorretos.' });
   }
-  setSessionCookie(res);
+  setSessionCookie(res, !!manter);
   return res.status(200).json({ ok: true });
 };
