@@ -620,6 +620,71 @@ input:focus,select:focus,textarea:focus{outline:2px solid #C79A3B;outline-offset
 </div>
 </sc-if>
 
+<sc-if value="{{ importModalOpen }}" hint-placeholder-val="{{ false }}">
+<div class="gf-noprint" style="position:fixed;inset:0;z-index:60;background:rgba(13,13,13,.55);display:flex;align-items:center;justify-content:center;padding:20px;animation:gfFade .18s">
+  <div style="width:100%;max-width:560px;max-height:88vh;overflow-y:auto;background:#fff;border-radius:16px;box-shadow:0 16px 48px rgba(0,0,0,.2);padding:26px;animation:gfIn .22s cubic-bezier(.4,0,.2,1)">
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:6px">
+      <div>
+        <h3 style="margin:0;font-family:'Nunito',sans-serif;font-weight:900;font-size:19px">{{ importTitle }}</h3>
+        <div style="font-size:13px;color:#8a8a8a;margin-top:3px">{{ importHelp }}</div>
+      </div>
+      <button onClick="{{ closeImport }}" style="background:none;border:none;font-size:22px;color:#a5a5a5;cursor:pointer;line-height:1;padding:0 2px">×</button>
+    </div>
+
+    <sc-if value="{{ hasImportErr }}" hint-placeholder-val="{{ false }}">
+      <div style="margin-top:14px;padding:12px 14px;background:#FBEAE3;border:1px solid #E3B29B;border-radius:10px;font-size:13px;color:#8f4a2c">{{ importErr }}</div>
+    </sc-if>
+
+    <sc-if value="{{ isImportPick }}" hint-placeholder-val="{{ false }}">
+      <label style="margin-top:18px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:36px 20px;border:1.5px dashed #d8d3ca;border-radius:14px;cursor:pointer;text-align:center;background:#FAF9F7" style-hover="border-color:#C79A3B">
+        <div style="font-size:26px;color:#C79A3B">⭱</div>
+        <div style="font-size:14px;font-weight:600;color:#2A2A2A">Clique para escolher o arquivo CSV</div>
+        <div style="font-size:12.5px;color:#9a9a9a">Colunas separadas por ; ou , — primeira linha com os nomes das colunas</div>
+        <input type="file" accept=".csv,text/csv" onChange="{{ onImportFile }}" style="display:none" />
+      </label>
+    </sc-if>
+
+    <sc-if value="{{ isImportPreview }}" hint-placeholder-val="{{ false }}">
+      <div style="margin-top:16px">
+        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px">
+          <div style="font-size:13.5px;color:#2A2A2A">{{ importFileName }}</div>
+          <button onClick="{{ escolherOutroArquivo }}" style="margin-left:auto;background:none;border:none;color:#8A6318;font-size:13px;font-weight:600;cursor:pointer;padding:0">Escolher outro arquivo</button>
+        </div>
+        <div style="font-size:13px;color:#5F7052;font-weight:600;margin-bottom:10px">{{ importCountLabel }}</div>
+        <div style="border:1px solid #e2ded6;border-radius:12px;overflow:hidden">
+          <div style="overflow-x:auto">
+            <table style="width:100%;border-collapse:collapse;min-width:420px">
+              <thead>
+                <tr style="background:#FAF9F7;border-bottom:1px solid #e7e4df">
+                  <sc-for list="{{ importPreviewCols }}" as="c" hint-placeholder-count="5"><th style="padding:9px 12px;text-align:left;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#8a8a8a;font-weight:600;white-space:nowrap">{{ c }}</th></sc-for>
+                </tr>
+              </thead>
+              <tbody>
+                <sc-for list="{{ importPreviewRows }}" as="r" hint-placeholder-count="5">
+                  <tr style="border-bottom:1px solid #f2efea">
+                    <sc-for list="{{ r.cells }}" as="c" hint-placeholder-count="5"><td style="padding:9px 12px;font-size:12.5px;color:#2A2A2A;white-space:nowrap">{{ c.v }}</td></sc-for>
+                  </tr>
+                </sc-for>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <sc-if value="{{ hasMoreImportRows }}" hint-placeholder-val="{{ false }}">
+          <div style="font-size:12px;color:#9a9a9a;margin-top:8px">mostrando os 6 primeiros registros de {{ importRowsTotal }}</div>
+        </sc-if>
+      </div>
+    </sc-if>
+
+    <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:24px">
+      <button onClick="{{ closeImport }}" style="padding:12px 22px;border:1px solid #e2ded6;border-radius:999px;background:#fff;font-size:14px;font-weight:600;color:#6a6a6a;cursor:pointer">Cancelar</button>
+      <sc-if value="{{ isImportPreview }}" hint-placeholder-val="{{ false }}">
+        <button onClick="{{ confirmImport }}" disabled="{{ confirmImportDisabled }}" style="padding:12px 26px;border:none;border-radius:999px;background:linear-gradient(160deg,#E0B75C,#B8862B);color:#1a1206;font-weight:700;font-size:14px;cursor:pointer;transition:transform 150ms cubic-bezier(.4,0,.2,1)" style-hover="transform:scale(1.03)" style-active="transform:scale(.97)">{{ confirmImportLabel }}</button>
+      </sc-if>
+    </div>
+  </div>
+</div>
+</sc-if>
+
 <sc-if value="{{ isPrint }}" hint-placeholder-val="{{ false }}">
 <div style="position:fixed;inset:0;z-index:70;background:#2A2A2A;overflow-y:auto;padding:0 0 60px">
   <div class="gf-noprint" style="position:sticky;top:0;z-index:5;background:#0D0D0D;display:flex;align-items:center;gap:12px;padding:14px clamp(14px,3vw,28px);flex-wrap:wrap">
@@ -759,7 +824,8 @@ class Component extends DCLogic {
     materiais: [],
     servicos: [],
     clientes: [],
-    notas: []
+    notas: [],
+    importOpen: null, importStep: 'pick', importFileName: '', importRows: [], importSkipped: 0, importTotal: 0, importErr: '', importBusy: false
   };
 
   cats = ['Forros', 'Molduras', 'Sancas', 'Divisórias', 'Drywall', 'Parede 3D', 'Reboco', 'Decoração'];
@@ -1059,6 +1125,142 @@ class Component extends DCLogic {
   excluirCliente = async (rec) => {
     try { await this.api('/api/clientes/' + rec.id, { method: 'DELETE' }); } catch (e) {}
     this.setState(st => ({ clientes: st.clientes.filter(x => x.id !== rec.id), sel: null }));
+  };
+
+  // ---- importação de CSV (produtos e clientes)
+  importSchemas = {
+    produtos: [
+      { key: 'cod', aliases: ['CODIGO', 'COD'] },
+      { key: 'nome', aliases: ['NOME', 'PRODUTO', 'DESCRICAO', 'DESCRICAO DO PRODUTO'] },
+      { key: 'cat', aliases: ['GRUPO', 'CATEGORIA'] },
+      { key: 'un', aliases: ['UNIDADE', 'UN'] },
+      { key: 'preco', aliases: ['PRECO VENDA', 'PRECO', 'VALOR', 'VALOR VENDA'] },
+      { key: 'estoque', aliases: ['ESTOQUE', 'ESTOQUE ATUAL', 'QUANTIDADE', 'QTD'] }
+    ],
+    clientes: [
+      { key: 'nome', aliases: ['NOME', 'NOME / RAZAO SOCIAL', 'RAZAO SOCIAL', 'CLIENTE'] },
+      { key: 'fantasia', aliases: ['FANTASIA', 'NOME FANTASIA'] },
+      { key: 'doc', aliases: ['CPF / CNPJ', 'CPF/CNPJ', 'CPF', 'CNPJ', 'DOCUMENTO'] },
+      { key: 'tel', aliases: ['TELEFONE', 'FONE', 'TEL'] },
+      { key: 'cel', aliases: ['CELULAR', 'CEL'] },
+      { key: 'municipio', aliases: ['MUNICIPIO', 'CIDADE'] },
+      { key: 'uf', aliases: ['UF', 'ESTADO'] },
+      { key: 'end', aliases: ['ENDERECO', 'ENDERECO DA OBRA', 'ENDERECO COMPLETO'] }
+    ]
+  };
+
+  normHeader(v) { return String(v || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toUpperCase().trim(); }
+
+  parseNumBR(v) {
+    let s = String(v === undefined || v === null ? '' : v).trim();
+    if (!s) return 0;
+    s = s.replace(/[^\d,.-]/g, '');
+    if (s.indexOf(',') >= 0 && s.indexOf('.') >= 0) s = s.replace(/\./g, '').replace(',', '.');
+    else if (s.indexOf(',') >= 0) s = s.replace(',', '.');
+    const n = parseFloat(s);
+    return isNaN(n) ? 0 : n;
+  }
+
+  parseCsvText(text) {
+    text = String(text || '').replace(/^﻿/, '');
+    const lines = text.split(/\r\n|\r|\n/).filter(l => l.trim().length > 0);
+    if (!lines.length) return { headers: [], rows: [] };
+    const delim = lines[0].split(';').length >= lines[0].split(',').length ? ';' : ',';
+    const parseLine = (line) => {
+      const out = [];
+      let cur = '', inQ = false;
+      for (let i = 0; i < line.length; i++) {
+        const ch = line[i];
+        if (inQ) {
+          if (ch === '"') { if (line[i + 1] === '"') { cur += '"'; i++; } else inQ = false; }
+          else cur += ch;
+        } else if (ch === '"') inQ = true;
+        else if (ch === delim) { out.push(cur); cur = ''; }
+        else cur += ch;
+      }
+      out.push(cur);
+      return out.map(v => v.trim());
+    };
+    const headers = parseLine(lines[0]);
+    const rows = lines.slice(1).map(parseLine);
+    return { headers, rows };
+  }
+
+  openImport = (type) => this.setState({ importOpen: type, importStep: 'pick', importFileName: '', importRows: [], importSkipped: 0, importTotal: 0, importErr: '', importBusy: false });
+  closeImport = () => this.setState({ importOpen: null, importStep: 'pick', importFileName: '', importRows: [], importSkipped: 0, importTotal: 0, importErr: '', importBusy: false });
+  escolherOutroArquivo = () => this.setState({ importStep: 'pick', importFileName: '', importRows: [], importSkipped: 0, importTotal: 0, importErr: '' });
+
+  onImportFile = (e) => {
+    const file = e.target.files && e.target.files[0];
+    e.target.value = '';
+    if (!file) return;
+    const type = this.state.importOpen;
+    const reader = new FileReader();
+    reader.onload = () => {
+      try {
+        const { headers, rows } = this.parseCsvText(String(reader.result || ''));
+        if (!headers.length || !rows.length) { this.setState({ importErr: 'Arquivo vazio ou em formato inválido.' }); return; }
+        const normHeaders = headers.map(h => this.normHeader(h));
+        const schema = this.importSchemas[type];
+        const colMap = {};
+        schema.forEach(f => {
+          const idx = normHeaders.findIndex(h => f.aliases.indexOf(h) >= 0);
+          if (idx >= 0) colMap[f.key] = idx;
+        });
+        if (colMap.nome === undefined) { this.setState({ importErr: 'Não encontramos a coluna de nome no arquivo. Verifique o cabeçalho do CSV.' }); return; }
+        let skipped = 0;
+        const parsedRows = rows.map(cols => {
+          const nome = (cols[colMap.nome] || '').trim();
+          if (!nome) { skipped++; return null; }
+          if (type === 'produtos') {
+            return {
+              cod: colMap.cod !== undefined ? (cols[colMap.cod] || '').trim() : '',
+              nome,
+              cat: (colMap.cat !== undefined && (cols[colMap.cat] || '').trim()) || this.cats[0],
+              un: (colMap.un !== undefined && (cols[colMap.un] || '').trim()) || 'un',
+              preco: colMap.preco !== undefined ? this.parseNumBR(cols[colMap.preco]) : 0,
+              estoque: colMap.estoque !== undefined ? this.parseNumBR(cols[colMap.estoque]) : 0
+            };
+          }
+          return {
+            nome,
+            fantasia: (colMap.fantasia !== undefined && (cols[colMap.fantasia] || '').trim()) || '—',
+            doc: (colMap.doc !== undefined && (cols[colMap.doc] || '').trim()) || '—',
+            tel: colMap.tel !== undefined ? (cols[colMap.tel] || '').trim() : '',
+            cel: colMap.cel !== undefined ? (cols[colMap.cel] || '').trim() : '',
+            municipio: colMap.municipio !== undefined ? (cols[colMap.municipio] || '').trim() : '',
+            uf: (colMap.uf !== undefined && (cols[colMap.uf] || '').trim()) || 'BA',
+            ativo: 'Sim', dtCompra: '—', nasc: '—', rua: '', num: '', bairro: '', cep: '',
+            end: colMap.end !== undefined ? (cols[colMap.end] || '').trim() : ''
+          };
+        }).filter(Boolean);
+        this.setState({ importStep: 'preview', importFileName: file.name, importRows: parsedRows, importSkipped: skipped, importTotal: rows.length, importErr: '' });
+      } catch (err) {
+        this.setState({ importErr: 'Não foi possível ler o arquivo. Confirme que é um CSV válido.' });
+      }
+    };
+    reader.onerror = () => this.setState({ importErr: 'Não foi possível ler o arquivo.' });
+    reader.readAsText(file, 'UTF-8');
+  };
+
+  confirmImport = async () => {
+    const { importOpen, importRows, importBusy } = this.state;
+    if (!importRows.length || importBusy) return;
+    if (importOpen === 'produtos') {
+      const now = Date.now();
+      const novos = importRows.map((r, i) => ({ ...r, id: 'm' + now + '_' + i }));
+      this.setState(st => ({ materiais: [...novos, ...st.materiais] }));
+      this.closeImport();
+      return;
+    }
+    this.setState({ importBusy: true });
+    const criados = [];
+    for (const r of importRows) {
+      try { criados.push(await this.api('/api/clientes', { method: 'POST', body: JSON.stringify(r) })); }
+      catch (e) { criados.push({ ...r, id: 'c' + Date.now() + Math.random().toString(16).slice(2) }); }
+    }
+    this.setState(st => ({ clientes: [...criados, ...st.clientes] }));
+    this.closeImport();
   };
 
   gdSel(page) {
@@ -1458,6 +1660,7 @@ class Component extends DCLogic {
       actions = [
         { label: '⊘ Excluir', style: btn('ghost'), go: () => rec && (key === 'clientes' ? this.excluirCliente(rec) : this.setState(st => ({ [key]: st[key].filter(x => x.id !== rec.id), sel: null }))) },
         { label: '✎ Editar', style: btn('normal'), go: () => rec && this.openModal(type, rec) },
+        ...(page === 'clientes' || page === 'produtos' ? [{ label: '⭱ Importar CSV', style: btn('normal'), go: () => this.openImport(page) }] : []),
         { label: '+ Novo', style: btn('primary'), go: () => this.openModal(type) }
       ];
     } else if (gd) {
@@ -1564,6 +1767,33 @@ class Component extends DCLogic {
       mTitle = [(s.editId !== null && s.editId !== undefined ? 'Editar' : 'Novo') + ' — ' + short, ''];
     }
 
+    // ---- importação CSV
+    const importHelps = {
+      produtos: 'Colunas reconhecidas: Código, Nome/Produto, Categoria/Grupo, Unidade, Preço de venda, Estoque.',
+      clientes: 'Colunas reconhecidas: Nome, Fantasia, CPF/CNPJ, Telefone, Celular, Município, UF, Endereço.'
+    };
+    const importPreviewCols = s.importOpen === 'produtos' ? ['Código', 'Produto', 'Categoria', 'Un.', 'Preço'] : ['Nome', 'Documento', 'Telefone', 'Município'];
+    const importPreviewRows = s.importRows.slice(0, 6).map(r => ({
+      cells: (s.importOpen === 'produtos'
+        ? [r.cod || '—', r.nome, r.cat, r.un, this.money(r.preco)]
+        : [r.nome, r.doc, r.tel || '—', r.municipio || '—']
+      ).map(v => ({ v }))
+    }));
+    const importVars = {
+      importModalOpen: !!s.importOpen,
+      importTitle: s.importOpen === 'produtos' ? 'Importar produtos' : 'Importar clientes',
+      importHelp: importHelps[s.importOpen] || '',
+      hasImportErr: !!s.importErr, importErr: s.importErr,
+      isImportPick: s.importStep === 'pick', isImportPreview: s.importStep === 'preview',
+      importFileName: s.importFileName,
+      importCountLabel: s.importRows.length + ' registro(s) prontos para importar' + (s.importSkipped ? ' · ' + s.importSkipped + ' ignorado(s) sem nome' : ''),
+      importPreviewCols, importPreviewRows,
+      hasMoreImportRows: s.importRows.length > 6, importRowsTotal: String(s.importRows.length),
+      confirmImportDisabled: s.importRows.length === 0 || s.importBusy,
+      confirmImportLabel: s.importBusy ? 'Importando…' : '⤓ Importar ' + s.importRows.length + ' registro(s)',
+      onImportFile: this.onImportFile, closeImport: this.closeImport, escolherOutroArquivo: this.escolherOutroArquivo, confirmImport: this.confirmImport
+    };
+
     // ---- print
     const pn = s.notas.find(n => n.id === s.printId);
     let pv = {};
@@ -1664,6 +1894,7 @@ class Component extends DCLogic {
       stubTitle: this.labelOf(page), stubIcon: '◫',
       modalOpen: !!mt, modalTitle: mTitle[0], modalSub: mTitle[1], modalFields,
       closeModal: () => this.setState({ modal: null, form: {}, editId: null }), saveModal: this.save,
+      ...importVars,
       isPrint: !!pn, closePrint: () => this.setState({ printId: null }), doPrint: () => window.print(),
       ...pv
     };
