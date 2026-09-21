@@ -1,10 +1,13 @@
-const { getSql } = require('../../../lib/db');
-const { isAuthed } = require('../../../lib/auth');
-const { getEntry, qi, dbCol, coerce, toJson } = require('../../../lib/cadastros');
+const { getSql } = require('../../lib/db');
+const { isAuthed } = require('../../lib/auth');
+const { getEntry, qi, dbCol, coerce, toJson } = require('../../lib/cadastros');
 
-// Rota unica para /api/cadastros/:modulo e /api/cadastros/:modulo/:id (limite
-// de 12 Serverless Functions do plano Hobby da Vercel nao permite index.js +
-// [id].js separados).
+// /api/cadastros/:modulo atende lista/criacao (GET, POST) e
+// /api/cadastros/:modulo?id=5 atende edicao/exclusao (PUT, PATCH, DELETE).
+// So um segmento dinamico de path (:modulo, confirmado suportado pela Vercel
+// fora do Next.js) — o id do registro vai por query string para nao precisar
+// de um segundo segmento dinamico (evita o limite de 12 Serverless Functions
+// do plano Hobby e a rota [[...id]] que nao é reconhecida fora do Next.js).
 module.exports = async (req, res) => {
   const entry = getEntry(req.query.modulo);
   if (!entry) return res.status(404).json({ error: 'cadastro desconhecido' });
@@ -12,8 +15,7 @@ module.exports = async (req, res) => {
   try {
     if (!isAuthed(req)) return res.status(401).json({ error: 'unauthorized' });
     const sql = getSql();
-    const idParam = req.query.id;
-    const id = Array.isArray(idParam) ? idParam[0] : idParam;
+    const { id } = req.query;
 
     if (id === undefined) {
       if (req.method === 'GET') {

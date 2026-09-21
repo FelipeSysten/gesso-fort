@@ -1,8 +1,8 @@
-const { getSql } = require('../../lib/db');
-const { isAuthed } = require('../../lib/auth');
+const { getSql } = require('../lib/db');
+const { isAuthed } = require('../lib/auth');
 
-// Rota unica para /api/servicos e /api/servicos/:id (limite de 12 Serverless
-// Functions do plano Hobby da Vercel nao permite index.js + [id].js separados).
+// /api/servicos atende lista/criacao (GET, POST) e /api/servicos?id=5 atende
+// edicao/exclusao (PUT, DELETE).
 function toJson(r) {
   return { id: String(r.id), cod: r.cod, nome: r.nome, cat: r.cat, un: r.un, preco: Number(r.preco), prazo: r.prazo };
 }
@@ -11,8 +11,7 @@ module.exports = async (req, res) => {
   try {
     if (!isAuthed(req)) return res.status(401).json({ error: 'unauthorized' });
     const sql = getSql();
-    const idParam = req.query.id;
-    const id = Array.isArray(idParam) ? idParam[0] : idParam;
+    const { id } = req.query;
 
     if (id === undefined) {
       if (req.method === 'GET') {

@@ -1,10 +1,8 @@
-const { getSql } = require('../../lib/db');
-const { isAuthed } = require('../../lib/auth');
-const { formatDataBR } = require('../../lib/format');
+const { getSql } = require('../lib/db');
+const { isAuthed } = require('../lib/auth');
+const { formatDataBR } = require('../lib/format');
 
-// Rota unica para /api/notas e /api/notas/:id — consolidada a partir de
-// index.js + [id].js para caber no limite de 12 Serverless Functions do plano
-// Hobby da Vercel.
+// /api/notas atende lista/criacao (GET, POST) e /api/notas?id=5 atende PATCH.
 function toJson(r) {
   return {
     id: String(r.id),
@@ -24,8 +22,7 @@ module.exports = async (req, res) => {
   try {
     if (!isAuthed(req)) return res.status(401).json({ error: 'unauthorized' });
     const sql = getSql();
-    const idParam = req.query.id;
-    const id = Array.isArray(idParam) ? idParam[0] : idParam;
+    const { id } = req.query;
 
     if (id === undefined) {
       if (req.method === 'GET') {

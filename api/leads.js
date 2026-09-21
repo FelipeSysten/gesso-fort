@@ -1,14 +1,12 @@
-const { getSql } = require('../../lib/db');
-const { isAuthed } = require('../../lib/auth');
-const { formatDataBR } = require('../../lib/format');
+const { getSql } = require('../lib/db');
+const { isAuthed } = require('../lib/auth');
+const { formatDataBR } = require('../lib/format');
 
-// Rota unica para /api/leads e /api/leads/:id — consolidada a partir de
-// index.js + [id].js para caber no limite de 12 Serverless Functions do plano
-// Hobby da Vercel. POST continua publico (formulario do site, sem login).
+// /api/leads atende lista (GET, autenticado) e criacao (POST, publico — vem
+// do formulario do site). /api/leads?id=5 atende PATCH de situacao (autenticado).
 module.exports = async (req, res) => {
   try {
-    const idParam = req.query.id;
-    const id = Array.isArray(idParam) ? idParam[0] : idParam;
+    const { id } = req.query;
 
     if (id === undefined) {
       if (req.method === 'GET') {

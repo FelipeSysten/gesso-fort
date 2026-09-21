@@ -1,9 +1,11 @@
-const { getSql } = require('../../lib/db');
-const { isAuthed } = require('../../lib/auth');
+const { getSql } = require('../lib/db');
+const { isAuthed } = require('../lib/auth');
 
-// Rota unica para /api/clientes e /api/clientes/:id — consolidada a partir de
-// index.js + [id].js para caber no limite de 12 Serverless Functions do plano
-// Hobby da Vercel (cada arquivo .js em api/ conta como uma function).
+// /api/clientes atende lista/criacao (GET, POST) e /api/clientes?id=5 atende
+// edicao/exclusao (PUT, DELETE) — um arquivo so, sem rota dinamica de path,
+// para caber no limite de 12 Serverless Functions do plano Hobby da Vercel
+// (as rotas [id].js / [[...id]].js viraram arquivos extras que a Vercel nao
+// enxergou como rota valida fora de projetos Next.js, dando 404 em producao).
 function toJson(r) {
   return {
     id: String(r.id),
@@ -30,8 +32,7 @@ module.exports = async (req, res) => {
   try {
     if (!isAuthed(req)) return res.status(401).json({ error: 'unauthorized' });
     const sql = getSql();
-    const idParam = req.query.id;
-    const id = Array.isArray(idParam) ? idParam[0] : idParam;
+    const { id } = req.query;
 
     if (id === undefined) {
       if (req.method === 'GET') {

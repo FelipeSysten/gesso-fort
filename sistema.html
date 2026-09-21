@@ -1013,7 +1013,7 @@ class Component extends DCLogic {
 
   setLeadSit = async (lead, sit) => {
     if (typeof lead.id !== 'undefined') {
-      try { await this.api('/api/leads/' + lead.id, { method: 'PATCH', body: JSON.stringify({ sit }) }); } catch (e) {}
+      try { await this.api('/api/leads?id=' + lead.id, { method: 'PATCH', body: JSON.stringify({ sit }) }); } catch (e) {}
     }
     this.saveLeads(this.state.leads.map(l => l.protocolo === lead.protocolo ? { ...l, sit } : l));
   };
@@ -1134,7 +1134,7 @@ class Component extends DCLogic {
       const page = modal.slice(3);
       const key = this.gdefs[page].seed;
       try {
-        const saved = await this.api(editId ? '/api/cadastros/' + key + '/' + editId : '/api/cadastros/' + key, { method: editId ? 'PUT' : 'POST', body: JSON.stringify(form) });
+        const saved = await this.api(editId ? '/api/cadastros/' + key + '?id=' + editId : '/api/cadastros/' + key, { method: editId ? 'PUT' : 'POST', body: JSON.stringify(form) });
         this.setState(st => ({ seed: { ...st.seed, [key]: editId ? st.seed[key].map(r => String(r.id) === String(editId) ? saved : r) : [saved, ...st.seed[key]] }, modal: null, form: {}, editId: null, sel: null }));
         return;
       } catch (e) {}
@@ -1145,7 +1145,7 @@ class Component extends DCLogic {
     if (!form.nome) { this.setState({ modal: null }); return; }
     if (modal === 'cliente') {
       try {
-        const saved = await this.api(editId ? '/api/clientes/' + editId : '/api/clientes', { method: editId ? 'PUT' : 'POST', body: JSON.stringify(form) });
+        const saved = await this.api(editId ? '/api/clientes?id=' + editId : '/api/clientes', { method: editId ? 'PUT' : 'POST', body: JSON.stringify(form) });
         this.setState(s => ({ clientes: editId ? s.clientes.map(c => c.id === editId ? saved : c) : [saved, ...s.clientes], modal: null, form: {}, editId: null }));
         return;
       } catch (e) {}
@@ -1156,7 +1156,7 @@ class Component extends DCLogic {
     const key = modal === 'material' ? 'materiais' : 'servicos';
     const apiPath = modal === 'material' ? '/api/produtos' : '/api/servicos';
     try {
-      const saved = await this.api(editId ? apiPath + '/' + editId : apiPath, { method: editId ? 'PUT' : 'POST', body: JSON.stringify(form) });
+      const saved = await this.api(editId ? apiPath + '?id=' + editId : apiPath, { method: editId ? 'PUT' : 'POST', body: JSON.stringify(form) });
       this.setState(s => ({ [key]: editId ? s[key].map(x => x.id === editId ? saved : x) : [saved, ...s[key]], modal: null, form: {}, editId: null }));
       return;
     } catch (e) {}
@@ -1166,12 +1166,12 @@ class Component extends DCLogic {
 
   excluirCatalogo = async (key, rec) => {
     const apiPath = key === 'materiais' ? '/api/produtos' : '/api/servicos';
-    try { await this.api(apiPath + '/' + rec.id, { method: 'DELETE' }); } catch (e) {}
+    try { await this.api(apiPath + '?id=' + rec.id, { method: 'DELETE' }); } catch (e) {}
     this.setState(st => ({ [key]: st[key].filter(x => x.id !== rec.id), sel: null }));
   };
 
   excluirCliente = async (rec) => {
-    try { await this.api('/api/clientes/' + rec.id, { method: 'DELETE' }); } catch (e) {}
+    try { await this.api('/api/clientes?id=' + rec.id, { method: 'DELETE' }); } catch (e) {}
     this.setState(st => ({ clientes: st.clientes.filter(x => x.id !== rec.id), sel: null }));
   };
 
@@ -1326,12 +1326,12 @@ class Component extends DCLogic {
   }
   gdPatch = async (page, id, patch) => {
     const key = this.gdefs[page].seed;
-    try { await this.api('/api/cadastros/' + key + '/' + id, { method: 'PUT', body: JSON.stringify(patch) }); } catch (e) {}
+    try { await this.api('/api/cadastros/' + key + '?id=' + id, { method: 'PUT', body: JSON.stringify(patch) }); } catch (e) {}
     this.setState(st => ({ seed: { ...st.seed, [key]: st.seed[key].map(r => String(r.id) === String(id) ? { ...r, ...patch } : r) } }));
   };
   gdExcluir = async (page, id) => {
     const key = this.gdefs[page].seed;
-    try { await this.api('/api/cadastros/' + key + '/' + id, { method: 'DELETE' }); } catch (e) {}
+    try { await this.api('/api/cadastros/' + key + '?id=' + id, { method: 'DELETE' }); } catch (e) {}
     this.setState(st => ({ seed: { ...st.seed, [key]: st.seed[key].filter(r => String(r.id) !== String(id)) }, sel: null }));
   };
   gdSangria = async (page) => {
@@ -1366,7 +1366,7 @@ class Component extends DCLogic {
 
   patchNota = async (id, patch) => {
     try {
-      const nota = await this.api('/api/notas/' + id, { method: 'PATCH', body: JSON.stringify(patch) });
+      const nota = await this.api('/api/notas?id=' + id, { method: 'PATCH', body: JSON.stringify(patch) });
       this.setState(st => ({ notas: st.notas.map(n => n.id === id ? nota : n) }));
       return;
     } catch (e) {}
@@ -1396,7 +1396,7 @@ class Component extends DCLogic {
     if (s.editingNotaId) {
       const editId = s.editingNotaId;
       try {
-        const nota = await this.api('/api/notas/' + editId, { method: 'PATCH', body: JSON.stringify(payload) });
+        const nota = await this.api('/api/notas?id=' + editId, { method: 'PATCH', body: JSON.stringify(payload) });
         this.setState(st => ({ notas: st.notas.map(n => n.id === editId ? nota : n), itens: [], novaObs: '', novaDesc: 0, novaCliente: '', editingNotaId: null, printId: nota.id }));
         return;
       } catch (e) {}
