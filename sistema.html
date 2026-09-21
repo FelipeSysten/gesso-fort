@@ -977,6 +977,35 @@ class Component extends DCLogic {
     }
   };
 
+  loadProdutos = async () => {
+    try {
+      const materiais = await this.api('/api/produtos');
+      this.setState({ materiais, avisoBanco: null });
+    } catch (e) {
+      if (e.status !== 401) this.setState({ avisoBanco: 'produtos: ' + e.message });
+    }
+  };
+
+  loadServicos = async () => {
+    try {
+      const servicos = await this.api('/api/servicos');
+      this.setState({ servicos, avisoBanco: null });
+    } catch (e) {
+      if (e.status !== 401) this.setState({ avisoBanco: 'servicos: ' + e.message });
+    }
+  };
+
+  loadCadastro = async (page) => {
+    try {
+      const rows = await this.api('/api/cadastros/' + page);
+      this.setState(st => ({ seed: { ...st.seed, [page]: rows }, avisoBanco: null }));
+    } catch (e) {
+      if (e.status !== 401) this.setState({ avisoBanco: page + ': ' + e.message });
+    }
+  };
+
+  loadCadastros = () => { Object.keys(this.gdefs).forEach(page => this.loadCadastro(page)); };
+
   saveLeads(leads) {
     this.setState({ leads });
     try { localStorage.setItem('gf_site_leads', JSON.stringify(leads)); } catch (e) {}
@@ -1017,6 +1046,9 @@ class Component extends DCLogic {
       this.loadClientes();
       this.loadNotas();
       this.loadLeads();
+      this.loadProdutos();
+      this.loadServicos();
+      this.loadCadastros();
     } catch (e) {
       this.setState({ loginErro: true, loginCarregando: false });
     }
@@ -1032,6 +1064,9 @@ class Component extends DCLogic {
     this.loadLeads();
     this.loadClientes();
     this.loadNotas();
+    this.loadProdutos();
+    this.loadServicos();
+    this.loadCadastros();
     this._ls = () => this.loadLeads();
     window.addEventListener('storage', this._ls);
     window.addEventListener('focus', this._ls);
@@ -1086,7 +1121,7 @@ class Component extends DCLogic {
       const page = type.slice(3);
       const f = {};
       this.gdefs[page].cols.forEach(c => { f[c[2]] = item ? item.rec[c[2]] : ''; });
-      this.setState({ modal: type, form: f, editId: item ? item.idx : null, sel: null });
+      this.setState({ modal: type, form: f, editId: item ? item.id : null, sel: null });
       return;
     }
     const f = item ? { ...item } : (type === 'cliente' ? { nome: '', doc: '', tel: '', end: '' }
@@ -1098,12 +1133,13 @@ class Component extends DCLogic {
     if (typeof modal === 'string' && modal.indexOf('gd:') === 0) {
       const page = modal.slice(3);
       const key = this.gdefs[page].seed;
-      const rec = { ...form };
-      this.setState(st => {
-        const arr = (st.seed[key] || []).slice();
-        if (editId !== null && editId !== undefined) arr[editId] = rec; else arr.unshift(rec);
-        return { seed: { ...st.seed, [key]: arr }, modal: null, form: {}, editId: null, sel: null };
-      });
+      try {
+        const saved = await this.api(editId ? '/api/cadastros/' + key + '/' + editId : '/api/cadastros/' + key, { method: editId ? 'PUT' : 'POST', body: JSON.stringify(form) });
+        this.setState(st => ({ seed: { ...st.seed, [key]: editId ? st.seed[key].map(r => String(r.id) === String(editId) ? saved : r) : [saved, ...st.seed[key]] }, modal: null, form: {}, editId: null, sel: null }));
+        return;
+      } catch (e) {}
+      const rec = { ...form, id: editId || 'g' + Date.now() };
+      this.setState(st => ({ seed: { ...st.seed, [key]: editId ? st.seed[key].map(r => String(r.id) === String(editId) ? rec : r) : [rec, ...st.seed[key]] }, modal: null, form: {}, editId: null, sel: null }));
       return;
     }
     if (!form.nome) { this.setState({ modal: null }); return; }
@@ -1118,8 +1154,20 @@ class Component extends DCLogic {
       return;
     }
     const key = modal === 'material' ? 'materiais' : 'servicos';
+    const apiPath = modal === 'material' ? '/api/produtos' : '/api/servicos';
+    try {
+      const saved = await this.api(editId ? apiPath + '/' + editId : apiPath, { method: editId ? 'PUT' : 'POST', body: JSON.stringify(form) });
+      this.setState(s => ({ [key]: editId ? s[key].map(x => x.id === editId ? saved : x) : [saved, ...s[key]], modal: null, form: {}, editId: null }));
+      return;
+    } catch (e) {}
     const rec = { ...form, id: editId || key[0] + Date.now(), preco: Number(form.preco) || 0 };
     this.setState(s => ({ [key]: editId ? s[key].map(x => x.id === editId ? rec : x) : [rec, ...s[key]], modal: null, form: {}, editId: null }));
+  };
+
+  excluirCatalogo = async (key, rec) => {
+    const apiPath = key === 'materiais' ? '/api/produtos' : '/api/servicos';
+    try { await this.api(apiPath + '/' + rec.id, { method: 'DELETE' }); } catch (e) {}
+    this.setState(st => ({ [key]: st[key].filter(x => x.id !== rec.id), sel: null }));
   };
 
   excluirCliente = async (rec) => {
@@ -1246,14 +1294,17 @@ class Component extends DCLogic {
   confirmImport = async () => {
     const { importOpen, importRows, importBusy } = this.state;
     if (!importRows.length || importBusy) return;
+    this.setState({ importBusy: true });
     if (importOpen === 'produtos') {
-      const now = Date.now();
-      const novos = importRows.map((r, i) => ({ ...r, id: 'm' + now + '_' + i }));
-      this.setState(st => ({ materiais: [...novos, ...st.materiais] }));
+      const criados = [];
+      for (const r of importRows) {
+        try { criados.push(await this.api('/api/produtos', { method: 'POST', body: JSON.stringify(r) })); }
+        catch (e) { criados.push({ ...r, id: 'm' + Date.now() + Math.random().toString(16).slice(2) }); }
+      }
+      this.setState(st => ({ materiais: [...criados, ...st.materiais] }));
       this.closeImport();
       return;
     }
-    this.setState({ importBusy: true });
     const criados = [];
     for (const r of importRows) {
       try { criados.push(await this.api('/api/clientes', { method: 'POST', body: JSON.stringify(r) })); }
@@ -1268,19 +1319,22 @@ class Component extends DCLogic {
     if (typeof s.sel !== 'string') return null;
     const i = s.sel.lastIndexOf(':');
     if (i < 0 || s.sel.slice(0, i) !== page) return null;
-    const idx = Number(s.sel.slice(i + 1));
+    const id = s.sel.slice(i + 1);
     const arr = s.seed[this.gdefs[page].seed] || [];
-    return arr[idx] !== undefined ? { idx, rec: arr[idx] } : null;
+    const rec = arr.find(r => String(r.id) === id);
+    return rec ? { id, rec } : null;
   }
-  gdPatch = (page, idx, patch) => {
+  gdPatch = async (page, id, patch) => {
     const key = this.gdefs[page].seed;
-    this.setState(st => ({ seed: { ...st.seed, [key]: st.seed[key].map((r, i) => i === idx ? { ...r, ...patch } : r) } }));
+    try { await this.api('/api/cadastros/' + key + '/' + id, { method: 'PUT', body: JSON.stringify(patch) }); } catch (e) {}
+    this.setState(st => ({ seed: { ...st.seed, [key]: st.seed[key].map(r => String(r.id) === String(id) ? { ...r, ...patch } : r) } }));
   };
-  gdExcluir = (page, idx) => {
+  gdExcluir = async (page, id) => {
     const key = this.gdefs[page].seed;
-    this.setState(st => ({ seed: { ...st.seed, [key]: st.seed[key].filter((r, i) => i !== idx) }, sel: null }));
+    try { await this.api('/api/cadastros/' + key + '/' + id, { method: 'DELETE' }); } catch (e) {}
+    this.setState(st => ({ seed: { ...st.seed, [key]: st.seed[key].filter(r => String(r.id) !== String(id)) }, sel: null }));
   };
-  gdSangria = (page) => {
+  gdSangria = async (page) => {
     const v = window.prompt('Valor da sangria (R$)');
     if (!v) return;
     const n = Number(String(v).replace(',', '.'));
@@ -1288,7 +1342,12 @@ class Component extends DCLogic {
     const key = this.gdefs[page].seed;
     const hora = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
     const rec = { hora, conta: 'Caixa interno', hist: 'Sangria para depósito bancário', forma: 'Dinheiro', tipo: 'Saída', valor: -Math.abs(n) };
-    this.setState(st => ({ seed: { ...st.seed, [key]: [rec, ...st.seed[key]] } }));
+    try {
+      const saved = await this.api('/api/cadastros/' + key, { method: 'POST', body: JSON.stringify(rec) });
+      this.setState(st => ({ seed: { ...st.seed, [key]: [saved, ...st.seed[key]] } }));
+      return;
+    } catch (e) {}
+    this.setState(st => ({ seed: { ...st.seed, [key]: [{ ...rec, id: 'g' + Date.now() }, ...st.seed[key]] } }));
   };
 
   exportCsv = (filename, cols, rows) => {
@@ -1532,8 +1591,8 @@ class Component extends DCLogic {
       const sitIcon = v => sitGood.indexOf(v) >= 0 ? '✓ ' : sitBad.indexOf(v) >= 0 ? '⊘ ' : '● ';
       const src = (s.seed[gd.seed] || []).filter(r => !gd.filtroKey || s.filtro === 'Todos' || r[gd.filtroKey] === s.filtro)
         .filter(r => !q || Object.values(r).some(v => String(v).toLowerCase().includes(q)));
-      rows = src.map((r, idx) => {
-        const rid = page + ':' + idx, on = s.sel === rid, ink = on ? '#fff' : '#2A2A2A';
+      rows = src.map((r) => {
+        const rid = page + ':' + r.id, on = s.sel === rid, ink = on ? '#fff' : '#2A2A2A';
         return {
           select: () => this.setState({ sel: on ? null : rid }),
           style: 'cursor:pointer;border-bottom:1px solid #f2efea;background:' + (on ? '#0D0D0D' : 'transparent'),
@@ -1658,7 +1717,7 @@ class Component extends DCLogic {
       const type = page === 'clientes' ? 'cliente' : page === 'produtos' ? 'material' : 'servico';
       const rec = s[key].find(x => x.id === s.sel);
       actions = [
-        { label: '⊘ Excluir', style: btn('ghost'), go: () => rec && (key === 'clientes' ? this.excluirCliente(rec) : this.setState(st => ({ [key]: st[key].filter(x => x.id !== rec.id), sel: null }))) },
+        { label: '⊘ Excluir', style: btn('ghost'), go: () => rec && (key === 'clientes' ? this.excluirCliente(rec) : this.excluirCatalogo(key, rec)) },
         { label: '✎ Editar', style: btn('normal'), go: () => rec && this.openModal(type, rec) },
         ...(page === 'clientes' || page === 'produtos' ? [{ label: '⭱ Importar CSV', style: btn('normal'), go: () => this.openImport(page) }] : []),
         { label: '+ Novo', style: btn('primary'), go: () => this.openModal(type) }
@@ -1668,26 +1727,26 @@ class Component extends DCLogic {
       const money = M;
       if (gd.actions) {
         if (page === 'mde') actions = [
-          { label: '⊘ Desconhecer', style: btn('ghost'), go: () => selGd && this.gdPatch(page, selGd.idx, { sit: 'Desconhecida' }) },
-          { label: '◐ Dar ciência', style: btn('normal'), go: () => selGd && this.gdPatch(page, selGd.idx, { sit: 'Ciência' }) },
-          { label: '✓ Confirmar operação', style: btn('primary'), go: () => selGd && this.gdPatch(page, selGd.idx, { sit: 'Confirmada' }) }
+          { label: '⊘ Desconhecer', style: btn('ghost'), go: () => selGd && this.gdPatch(page, selGd.id, { sit: 'Desconhecida' }) },
+          { label: '◐ Dar ciência', style: btn('normal'), go: () => selGd && this.gdPatch(page, selGd.id, { sit: 'Ciência' }) },
+          { label: '✓ Confirmar operação', style: btn('primary'), go: () => selGd && this.gdPatch(page, selGd.id, { sit: 'Confirmada' }) }
         ];
         else if (page === 'receber') actions = [
-          { label: '⊘ Estornar', style: btn('ghost'), go: () => selGd && this.gdPatch(page, selGd.idx, { sit: 'A receber', recebido: 0 }) },
+          { label: '⊘ Estornar', style: btn('ghost'), go: () => selGd && this.gdPatch(page, selGd.id, { sit: 'A receber', recebido: 0 }) },
           { label: '⎙ Extrato', style: btn('normal'), go: () => selGd && window.alert(selGd.rec.doc + ' — ' + selGd.rec.cliente + '\nVencimento: ' + selGd.rec.venc + '\nValor: ' + money(selGd.rec.valor) + '\nRecebido: ' + money(selGd.rec.recebido) + '\nSituação: ' + selGd.rec.sit) },
-          { label: '✓ Receber', style: btn('primary'), go: () => selGd && this.gdPatch(page, selGd.idx, { sit: 'Recebido', recebido: selGd.rec.valor }) }
+          { label: '✓ Receber', style: btn('primary'), go: () => selGd && this.gdPatch(page, selGd.id, { sit: 'Recebido', recebido: selGd.rec.valor }) }
         ];
         else if (page === 'pagar') actions = [
-          { label: '⊘ Estornar', style: btn('ghost'), go: () => selGd && this.gdPatch(page, selGd.idx, { sit: 'A pagar' }) },
+          { label: '⊘ Estornar', style: btn('ghost'), go: () => selGd && this.gdPatch(page, selGd.id, { sit: 'A pagar' }) },
           { label: '⎙ Extrato', style: btn('normal'), go: () => selGd && window.alert(selGd.rec.doc + ' — ' + selGd.rec.forn + '\nVencimento: ' + selGd.rec.venc + '\nValor: ' + money(selGd.rec.valor) + '\nCategoria: ' + selGd.rec.cat + '\nSituação: ' + selGd.rec.sit) },
-          { label: '✓ Pagar', style: btn('primary'), go: () => selGd && this.gdPatch(page, selGd.idx, { sit: 'Pago' }) }
+          { label: '✓ Pagar', style: btn('primary'), go: () => selGd && this.gdPatch(page, selGd.id, { sit: 'Pago' }) }
         ];
         else if (page === 'banco') actions = [
           { label: '⎙ Extrato', style: btn('normal'), go: () => selGd && window.alert(selGd.rec.data + ' — ' + selGd.rec.conta + '\n' + selGd.rec.hist + '\nValor: ' + money(selGd.rec.valor) + '\nSaldo: ' + money(selGd.rec.saldo)) },
           { label: '+ Novo lançamento', style: btn('primary'), go: () => this.openModal('gd:' + page) }
         ];
         else if (page === 'boletos') actions = [
-          { label: '⊘ Baixar registro', style: btn('ghost'), go: () => selGd && this.gdPatch(page, selGd.idx, { sit: 'Liquidado' }) },
+          { label: '⊘ Baixar registro', style: btn('ghost'), go: () => selGd && this.gdPatch(page, selGd.id, { sit: 'Liquidado' }) },
           { label: '⎙ Imprimir boleto', style: btn('normal'), go: () => selGd && window.alert('Boleto ' + selGd.rec.nosso + '\nCliente: ' + selGd.rec.cliente + '\nVencimento: ' + selGd.rec.venc + '\nValor: ' + money(selGd.rec.valor) + '\nBanco: ' + selGd.rec.banco) },
           { label: '+ Gerar remessa', style: btn('primary'), go: () => window.alert('Geração de remessa CNAB requer integração bancária real — não disponível nesta versão.') }
         ];
@@ -1704,14 +1763,14 @@ class Component extends DCLogic {
         ];
       } else if (gd.doc) {
         actions = [
-          { label: '⊘ Cancelar documento', style: btn('ghost'), go: () => selGd && this.gdPatch(page, selGd.idx, { sit: 'Cancelado' }) },
+          { label: '⊘ Cancelar documento', style: btn('ghost'), go: () => selGd && this.gdPatch(page, selGd.id, { sit: 'Cancelado' }) },
           { label: '⎙ Imprimir', style: btn('normal'), go: () => selGd && window.alert(gd.cols.map(c => c[0] + ': ' + (selGd.rec[c[2]] === undefined || selGd.rec[c[2]] === '' ? '—' : (c[3] === 'money' ? money(selGd.rec[c[2]]) : selGd.rec[c[2]]))).join('\n')) },
           { label: '✎ Editar', style: btn('normal'), go: () => selGd && this.openModal('gd:' + page, selGd) },
           { label: '+ Novo', style: btn('primary'), go: () => this.openModal('gd:' + page) }
         ];
       } else {
         actions = [
-          { label: '⊘ Excluir', style: btn('ghost'), go: () => selGd && this.gdExcluir(page, selGd.idx) },
+          { label: '⊘ Excluir', style: btn('ghost'), go: () => selGd && this.gdExcluir(page, selGd.id) },
           { label: '✎ Editar', style: btn('normal'), go: () => selGd && this.openModal('gd:' + page, selGd) },
           { label: '+ Novo', style: btn('primary'), go: () => this.openModal('gd:' + page) }
         ];
