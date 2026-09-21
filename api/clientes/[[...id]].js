@@ -1,6 +1,9 @@
 const { getSql } = require('../../lib/db');
 const { isAuthed } = require('../../lib/auth');
 
+// Rota unica para /api/clientes e /api/clientes/:id — consolidada a partir de
+// index.js + [id].js para caber no limite de 12 Serverless Functions do plano
+// Hobby da Vercel (cada arquivo .js em api/ conta como uma function).
 function toJson(r) {
   return {
     id: String(r.id),
@@ -27,7 +30,31 @@ module.exports = async (req, res) => {
   try {
     if (!isAuthed(req)) return res.status(401).json({ error: 'unauthorized' });
     const sql = getSql();
-    const { id } = req.query;
+    const idParam = req.query.id;
+    const id = Array.isArray(idParam) ? idParam[0] : idParam;
+
+    if (id === undefined) {
+      if (req.method === 'GET') {
+        const rows = await sql`SELECT * FROM clientes ORDER BY created_at DESC`;
+        return res.status(200).json(rows.map(toJson));
+      }
+
+      if (req.method === 'POST') {
+        const b = req.body || {};
+        if (!b.nome) return res.status(400).json({ error: 'nome obrigatorio' });
+        const rows = await sql`
+          INSERT INTO clientes (nome, fantasia, contato, doc, tel, cel, municipio, uf, ativo, dt_compra, nasc, rua, num, bairro, cep, endereco)
+          VALUES (${b.nome}, ${b.fantasia || '—'}, ${b.contato || ''}, ${b.doc || '—'}, ${b.tel || ''}, ${b.cel || ''},
+                  ${b.municipio || ''}, ${b.uf || 'BA'}, ${b.ativo || 'Sim'}, ${b.dtCompra || '—'}, ${b.nasc || '—'},
+                  ${b.rua || ''}, ${b.num || ''}, ${b.bairro || ''}, ${b.cep || ''}, ${b.end || ''})
+          RETURNING *
+        `;
+        return res.status(201).json(toJson(rows[0]));
+      }
+
+      res.setHeader('Allow', 'GET, POST');
+      return res.status(405).end();
+    }
 
     if (req.method === 'PUT') {
       const b = req.body || {};
