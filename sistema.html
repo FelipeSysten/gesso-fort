@@ -124,7 +124,7 @@ input:focus,select:focus,textarea:focus{outline:2px solid #C79A3B;outline-offset
       <div style="margin-left:auto;display:flex;align-items:center;gap:8px">
         <a href="index.html" style="font-size:12px;padding:6px 13px;border:1px solid #e7e4df;border-radius:999px;color:#8A6318" style-hover="border-color:#C79A3B;color:#B8862B">Ver site</a>
         <span style="font-size:11px;color:#a5a5a5">{{ agora }}</span>
-        <div style="width:26px;height:26px;border-radius:50%;background:#F5F4F2;border:1px solid #e7e4df;display:flex;align-items:center;justify-content:center;font-size:10.5px;font-weight:700;color:#7a7a7a">AG</div>
+        <div style="width:26px;height:26px;border-radius:50%;background:#F5F4F2;border:1px solid #e7e4df;display:flex;align-items:center;justify-content:center;font-size:10.5px;font-weight:700;color:#7a7a7a">{{ userIniciais }}</div>
       </div>
     </div>
 
@@ -149,7 +149,7 @@ input:focus,select:focus,textarea:focus{outline:2px solid #C79A3B;outline-offset
         <div style="position:relative;padding:clamp(18px,3vw,34px);display:flex;flex-direction:column;gap:18px;min-height:inherit">
           <div style="display:flex;align-items:flex-start;gap:16px;flex-wrap:wrap">
             <div>
-              <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:clamp(22px,3vw,30px);color:#fff;letter-spacing:-.01em">Bem-vindo, Alex</div>
+              <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:clamp(22px,3vw,30px);color:#fff;letter-spacing:-.01em">{{ boasVindas }}</div>
               <div style="font-size:13.5px;color:#9a9a9a;margin-top:3px">{{ dataLonga }}</div>
             </div>
             <div style="margin-left:auto;display:flex;gap:4px;background:rgba(255,255,255,.08);padding:4px;border-radius:999px">
@@ -507,7 +507,7 @@ input:focus,select:focus,textarea:focus{outline:2px solid #C79A3B;outline-offset
       <sc-if value="{{ isDoc }}" hint-placeholder-val="{{ false }}">
       <div style="animation:gfFade .3s;max-width:780px">
         <h1 style="margin:0 0 4px;font-family:'Nunito',sans-serif;font-weight:900;font-size:clamp(21px,2.6vw,27px);letter-spacing:-.015em">Contrato e Termos de Uso</h1>
-        <div style="font-size:13.5px;color:#8a8a8a;margin-bottom:16px">Aceito em 14/04/2026 por alex.gomes · versão 3.2</div>
+        <div style="font-size:13.5px;color:#8a8a8a;margin-bottom:16px">Versão 3.2</div>
         <div style="background:#fff;border:1px solid #e2ded6;border-radius:14px;box-shadow:0 4px 24px rgba(0,0,0,.05);padding:clamp(22px,3vw,34px);display:flex;flex-direction:column;gap:22px">
           <sc-for list="{{ docBlocks }}" as="b" hint-placeholder-count="4">
             <div>
@@ -717,163 +717,41 @@ input:focus,select:focus,textarea:focus{outline:2px solid #C79A3B;outline-offset
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:900}}">
 const SEED_DATA = {
-    fornecedores: [
-      { cod: '01', nome: 'Gipsita Nordeste Mineração LTDA', cnpj: '08.442.190/0001-22', contato: 'Cláudio Mendes', cidade: 'Araripina/PE', tel: '(87) 3873-1200', ultima: '02/09/2026' },
-      { cod: '02', nome: 'Placol Indústria de Gesso', cnpj: '19.330.744/0001-61', contato: 'Simone Aguiar', cidade: 'Trindade/PE', tel: '(87) 3877-4410', ultima: '28/08/2026' },
-      { cod: '03', nome: 'Knauf do Brasil — Distribuidor BA', cnpj: '61.100.205/0004-70', contato: 'Rogério Pinto', cidade: 'Salvador/BA', tel: '(71) 3342-9900', ultima: '19/08/2026' },
-      { cod: '04', nome: 'Ferragens Maron Materiais', cnpj: '05.774.812/0001-14', contato: 'Elvis Souza', cidade: 'Itabuna/BA', tel: '(73) 3211-0788', ultima: '11/09/2026' }
-    ],
-    transportadoras: [
-      { cod: '01', nome: 'Translitoral Cargas LTDA', cnpj: '14.205.663/0001-90', veiculo: 'Truck · OKP-4C21', cidade: 'Itabuna/BA', tel: '(73) 3614-5000' },
-      { cod: '02', nome: 'Rodo Sul Bahia Transportes', cnpj: '22.881.004/0001-37', veiculo: 'Carreta · PHT-8J55', cidade: 'Vitória da Conquista/BA', tel: '(77) 3422-8100' },
-      { cod: '03', nome: 'Entrega Própria — Gesso Fort', cnpj: '60.560.384/0001-29', veiculo: 'VUC · QMB-1F09', cidade: 'Itabuna/BA', tel: '(73) 98832-2798' }
-    ],
-    vendedores: [
-      { cod: '01', nome: 'Caliane Galdino', com: '3,0 %', meta: 45000, vendas: 38420, sit: 'Ativo' },
-      { cod: '02', nome: 'Alex Gomes', com: '2,0 %', meta: 30000, vendas: 31150, sit: 'Ativo' },
-      { cod: '03', nome: 'Deyse Nascimento', com: '3,5 %', meta: 28000, vendas: 9600, sit: 'Inativo' }
-    ],
-    pedcompra: [
-      { num: '000042', emissao: '11/09/2026 09:12', forn: 'Ferragens Maron Materiais', itens: 7, total: 4820.4, previsao: '18/09/2026', sit: 'Pendente' },
-      { num: '000041', emissao: '02/09/2026 14:40', forn: 'Gipsita Nordeste Mineração LTDA', itens: 3, total: 12960, previsao: '12/09/2026', sit: 'Importado' },
-      { num: '000040', emissao: '28/08/2026 08:05', forn: 'Placol Indústria de Gesso', itens: 5, total: 7315.5, previsao: '05/09/2026', sit: 'Importado' },
-      { num: '000039', emissao: '19/08/2026 16:22', forn: 'Knauf do Brasil — Distribuidor BA', itens: 2, total: 2688, previsao: '29/08/2026', sit: 'Cancelado' }
-    ],
-    notaentrada: [
-      { nf: '118.442', chave: '2926 0908 4421 9000 0122 5500 1000', forn: 'Gipsita Nordeste Mineração LTDA', emissao: '10/09/2026', valor: 12960, itens: 3, sit: 'Escriturada' },
-      { nf: '004.907', chave: '2926 0919 3307 4400 0161 5500 1000', forn: 'Placol Indústria de Gesso', emissao: '03/09/2026', valor: 7315.5, itens: 5, sit: 'Escriturada' },
-      { nf: '772.010', chave: '2926 0861 1002 0500 0470 5500 1000', forn: 'Knauf do Brasil — Distribuidor BA', emissao: '26/08/2026', valor: 2688, itens: 2, sit: 'Pendente' },
-      { nf: '000.318', chave: '2926 0805 7748 1200 0114 5500 1000', forn: 'Ferragens Maron Materiais', emissao: '12/09/2026', valor: 4820.4, itens: 7, sit: 'Pendente' }
-    ],
-    mde: [
-      { chave: '2926 0908 4421 9000 0122 5500 1000 0118 4421', forn: 'Gipsita Nordeste Mineração LTDA', emissao: '10/09/2026', valor: 12960, sit: 'Confirmada' },
-      { chave: '2926 0861 1002 0500 0470 5500 1000 0077 2010', forn: 'Knauf do Brasil — Distribuidor BA', emissao: '26/08/2026', valor: 2688, sit: 'Sem manifestação' },
-      { chave: '2926 0805 7748 1200 0114 5500 1000 0000 0318', forn: 'Ferragens Maron Materiais', emissao: '12/09/2026', valor: 4820.4, sit: 'Ciência' }
-    ],
-    faturamento: [
-      { num: '000019', cliente: 'Construtora Vale Verde LTDA', emissao: '09/09/2026', venc: '09/10/2026', valor: 8462.5, forma: 'Boleto 30 dias', sit: 'Emitida' },
-      { num: '000018', cliente: 'Residencial Parque das Palmeiras', emissao: '02/09/2026', venc: '02/09/2026', valor: 3520, forma: 'Pix', sit: 'Emitida' },
-      { num: '000017', cliente: 'Juliana Ferraz Andrade', emissao: '31/08/2026', venc: '30/09/2026', valor: 2030, forma: 'Cartão 3x', sit: 'Pendente' },
-      { num: '000016', cliente: 'Marcos Antônio Silveira', emissao: '28/08/2026', venc: '28/08/2026', valor: 3136, forma: 'Dinheiro', sit: 'Cancelada' }
-    ],
-    receber: [
-      { doc: '000019/1', cliente: 'Construtora Vale Verde LTDA', venc: '09/10/2026', valor: 8462.5, recebido: 0, sit: 'A receber' },
-      { doc: '000018/1', cliente: 'Residencial Parque das Palmeiras', venc: '02/09/2026', valor: 3520, recebido: 3520, sit: 'Recebido' },
-      { doc: '000017/1', cliente: 'Juliana Ferraz Andrade', venc: '30/09/2026', valor: 676.67, recebido: 0, sit: 'A receber' },
-      { doc: '000017/2', cliente: 'Juliana Ferraz Andrade', venc: '30/10/2026', valor: 676.67, recebido: 0, sit: 'A receber' },
-      { doc: '000015/1', cliente: 'Marcos Antônio Silveira', venc: '05/09/2026', valor: 1480, recebido: 0, sit: 'Vencido' }
-    ],
-    pagar: [
-      { doc: 'NF 118.442', forn: 'Gipsita Nordeste Mineração LTDA', venc: '10/10/2026', valor: 12960, cat: 'Matéria-prima', sit: 'A pagar' },
-      { doc: 'NF 004.907', forn: 'Placol Indústria de Gesso', venc: '03/10/2026', valor: 7315.5, cat: 'Matéria-prima', sit: 'A pagar' },
-      { doc: 'Aluguel 09/2026', forn: 'Imobiliária Alto Maron', venc: '10/09/2026', valor: 3200, cat: 'Ocupação', sit: 'Pago' },
-      { doc: 'Folha 09/2026', forn: 'Equipe de instalação', venc: '05/09/2026', valor: 14800, cat: 'Pessoal', sit: 'Pago' },
-      { doc: 'Energia 08/2026', forn: 'Coelba', venc: '02/09/2026', valor: 1284.9, cat: 'Utilidades', sit: 'Vencido' }
-    ],
-    banco: [
-      { data: '12/09/2026', conta: 'Banco do Brasil · 1234-5', hist: 'Recebimento Pix — Palmeiras', tipo: 'Crédito', valor: 3520, saldo: 41820.3 },
-      { data: '10/09/2026', conta: 'Banco do Brasil · 1234-5', hist: 'Pagamento aluguel setembro', tipo: 'Débito', valor: -3200, saldo: 38300.3 },
-      { data: '05/09/2026', conta: 'Caixa Econômica · 0987-1', hist: 'Folha de pagamento', tipo: 'Débito', valor: -14800, saldo: 23500.3 },
-      { data: '03/09/2026', conta: 'Banco do Brasil · 1234-5', hist: 'Boleto Vale Verde — parcela 1', tipo: 'Crédito', valor: 8462.5, saldo: 31962.8 },
-      { data: '02/09/2026', conta: 'Caixa interno', hist: 'Sangria para depósito', tipo: 'Débito', valor: -1200, saldo: 30762.8 }
-    ],
-    agenda: [
-      { data: '17/09/2026 08:30', comp: 'Medição de forro — 3 pavimentos', cliente: 'Construtora Vale Verde LTDA', resp: 'Alex Gomes', sit: 'Confirmado' },
-      { data: '17/09/2026 14:00', comp: 'Entrega de placas drywall', cliente: 'Residencial Parque das Palmeiras', resp: 'Entrega própria', sit: 'Confirmado' },
-      { data: '18/09/2026 09:00', comp: 'Visita técnica — sanca com LED', cliente: 'Juliana Ferraz Andrade', resp: 'Caliane Galdino', sit: 'Pendente' },
-      { data: '19/09/2026 16:30', comp: 'Cobrança parcela vencida', cliente: 'Marcos Antônio Silveira', resp: 'Financeiro', sit: 'Pendente' }
-    ],
-    tributacoes: [
-      { cod: 'T01', desc: 'Venda de mercadoria — Simples Nacional', cst: '102', cfop: '5102', icms: '0,00 %', pis: '0,00 %', cofins: '0,00 %' },
-      { cod: 'T02', desc: 'Venda interestadual — contribuinte', cst: '102', cfop: '6102', icms: '12,00 %', pis: '0,65 %', cofins: '3,00 %' },
-      { cod: 'T03', desc: 'Prestação de serviço — ISS Itabuna', cst: '—', cfop: '—', icms: '—', pis: '0,65 %', cofins: '3,00 %' },
-      { cod: 'T04', desc: 'Devolução de compra', cst: '202', cfop: '5202', icms: '0,00 %', pis: '0,00 %', cofins: '0,00 %' }
-    ],
-    cfop: [
-      { cod: '5102', desc: 'Venda de mercadoria adquirida de terceiros', tipo: 'Saída', aplic: 'Dentro do estado' },
-      { cod: '6102', desc: 'Venda de mercadoria — outro estado', tipo: 'Saída', aplic: 'Interestadual' },
-      { cod: '1102', desc: 'Compra para comercialização', tipo: 'Entrada', aplic: 'Dentro do estado' },
-      { cod: '5933', desc: 'Prestação de serviço sujeita ao ISSQN', tipo: 'Saída', aplic: 'Serviço' },
-      { cod: '5202', desc: 'Devolução de compra para comercialização', tipo: 'Saída', aplic: 'Devolução' }
-    ],
-    boletos: [
-      { nosso: '000000019-7', cliente: 'Construtora Vale Verde LTDA', venc: '09/10/2026', valor: 8462.5, banco: 'Banco do Brasil', sit: 'Registrado' },
-      { nosso: '000000017-3', cliente: 'Juliana Ferraz Andrade', venc: '30/09/2026', valor: 676.67, banco: 'Banco do Brasil', sit: 'Registrado' },
-      { nosso: '000000015-9', cliente: 'Marcos Antônio Silveira', venc: '05/09/2026', valor: 1480, banco: 'Caixa Econômica', sit: 'Vencido' },
-      { nosso: '000000018-1', cliente: 'Residencial Parque das Palmeiras', venc: '02/09/2026', valor: 3520, banco: 'Banco do Brasil', sit: 'Liquidado' }
-    ],
-    xmls: [
-      { chave: '2926 0960 5603 8400 0129 5500 1000 0000 0019', tipo: 'NF-e saída', emissao: '09/09/2026', valor: 8462.5, sit: 'Autorizada' },
-      { chave: '2926 0960 5603 8400 0129 5500 1000 0000 0018', tipo: 'NF-e saída', emissao: '02/09/2026', valor: 3520, sit: 'Autorizada' },
-      { chave: '2926 0908 4421 9000 0122 5500 1000 0118 4421', tipo: 'NF-e entrada', emissao: '10/09/2026', valor: 12960, sit: 'Autorizada' },
-      { chave: '2926 0960 5603 8400 0129 5500 1000 0000 0016', tipo: 'NF-e saída', emissao: '28/08/2026', valor: 3136, sit: 'Cancelada' }
-    ],
-    usuarios: [
-      { user: 'alex.gomes', nome: 'Alex Gomes', grupo: 'Administradores', acesso: '17/09/2026 07:52', sit: 'Ativo' },
-      { user: 'caliane.galdino', nome: 'Caliane Galdino', grupo: 'Vendas', acesso: '16/09/2026 18:10', sit: 'Ativo' },
-      { user: 'financeiro', nome: 'Eliane Matos', grupo: 'Financeiro', acesso: '16/09/2026 17:34', sit: 'Ativo' },
-      { user: 'deyse.n', nome: 'Deyse Nascimento', grupo: 'Vendas', acesso: '02/08/2026 11:20', sit: 'Bloqueado' }
-    ],
-    grupos: [
-      { grupo: 'Administradores', desc: 'Acesso total ao sistema', users: 1, perms: 'Todos os módulos' },
-      { grupo: 'Vendas', desc: 'Orçamentos, pedidos e clientes', users: 2, perms: 'Vendas · Cadastros' },
-      { grupo: 'Financeiro', desc: 'Contas, caixa e boletos', users: 1, perms: 'Financeiro · Relatórios' }
-    ],
-    caixa: [
-      { hora: '08:04', hist: 'Abertura de caixa', forma: '—', tipo: 'Abertura', valor: 300 },
-      { hora: '09:41', hist: 'Venda 000021 — moldura 8cm', forma: 'Dinheiro', tipo: 'Entrada', valor: 448 },
-      { hora: '11:16', hist: 'Venda 000022 — placas standard', forma: 'Pix', tipo: 'Entrada', valor: 1912.5 },
-      { hora: '13:50', hist: 'Frete entrega Alto Maron', forma: 'Dinheiro', tipo: 'Saída', valor: -180 },
-      { hora: '15:22', hist: 'Sangria para depósito bancário', forma: 'Dinheiro', tipo: 'Saída', valor: -1200 },
-      { hora: '16:05', hist: 'Venda 000023 — sanca pré-moldada', forma: 'Cartão débito', tipo: 'Entrada', valor: 1020 }
-    ]
+    fornecedores: [],
+    transportadoras: [],
+    vendedores: [],
+    pedcompra: [],
+    notaentrada: [],
+    mde: [],
+    faturamento: [],
+    receber: [],
+    pagar: [],
+    banco: [],
+    agenda: [],
+    tributacoes: [],
+    cfop: [],
+    boletos: [],
+    xmls: [],
+    usuarios: [],
+    grupos: [],
+    caixa: []
 };
 
 class Component extends DCLogic {
   state = {
     seed: SEED_DATA,
-    logged: false, loginUser: 'alex.gomes', loginPass: '', loginManter: true, loginErro: false, loginCarregando: false, avisoBanco: null,
+    logged: false, loginUser: '', loginPass: '', loginManter: true, loginErro: false, loginCarregando: false, avisoBanco: null,
     tabs: [{ id: 'home', label: 'Home' }],
     active: 'home', fly: null, homeTab: 'atalhos',
     busca: '', campo: 'Todos', de: '2026-06-01', ate: '2026-09-17',
     colsSel: '9 Coluna(s)', filtro: 'Todos', sel: null, optionsOpen: false,
     modal: null, form: {}, editId: null, leads: [],
     novaTipo: 'Orçamento', novaCliente: '', novaObs: '', novaDesc: 0, itens: [], addSel: '', editingNotaId: null,
-    printId: null, seq: 12,
-    materiais: [
-      { id: 'm1', cod: '101', nome: 'Placa de Gesso Standard 1,80 x 1,20m', cat: 'Forros', un: 'pç', preco: 22.5, estoque: 240 },
-      { id: 'm2', cod: '102', nome: 'Placa Drywall ST 1,80 x 1,20m 12,5mm', cat: 'Drywall', un: 'pç', preco: 46.9, estoque: 96 },
-      { id: 'm3', cod: '118', nome: 'Moldura de Gesso Clássica 8cm — 2m', cat: 'Molduras', un: 'barra', preco: 18, estoque: 310 },
-      { id: 'm4', cod: '124', nome: 'Sanca Aberta Pré-moldada 10cm — 2m', cat: 'Sancas', un: 'barra', preco: 34, estoque: 128 },
-      { id: 'm5', cod: '140', nome: 'Placa Parede 3D Onda 50 x 50cm', cat: 'Parede 3D', un: 'm²', preco: 89.9, estoque: 64 },
-      { id: 'm6', cod: '155', nome: 'Perfil Montante 48mm — 3m', cat: 'Divisórias', un: 'barra', preco: 21.4, estoque: 180 },
-      { id: 'm7', cod: '160', nome: 'Massa para Rejunte Drywall 5kg', cat: 'Reboco', un: 'saco', preco: 32, estoque: 75 },
-      { id: 'm8', cod: '171', nome: 'Rosácea Decorativa Ø 40cm', cat: 'Decoração', un: 'un', preco: 62, estoque: 22 }
-    ],
-    servicos: [
-      { id: 's1', cod: 'S01', nome: 'Instalação de forro de gesso liso', cat: 'Forros', un: 'm²', preco: 55, prazo: '2 a 4 dias' },
-      { id: 's2', cod: 'S02', nome: 'Execução de sanca com iluminação', cat: 'Sancas', un: 'm linear', preco: 98, prazo: '3 a 5 dias' },
-      { id: 's3', cod: 'S03', nome: 'Instalação de moldura de gesso', cat: 'Molduras', un: 'm linear', preco: 28, prazo: '1 a 2 dias' },
-      { id: 's4', cod: 'S04', nome: 'Montagem de parede drywall dupla face', cat: 'Drywall', un: 'm²', preco: 135, prazo: '3 a 6 dias' },
-      { id: 's5', cod: 'S05', nome: 'Aplicação de parede 3D', cat: 'Parede 3D', un: 'm²', preco: 145, prazo: '2 a 3 dias' },
-      { id: 's6', cod: 'S06', nome: 'Reboco e acabamento em massa fina', cat: 'Reboco', un: 'm²', preco: 42, prazo: '2 a 4 dias' },
-      { id: 's7', cod: 'S07', nome: 'Divisória em drywall com isolamento', cat: 'Divisórias', un: 'm²', preco: 168, prazo: '4 a 7 dias' }
-    ],
-    clientes: [
-      { id: 'c1', nome: 'Construtora Vale Verde LTDA', fantasia: 'Vale Verde', contato: 'Eng. Rafael Musa', doc: '12.884.301/0001-45', tel: '(73) 3613-2200', cel: '(73) 99114-2200', municipio: 'Itabuna', uf: 'BA', ativo: 'Sim', dtCompra: '09/09/2026', nasc: '—', rua: 'Av. Cinquentenário', num: '1120', bairro: 'Centro', cep: '45600-000', end: 'Av. Cinquentenário, 1120 — Itabuna, BA' },
-      { id: 'c2', nome: 'Marcos Antônio Silveira', fantasia: '—', contato: 'Marcos', doc: '842.115.905-30', tel: '(73) 3615-7702', cel: '(73) 99814-7702', municipio: 'Itabuna', uf: 'BA', ativo: 'Sim', dtCompra: '04/09/2026', nasc: '14/03/1984', rua: 'Rua do Cajueiro', num: '45', bairro: 'São Caetano', cep: '45604-095', end: 'Rua do Cajueiro, 45 — Itabuna, BA' },
-      { id: 'c3', nome: 'Residencial Parque das Palmeiras', fantasia: 'Palmeiras', contato: 'Síndica Ana Lima', doc: '29.774.180/0001-08', tel: '(73) 3212-9080', cel: '(73) 98800-9080', municipio: 'Ilhéus', uf: 'BA', ativo: 'Sim', dtCompra: '02/09/2026', nasc: '—', rua: 'Rod. Ilhéus-Itabuna', num: 'km 8', bairro: 'Iguape', cep: '45650-000', end: 'Rod. Ilhéus-Itabuna, km 8 — Ilhéus, BA' },
-      { id: 'c4', nome: 'Juliana Ferraz Andrade', fantasia: '—', contato: 'Juliana', doc: '017.552.335-91', tel: '—', cel: '(73) 98123-4455', municipio: 'Itabuna', uf: 'BA', ativo: 'Não', dtCompra: '31/08/2026', nasc: '02/11/1991', rua: 'Rua Nina Barreto', num: '210', bairro: 'Alto Maron', cep: '45605-000', end: 'Rua Nina Barreto, 210 — Itabuna, BA' }
-    ],
-    notas: [
-      { id: 'n1', numero: '000011', tipo: 'Orçamento', cliente: 'c1', data: '09/09/2026 12:48', validade: '12/09/2026', sit: 'Pendente', desc: 200, obs: 'Execução em 3 pavimentos. Andaime por conta do contratante.', itens: [{ nome: 'Instalação de forro de gesso liso', un: 'm²', qtd: 120, preco: 55 }, { nome: 'Placa de Gesso Standard 1,80 x 1,20m', un: 'pç', qtd: 85, preco: 22.5 }] },
-      { id: 'n2', numero: '000010', tipo: 'Orçamento', cliente: 'c2', data: '04/09/2026 17:18', validade: '07/09/2026', sit: 'Cancelado', desc: 0, obs: 'Validade de 15 dias.', itens: [{ nome: 'Execução de sanca com iluminação', un: 'm linear', qtd: 32, preco: 98 }] },
-      { id: 'n3', numero: '000009', tipo: 'Pedido de Venda', cliente: 'c3', data: '02/09/2026 17:15', validade: '05/09/2026', sit: 'Importado', desc: 150, obs: '', itens: [{ nome: 'Placa Drywall ST 1,80 x 1,20m 12,5mm', un: 'pç', qtd: 60, preco: 46.9 }, { nome: 'Perfil Montante 48mm — 3m', un: 'barra', qtd: 40, preco: 21.4 }] },
-      { id: 'n4', numero: '000008', tipo: 'Ordem de Serviço', cliente: 'c4', data: '31/08/2026 08:34', validade: '03/09/2026', sit: 'Pendente', desc: 0, obs: 'Pagamento à vista.', itens: [{ nome: 'Aplicação de parede 3D', un: 'm²', qtd: 14, preco: 145 }] },
-      { id: 'n5', numero: '000007', tipo: 'Orçamento', cliente: 'c1', data: '31/08/2026 08:27', validade: '03/09/2026', sit: 'Importado', desc: 0, obs: '', itens: [{ nome: 'Reboco e acabamento em massa fina', un: 'm²', qtd: 62, preco: 42 }] },
-      { id: 'n6', numero: '000006', tipo: 'Pedido de Compra', cliente: 'c3', data: '30/08/2026 01:58', validade: '02/09/2026', sit: 'Pendente', desc: 0, obs: '', itens: [{ nome: 'Massa para Rejunte Drywall 5kg', un: 'saco', qtd: 12, preco: 32 }] },
-      { id: 'n7', numero: '000005', tipo: 'Recibo', cliente: 'c2', data: '30/08/2026 01:32', validade: '02/09/2026', sit: 'Cancelado', desc: 0, obs: '', itens: [{ nome: 'Instalação de moldura de gesso', un: 'm linear', qtd: 25, preco: 28 }] }
-    ]
+    printId: null, seq: 1,
+    materiais: [],
+    servicos: [],
+    clientes: [],
+    notas: []
   };
 
   cats = ['Forros', 'Molduras', 'Sancas', 'Divisórias', 'Drywall', 'Parede 3D', 'Reboco', 'Decoração'];
@@ -1091,6 +969,18 @@ class Component extends DCLogic {
   }
 
   money(n) { return 'R$ ' + (Number(n) || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+  nomeExibicao(u) {
+    if (!u) return '';
+    const parte = u.trim().split(/[.\s]/)[0];
+    return parte ? parte.charAt(0).toUpperCase() + parte.slice(1) : '';
+  }
+  iniciais(u) {
+    if (!u) return '··';
+    const partes = u.trim().split(/[.\s]+/).filter(Boolean);
+    const a = (partes[0] || '')[0] || '';
+    const b = (partes[1] || '')[0] || '';
+    return (a + b).toUpperCase() || '··';
+  }
   set(k) { return e => this.setState({ [k]: e.target.value }); }
   setForm(k) { return e => this.setState(s => ({ form: { ...s.form, [k]: e.target.value } })); }
 
@@ -1375,7 +1265,7 @@ class Component extends DCLogic {
             { v: String(n.itens.length), style: td('center') },
             { v: M(this.notaTotals(n).total), style: td('right', 1) },
             { v: n.validade || '—', style: td('left') },
-            { v: 'CALIANE GALDINO', style: 'padding:12px 16px;font-size:12px;color:' + (on ? '#9a9a9a' : '#9a9a9a') },
+            { v: '—', style: 'padding:12px 16px;font-size:12px;color:' + (on ? '#9a9a9a' : '#9a9a9a') },
             { v: (n.sit === 'Importado' ? '✓ ' : n.sit === 'Cancelado' ? '⊘ ' : '● ') + n.sit, style: 'padding:12px 16px;font-size:12.5px;font-weight:600;color:' + sitColor }
           ]
         };
@@ -1668,14 +1558,14 @@ class Component extends DCLogic {
         pTipo: pn.tipo, pNumero: pn.numero, pData: (pn.data || '').split(' ')[0], pImpresso: new Date().toLocaleString('pt-BR'),
         pCliNome: c ? c.nome : 'NÃO CADASTRADO', pCliDoc: c ? c.doc : '—', pCliTel: c ? c.tel : '—',
         pCliRua: c ? c.rua : '', pCliNum: c ? c.num : '', pCliBairro: c ? c.bairro : '', pCliCep: c ? c.cep : '',
-        pCliMun: c ? (c.municipio + '-' + c.uf) : '', pVendedor: 'CALIANE GALDINO',
+        pCliMun: c ? (c.municipio + '-' + c.uf) : '', pVendedor: '—',
         pItens: pn.itens.map(i => {
           const ref = cat.find(x => x.nome === i.nome) || {};
           return { cod: ref.cod || '—', nome: (i.nome || '').toUpperCase(), un: (i.un || 'un').toUpperCase(), qtd: Number(i.qtd).toFixed(1), preco: M(i.preco), desc: M(0), total: M(i.qtd * i.preco) };
         }),
         pQtd: String(tt.qtd), pSub: M(tt.sub), pDesc: M(tt.d), pFrete: M(0),
         pDescPct: (tt.sub ? (tt.d / tt.sub * 100).toFixed(2).replace('.', ',') : '0,00') + ' %',
-        pTotal: M(tt.total), pObs: pn.obs || '', pValidade: pn.validade || '—', pFormaPgto: 'DINHEIRO'
+        pTotal: M(tt.total), pObs: pn.obs || '', pValidade: pn.validade || '—', pFormaPgto: '—'
       };
     }
 
@@ -1695,6 +1585,8 @@ class Component extends DCLogic {
       closeFly: () => this.setState({ fly: null }),
       tabs, agora: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
       dataLonga: new Date().toLocaleDateString('pt-BR', { weekday: 'long', day: '2-digit', month: 'long', year: 'numeric' }),
+      boasVindas: 'Bem-vindo' + (this.nomeExibicao(s.loginUser) ? ', ' + this.nomeExibicao(s.loginUser) : ''),
+      userIniciais: this.iniciais(s.loginUser),
       isHome: page === 'home', homeAtalhos: page === 'home' && s.homeTab === 'atalhos', homeDash: page === 'home' && s.homeTab === 'dash',
       goAtalhos: () => this.setState({ homeTab: 'atalhos' }), goDash: () => this.setState({ homeTab: 'dash' }),
       tgAtalhos: tg(s.homeTab === 'atalhos'), tgDash: tg(s.homeTab === 'dash'),
