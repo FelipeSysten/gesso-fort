@@ -345,26 +345,31 @@ input:focus,select:focus,textarea:focus{outline:2px solid #C79A3B;outline-offset
               </div>
               <div style="display:flex;flex-direction:column;gap:8px">
                 <sc-for list="{{ itensNova }}" as="i" hint-placeholder-count="2">
-                  <div style="border:1px solid #eeebe6;border-radius:12px;padding:12px 13px;display:flex;gap:11px;align-items:center;flex-wrap:wrap;background:#FDFCFB">
-                    <div style="flex:1;min-width:150px">
-                      <div style="font-size:14px;font-weight:600">{{ i.nome }}</div>
-                      <div style="font-size:11px;color:#9a9a9a;letter-spacing:.06em;text-transform:uppercase">{{ i.meta }}</div>
+                  <div style="border:1px solid #eeebe6;border-radius:12px;padding:12px 13px;background:#FDFCFB">
+                    <div style="display:flex;gap:11px;align-items:center;flex-wrap:wrap">
+                      <div style="flex:1;min-width:150px">
+                        <div style="font-size:14px;font-weight:600">{{ i.nome }}</div>
+                        <div style="font-size:11px;color:#9a9a9a;letter-spacing:.06em;text-transform:uppercase">{{ i.meta }}</div>
+                      </div>
+                      <div style="display:flex;align-items:center;gap:8px">
+                        <div>
+                          <div style="font-size:9.5px;color:#9a9a9a;text-transform:uppercase;letter-spacing:.1em;margin-bottom:3px">Qtd</div>
+                          <input type="number" value="{{ i.qtd }}" onChange="{{ i.onQtd }}" style="{{ i.qtdStyle }}" />
+                        </div>
+                        <div>
+                          <div style="font-size:9.5px;color:#9a9a9a;text-transform:uppercase;letter-spacing:.1em;margin-bottom:3px">Valor un.</div>
+                          <input type="number" value="{{ i.preco }}" onChange="{{ i.onPreco }}" style="width:90px;padding:8px 10px;font-size:14px;border:1px solid #e2ded6;border-radius:8px;text-align:right" />
+                        </div>
+                        <div style="text-align:right;min-width:90px">
+                          <div style="font-size:9.5px;color:#9a9a9a;text-transform:uppercase;letter-spacing:.1em;margin-bottom:3px">Total</div>
+                          <div style="font-size:15px;font-weight:700;padding:8px 0">{{ i.total }}</div>
+                        </div>
+                        <button onClick="{{ i.del }}" title="Remover" style="background:none;border:none;color:#b98080;font-size:17px;cursor:pointer;padding:6px">×</button>
+                      </div>
                     </div>
-                    <div style="display:flex;align-items:center;gap:8px">
-                      <div>
-                        <div style="font-size:9.5px;color:#9a9a9a;text-transform:uppercase;letter-spacing:.1em;margin-bottom:3px">Qtd</div>
-                        <input type="number" value="{{ i.qtd }}" onChange="{{ i.onQtd }}" style="width:72px;padding:8px 10px;font-size:14px;border:1px solid #e2ded6;border-radius:8px;text-align:right" />
-                      </div>
-                      <div>
-                        <div style="font-size:9.5px;color:#9a9a9a;text-transform:uppercase;letter-spacing:.1em;margin-bottom:3px">Valor un.</div>
-                        <input type="number" value="{{ i.preco }}" onChange="{{ i.onPreco }}" style="width:90px;padding:8px 10px;font-size:14px;border:1px solid #e2ded6;border-radius:8px;text-align:right" />
-                      </div>
-                      <div style="text-align:right;min-width:90px">
-                        <div style="font-size:9.5px;color:#9a9a9a;text-transform:uppercase;letter-spacing:.1em;margin-bottom:3px">Total</div>
-                        <div style="font-size:15px;font-weight:700;padding:8px 0">{{ i.total }}</div>
-                      </div>
-                      <button onClick="{{ i.del }}" title="Remover" style="background:none;border:none;color:#b98080;font-size:17px;cursor:pointer;padding:6px">×</button>
-                    </div>
+                    <sc-if value="{{ i.semEstoque }}" hint-placeholder-val="{{ false }}">
+                      <div style="margin-top:8px;font-size:12.5px;font-weight:600;color:#A34A24">{{ i.estoqueMsg }}</div>
+                    </sc-if>
                   </div>
                 </sc-for>
               </div>
@@ -394,6 +399,9 @@ input:focus,select:focus,textarea:focus{outline:2px solid #C79A3B;outline-offset
               <span style="font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:#7d7d7d">Valor total</span>
               <span style="font-family:'Nunito',sans-serif;font-weight:900;font-size:27px;background:linear-gradient(160deg,#F0D18A,#B8862B);-webkit-background-clip:text;background-clip:text;color:transparent">{{ resumoTotal }}</span>
             </div>
+            <sc-if value="{{ temSemEstoque }}" hint-placeholder-val="{{ false }}">
+              <div style="margin-top:16px;padding:10px 12px;border-radius:10px;background:rgba(163,74,36,.18);border:1px solid rgba(163,74,36,.4);color:#f0b39d;font-size:12.5px;font-weight:600;line-height:1.5">⚠ {{ semEstoqueResumo }}</div>
+            </sc-if>
             <button onClick="{{ salvarNota }}" style="width:100%;margin-top:22px;padding:14px;border:none;border-radius:999px;background:linear-gradient(160deg,#E0B75C,#B8862B);color:#1a1206;font-weight:700;font-size:15px;cursor:pointer;transition:transform 150ms cubic-bezier(.4,0,.2,1)" style-hover="transform:scale(1.02)" style-active="transform:scale(.97)">{{ salvarNotaLabel }}</button>
           </div>
         </div>
@@ -1513,15 +1521,23 @@ class Component extends DCLogic {
       style: 'padding:11px 18px;border-radius:999px;font-size:13.5px;font-weight:600;cursor:pointer;border:1px solid ' + (s.novaTipo === tp ? '#B8862B' : '#e2ded6') + ';background:' + (s.novaTipo === tp ? 'linear-gradient(160deg,#E0B75C,#B8862B)' : '#fff') + ';color:' + (s.novaTipo === tp ? '#1a1206' : '#6a6a6a')
     }));
     const catalogoOpts = [
-      ...s.materiais.map(m => ({ id: m.id, label: 'PRODUTO · ' + m.nome + ' — ' + M(m.preco) + '/' + m.un })),
+      ...s.materiais.map(m => ({ id: m.id, label: 'PRODUTO · ' + m.nome + ' — ' + M(m.preco) + '/' + m.un + ' · estoque: ' + (m.estoque === '' || m.estoque === undefined ? '—' : m.estoque) })),
       ...s.servicos.map(x => ({ id: x.id, label: 'SERVIÇO · ' + x.nome + ' — ' + M(x.preco) + '/' + x.un }))
     ];
-    const itensNova = s.itens.map((i, idx) => ({
-      nome: i.nome, meta: i.cat + ' · ' + i.un, qtd: i.qtd, preco: i.preco, total: M(i.qtd * i.preco),
-      onQtd: e => { const v = e.target.value; this.setState(st => ({ itens: st.itens.map((x, k) => k === idx ? { ...x, qtd: v === '' ? '' : Number(v) } : x) })); },
-      onPreco: e => { const v = e.target.value; this.setState(st => ({ itens: st.itens.map((x, k) => k === idx ? { ...x, preco: v === '' ? '' : Number(v) } : x) })); },
-      del: () => this.setState(st => ({ itens: st.itens.filter((x, k) => k !== idx) }))
-    }));
+    const itensNova = s.itens.map((i, idx) => {
+      const matRef = s.materiais.find(m => m.nome === i.nome);
+      const estoqueDisp = matRef && matRef.estoque !== '' && matRef.estoque !== undefined ? Number(matRef.estoque) : null;
+      const semEstoque = estoqueDisp !== null && Number(i.qtd) > estoqueDisp;
+      return {
+        nome: i.nome, meta: i.cat + ' · ' + i.un, qtd: i.qtd, preco: i.preco, total: M(i.qtd * i.preco),
+        semEstoque, estoqueMsg: semEstoque ? ('⚠ Estoque insuficiente — disponível: ' + estoqueDisp + ' ' + i.un + (estoqueDisp > 0 ? '' : ' (sem estoque)')) : '',
+        qtdStyle: 'width:72px;padding:8px 10px;font-size:14px;border:1px solid ' + (semEstoque ? '#A34A24' : '#e2ded6') + ';border-radius:8px;text-align:right' + (semEstoque ? ';background:#fdf0ec' : ''),
+        onQtd: e => { const v = e.target.value; this.setState(st => ({ itens: st.itens.map((x, k) => k === idx ? { ...x, qtd: v === '' ? '' : Number(v) } : x) })); },
+        onPreco: e => { const v = e.target.value; this.setState(st => ({ itens: st.itens.map((x, k) => k === idx ? { ...x, preco: v === '' ? '' : Number(v) } : x) })); },
+        del: () => this.setState(st => ({ itens: st.itens.filter((x, k) => k !== idx) }))
+      };
+    });
+    const semEstoqueQtd = itensNova.filter(i => i.semEstoque).length;
     const sub = s.itens.reduce((a, i) => a + (Number(i.qtd) || 0) * (Number(i.preco) || 0), 0);
     const desc = Number(s.novaDesc) || 0;
 
@@ -1638,6 +1654,8 @@ class Component extends DCLogic {
       openNovoCliente: () => this.openModal('cliente'),
       catalogoOpts, addSel: s.addSel, onAddSel: this.set('addSel'), addItem: this.addItem,
       itensNova, semItens: s.itens.length === 0, novaObs: s.novaObs, onNovaObs: this.set('novaObs'),
+      temSemEstoque: semEstoqueQtd > 0,
+      semEstoqueResumo: semEstoqueQtd === 1 ? '1 item com estoque insuficiente. Confira antes de gerar o documento.' : semEstoqueQtd + ' itens com estoque insuficiente. Confira antes de gerar o documento.',
       novaDesc: s.novaDesc, onNovaDesc: this.set('novaDesc'),
       resumoQtd: String(s.itens.reduce((a, i) => a + (Number(i.qtd) || 0), 0)), resumoSub: M(sub), resumoTotal: M(sub - desc),
       resumoDescPct: sub ? (desc / sub * 100).toFixed(2).replace('.', ',') + ' %' : '',
