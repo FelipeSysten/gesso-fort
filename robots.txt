@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+Disallow: /sistema
+Disallow: /sistema.html
+Disallow: /sistema-v1
+Disallow: /sistema-v1.html
+Disallow: /api/
+Disallow: /uploads/
+
+Sitemap: https://gesso-fort.vercel.app/sitemap.xml

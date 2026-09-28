@@ -1,12 +1,62 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Gesso Fort Itabuna — Forros, Sancas, Molduras e Parede 3D</title>
-<meta name="description" content="Acabamentos em gesso em Itabuna e região sul da Bahia: forros, sancas com iluminação, molduras, parede 3D, drywall e divisórias. Loja completa de materiais e ferramentas para gesseiros.">
+<title>Gesso Fort Itabuna | Forros, Drywall, Sancas e Reformas em Gesso</title>
+<meta name="description" content="Instalação de forros, sancas com iluminação, drywall e divisórias em Itabuna e região sul da Bahia. Orçamento formal, equipe própria e loja completa de materiais para gesseiros.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://gesso-fort.vercel.app/">
+
+<!-- Open Graph (WhatsApp, Facebook, LinkedIn) -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Gesso Fort Itabuna">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:url" content="https://gesso-fort.vercel.app/">
+<meta property="og:title" content="Gesso Fort Itabuna | Forros, Drywall, Sancas e Reformas em Gesso">
+<meta property="og:description" content="Instalação de forros, sancas com iluminação, drywall e divisórias em Itabuna e região sul da Bahia. Orçamento formal, equipe própria e loja completa de materiais para gesseiros.">
+<meta property="og:image" content="https://gesso-fort.vercel.app/assets/site/fachada.jpg">
+<meta property="og:image:width" content="1600">
+<meta property="og:image:height" content="1200">
+<meta property="og:image:alt" content="Fachada da loja Gesso Fort em Itabuna">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Gesso Fort Itabuna | Forros, Drywall, Sancas e Reformas em Gesso">
+<meta name="twitter:description" content="Instalação de forros, sancas com iluminação, drywall e divisórias em Itabuna e região sul da Bahia. Orçamento formal e loja completa de materiais para gesseiros.">
+<meta name="twitter:image" content="https://gesso-fort.vercel.app/assets/site/fachada.jpg">
+
 <link rel="icon" type="image/png" href="assets/favicon.png">
 <script src="./support.js"></script>
+
+<!-- Dados estruturados (schema.org) para negócio local — ajuda o Google a
+     entender endereço, telefone e horário e pode habilitar rich results. -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "HomeAndConstructionBusiness",
+  "name": "Gesso Fort Itabuna",
+  "image": "https://gesso-fort.vercel.app/assets/site/fachada.jpg",
+  "url": "https://gesso-fort.vercel.app/",
+  "telephone": "+5573988322798",
+  "email": "gessofort2026@gmail.com",
+  "description": "Acabamentos em gesso, forros, sancas com iluminação, molduras, parede 3D, drywall e divisórias em Itabuna e região sul da Bahia. Loja completa de materiais e ferramentas para gesseiros.",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "Rua Nina Barreto, nº 74, Alto Maron",
+    "addressLocality": "Itabuna",
+    "addressRegion": "BA",
+    "postalCode": "45605-000",
+    "addressCountry": "BR"
+  },
+  "openingHoursSpecification": [
+    { "@type": "OpeningHoursSpecification", "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"], "opens": "07:30", "closes": "17:30" },
+    { "@type": "OpeningHoursSpecification", "dayOfWeek": "Saturday", "opens": "07:30", "closes": "12:00" }
+  ],
+  "sameAs": ["https://instagram.com/gessofort2026"],
+  "areaServed": "Itabuna e região sul da Bahia"
+}
+</script>
 </head>
 <body>
 <x-dc>
@@ -96,7 +146,7 @@ input:focus,select:focus,textarea:focus{outline:2px solid #C79A3B;outline-offset
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,290px),1fr));gap:18px">
       <sc-for list="{{ servicos }}" as="s" hint-placeholder-count="6">
         <div style="background:#fff;border:1px solid rgba(0,0,0,.06);border-radius:16px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,.05);display:flex;flex-direction:column">
-          <img src="{{ s.img }}" alt="{{ s.t }}" style="width:100%;height:190px;object-fit:cover" />
+          <img src="{{ s.img }}" alt="{{ s.alt }}" style="width:100%;height:190px;object-fit:cover" />
           <div style="padding:20px 22px 22px;display:flex;flex-direction:column;gap:8px;flex:1">
             <div style="font-family:'Nunito',sans-serif;font-weight:800;font-size:18px">{{ s.t }}</div>
             <p style="margin:0;font-size:14px;line-height:1.55;color:#6a6a6a;text-wrap:pretty">{{ s.d }}</p>
@@ -120,7 +170,7 @@ input:focus,select:focus,textarea:focus{outline:2px solid #C79A3B;outline-offset
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr));gap:14px">
       <sc-for list="{{ produtos }}" as="p" hint-placeholder-count="6">
         <div style="position:relative;border-radius:16px;overflow:hidden;background:#1A1A1A;border:1px solid rgba(255,255,255,.07)">
-          <img src="{{ p.img }}" alt="{{ p.t }}" style="width:100%;height:230px;object-fit:cover" />
+          <img src="{{ p.img }}" alt="{{ p.alt }}" style="width:100%;height:230px;object-fit:cover" />
           <div style="position:absolute;left:0;right:0;bottom:0;padding:34px 18px 16px;background:linear-gradient(to top,rgba(13,13,13,.92),transparent)">
             <div style="font-family:'Nunito',sans-serif;font-weight:800;font-size:16px;color:#fff">{{ p.t }}</div>
             <div style="font-size:12.5px;color:#b5b5b5;margin-top:2px">{{ p.d }}</div>
@@ -140,7 +190,7 @@ input:focus,select:focus,textarea:focus{outline:2px solid #C79A3B;outline-offset
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:14px">
       <sc-for list="{{ obras }}" as="o" hint-placeholder-count="6">
         <figure style="margin:0;border-radius:16px;overflow:hidden;background:#fff;border:1px solid rgba(0,0,0,.06);box-shadow:0 4px 24px rgba(0,0,0,.05)">
-          <img src="{{ o.img }}" alt="{{ o.t }}" style="width:100%;height:{{ o.h }};object-fit:cover" />
+          <img src="{{ o.img }}" alt="{{ o.alt }}" style="width:100%;height:{{ o.h }};object-fit:cover" />
           <figcaption style="padding:14px 16px;font-size:13.5px;color:#5a5a5a">{{ o.t }}</figcaption>
         </figure>
       </sc-for>
@@ -336,30 +386,30 @@ class Component extends DCLogic {
         { icon: '$', t: 'Preço justo e transparência', s: 'Orçamento formal, sem surpresa' }
       ],
       servicos: [
-        { t: 'Forro de gesso', d: 'Forro liso, com rebaixo ou tabica, em placa ou drywall, com acabamento pronto para pintura.', tag: 'Residencial e comercial', img: 'assets/site/forro-rebaixo.jpg' },
-        { t: 'Sancas e iluminação', d: 'Sanca aberta, fechada ou invertida, preparada para LED e spots embutidos.', tag: 'Projeto de luz', img: 'assets/site/forro-led.jpg' },
-        { t: 'Molduras e rodateto', d: 'Mais de 17 modelos de moldura e rodateto, do clássico ao reto moderno.', tag: 'Mostruário na loja', img: 'assets/site/forro-sanca.jpg' },
-        { t: 'Parede 3D', d: 'Painéis 3D em gesso aplicados em salas, quartos, fachadas internas e recepções.', tag: 'Diversos modelos', img: 'assets/site/parede3d-flor.jpg' },
-        { t: 'Drywall e divisórias', d: 'Paredes drywall, divisórias com isolamento e nichos para lojas e escritórios.', tag: 'Obra comercial', img: 'assets/site/drywall-obra.jpg' },
-        { t: 'Reboco e revestimento', d: 'Reboco em gesso, massa fina e revestimento tipo pedra canjiquinha.', tag: 'Acabamento final', img: 'assets/site/pedra-canjiquinha.jpg' }
+        { t: 'Forro de gesso', alt: 'Instalação de forro de gesso liso pronto para pintura', d: 'Forro liso, com rebaixo ou tabica, em placa ou drywall, com acabamento pronto para pintura.', tag: 'Residencial e comercial', img: 'assets/site/forro-rebaixo.jpg' },
+        { t: 'Sancas e iluminação', alt: 'Sanca de gesso com iluminação em LED embutida', d: 'Sanca aberta, fechada ou invertida, preparada para LED e spots embutidos.', tag: 'Projeto de luz', img: 'assets/site/forro-led.jpg' },
+        { t: 'Molduras e rodateto', alt: 'Forro de gesso com moldura e rodateto decorativo', d: 'Mais de 17 modelos de moldura e rodateto, do clássico ao reto moderno.', tag: 'Mostruário na loja', img: 'assets/site/forro-sanca.jpg' },
+        { t: 'Parede 3D', alt: 'Painel de parede 3D em gesso com relevo decorativo', d: 'Painéis 3D em gesso aplicados em salas, quartos, fachadas internas e recepções.', tag: 'Diversos modelos', img: 'assets/site/parede3d-flor.jpg' },
+        { t: 'Drywall e divisórias', alt: 'Instalação de parede em drywall e divisória de gesso em obra comercial', d: 'Paredes drywall, divisórias com isolamento e nichos para lojas e escritórios.', tag: 'Obra comercial', img: 'assets/site/drywall-obra.jpg' },
+        { t: 'Reboco e revestimento', alt: 'Revestimento de parede em gesso tipo pedra canjiquinha', d: 'Reboco em gesso, massa fina e revestimento tipo pedra canjiquinha.', tag: 'Acabamento final', img: 'assets/site/pedra-canjiquinha.jpg' }
       ],
       produtos: [
-        { t: 'Placa 3D Diamante', d: 'Painel 50 x 50 cm', img: 'assets/site/placa-diamante.jpg' },
-        { t: 'Placa 3D Onda', d: 'Painel 50 x 50 cm', img: 'assets/site/placa-onda.jpg' },
-        { t: 'Placa 3D Flor', d: 'Painel 50 x 50 cm', img: 'assets/site/placa-flor.jpg' },
-        { t: 'Placa 3D Ripada', d: 'Painel 50 x 50 cm', img: 'assets/site/placa-ripada.jpg' },
-        { t: 'Placa 3D Tijolinho', d: 'Painel 50 x 50 cm', img: 'assets/site/placa-tijolinho.jpg' },
-        { t: 'Molduras e rodatetos', d: '17 modelos disponíveis', img: 'assets/site/molduras.jpg' },
-        { t: 'Rosáceas', d: '4 tamanhos', img: 'assets/site/rosaceas.jpg' },
-        { t: 'Gesso e materiais', d: 'Revestimento, fundição, cola e sisal', img: 'assets/site/estoque-gesso.jpg' }
+        { t: 'Placa 3D Diamante', alt: 'Placa de gesso 3D modelo Diamante para parede decorativa', d: 'Painel 50 x 50 cm', img: 'assets/site/placa-diamante.jpg' },
+        { t: 'Placa 3D Onda', alt: 'Placa de gesso 3D modelo Onda para parede decorativa', d: 'Painel 50 x 50 cm', img: 'assets/site/placa-onda.jpg' },
+        { t: 'Placa 3D Flor', alt: 'Placa de gesso 3D modelo Flor para parede decorativa', d: 'Painel 50 x 50 cm', img: 'assets/site/placa-flor.jpg' },
+        { t: 'Placa 3D Ripada', alt: 'Placa de gesso 3D modelo Ripada para parede decorativa', d: 'Painel 50 x 50 cm', img: 'assets/site/placa-ripada.jpg' },
+        { t: 'Placa 3D Tijolinho', alt: 'Placa de gesso 3D modelo Tijolinho para parede decorativa', d: 'Painel 50 x 50 cm', img: 'assets/site/placa-tijolinho.jpg' },
+        { t: 'Molduras e rodatetos', alt: 'Molduras e rodatetos de gesso à venda na loja Gesso Fort', d: '17 modelos disponíveis', img: 'assets/site/molduras.jpg' },
+        { t: 'Rosáceas', alt: 'Rosáceas de gesso para forro em diferentes tamanhos', d: '4 tamanhos', img: 'assets/site/rosaceas.jpg' },
+        { t: 'Gesso e materiais', alt: 'Estoque de gesso e materiais para instalação de forro e drywall', d: 'Revestimento, fundição, cola e sisal', img: 'assets/site/estoque-gesso.jpg' }
       ],
       obras: [
-        { t: 'Forro com sanca e moldura — residência', h: '260px', img: 'assets/site/corredor-sanca.jpg' },
-        { t: 'Parede 3D em corredor', h: '260px', img: 'assets/site/parede3d-corredor.jpg' },
-        { t: 'Loja com forro e spots embutidos', h: '260px', img: 'assets/site/loja-spots.jpg' },
-        { t: 'Obra comercial — forro contínuo', h: '260px', img: 'assets/site/comercial-forro.jpg' },
-        { t: 'Cozinha com painel 3D', h: '260px', img: 'assets/site/cozinha-3d.jpg' },
-        { t: 'Revestimento tipo pedra', h: '260px', img: 'assets/site/pedra-canjiquinha.jpg' }
+        { t: 'Forro com sanca e moldura — residência', alt: 'Obra concluída de forro de gesso com sanca e moldura em residência', h: '260px', img: 'assets/site/corredor-sanca.jpg' },
+        { t: 'Parede 3D em corredor', alt: 'Parede decorativa em gesso 3D instalada em corredor residencial', h: '260px', img: 'assets/site/parede3d-corredor.jpg' },
+        { t: 'Loja com forro e spots embutidos', alt: 'Forro de gesso rebaixado com spots embutidos em obra comercial', h: '260px', img: 'assets/site/loja-spots.jpg' },
+        { t: 'Obra comercial — forro contínuo', alt: 'Forro de gesso contínuo instalado em obra comercial', h: '260px', img: 'assets/site/comercial-forro.jpg' },
+        { t: 'Cozinha com painel 3D', alt: 'Painel de parede 3D em gesso instalado em cozinha', h: '260px', img: 'assets/site/cozinha-3d.jpg' },
+        { t: 'Revestimento tipo pedra', alt: 'Revestimento de parede em gesso tipo pedra canjiquinha instalado', h: '260px', img: 'assets/site/pedra-canjiquinha.jpg' }
       ],
       lojaItens: [
         'Gesso para revestimento e fundição, gesso cola e sisal',
