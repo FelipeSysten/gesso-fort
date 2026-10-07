@@ -1383,8 +1383,10 @@ class Component extends DCLogic {
   };
 
   addItem = () => {
-    const id = this.state.addSel; if (!id) return;
-    const src = [...this.state.materiais, ...this.state.servicos].find(x => x.id === id); if (!src) return;
+    const sel = this.state.addSel; if (!sel) return;
+    const i = sel.indexOf(':');
+    const tipo = sel.slice(0, i), id = sel.slice(i + 1);
+    const src = (tipo === 's' ? this.state.servicos : this.state.materiais).find(x => x.id === id); if (!src) return;
     this.setState(s => ({ itens: [...s.itens, { key: 'i' + Date.now(), nome: src.nome, un: src.un, cat: src.cat, qtd: 1, preco: src.preco }], addSel: '' }));
   };
 
@@ -1783,8 +1785,8 @@ class Component extends DCLogic {
       style: 'padding:11px 18px;border-radius:999px;font-size:13.5px;font-weight:600;cursor:pointer;border:1px solid ' + (s.novaTipo === tp ? '#B8862B' : '#e2ded6') + ';background:' + (s.novaTipo === tp ? 'linear-gradient(160deg,#E0B75C,#B8862B)' : '#fff') + ';color:' + (s.novaTipo === tp ? '#1a1206' : '#6a6a6a')
     }));
     const catalogoOpts = [
-      ...s.materiais.map(m => ({ id: m.id, label: 'PRODUTO · ' + m.nome + ' — ' + M(m.preco) + '/' + m.un + ' · estoque: ' + (m.estoque === '' || m.estoque === undefined ? '—' : m.estoque) })),
-      ...s.servicos.map(x => ({ id: x.id, label: 'SERVIÇO · ' + x.nome + ' — ' + M(x.preco) + '/' + x.un }))
+      ...s.materiais.map(m => ({ id: 'p:' + m.id, label: 'PRODUTO · ' + m.nome + ' — ' + M(m.preco) + '/' + m.un + ' · estoque: ' + (m.estoque === '' || m.estoque === undefined ? '—' : m.estoque) })),
+      ...s.servicos.map(x => ({ id: 's:' + x.id, label: 'SERVIÇO · ' + x.nome + ' — ' + M(x.preco) + '/' + x.un }))
     ];
     const itensNova = s.itens.map((i, idx) => {
       const matRef = s.materiais.find(m => m.nome === i.nome);
