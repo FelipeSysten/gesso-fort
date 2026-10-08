@@ -767,7 +767,6 @@ input:focus,select:focus,textarea:focus{outline:2px solid #C79A3B;outline-offset
     </div>
 
     <div style="margin-top:12px;display:flex;flex-direction:column;gap:9px">
-      <div style="font-family:'Nunito',sans-serif;font-weight:800;font-size:15px">Transportador</div>
       <div style="display:grid;grid-template-columns:1fr auto 1fr;gap:16px">
         <div>Forma Pgto: {{ pFormaPgto }}</div>
         <div>Validade: {{ pValidade }}</div>
@@ -1124,7 +1123,7 @@ class Component extends DCLogic {
       this.setState({ modal: type, form: f, editId: item ? item.id : null, sel: null });
       return;
     }
-    const f = item ? { ...item } : (type === 'cliente' ? { nome: '', doc: '', tel: '', end: '' }
+    const f = item ? { ...item } : (type === 'cliente' ? { nome: '', doc: '', tel: '', rua: '', num: '', bairro: '', municipio: '', uf: 'BA', cep: '' }
       : { cod: '', nome: '', cat: this.cats[0], un: type === 'material' ? 'pç' : 'm²', preco: '', estoque: '', prazo: '' });
     this.setState({ modal: type, form: f, editId: item ? item.id : null });
   }
@@ -1809,7 +1808,7 @@ class Component extends DCLogic {
     const mt = s.modal;
     const F = (label, key, o) => ({ label, value: s.form[key] === undefined ? '' : s.form[key], onChange: this.setForm(key), isSelect: !!(o && o.options), isInput: !(o && o.options), options: (o && o.options) || [], type: (o && o.type) || 'text', ph: (o && o.ph) || '', wrapStyle: (o && o.full) ? 'grid-column:1/-1' : '' });
     let modalFields = [];
-    if (mt === 'cliente') modalFields = [F('Nome / Razão social', 'nome', { full: 1, ph: 'Ex: Construtora Vale Verde LTDA' }), F('CPF / CNPJ', 'doc', { ph: '000.000.000-00' }), F('Telefone', 'tel', { ph: '(73) 00000-0000' }), F('Endereço da obra', 'end', { full: 1, ph: 'Rua, nº, bairro — cidade/UF' })];
+    if (mt === 'cliente') modalFields = [F('Nome / Razão social', 'nome', { full: 1, ph: 'Ex: Construtora Vale Verde LTDA' }), F('CPF / CNPJ', 'doc', { ph: '000.000.000-00' }), F('Telefone', 'tel', { ph: '(73) 00000-0000' }), F('Rua', 'rua', { full: 1, ph: 'Rua Nina Barreto' }), F('Número', 'num', { ph: '74' }), F('Bairro', 'bairro', { ph: 'Alto Maron' }), F('Município', 'municipio', { ph: 'Itabuna' }), F('UF', 'uf', { ph: 'BA' }), F('CEP', 'cep', { ph: '45605-000' })];
     else if (mt === 'material') modalFields = [F('Código', 'cod', { ph: '101' }), F('Categoria', 'cat', { options: this.cats }), F('Descrição do produto', 'nome', { full: 1, ph: 'Ex: Placa de Gesso Standard 1,80 x 1,20m' }), F('Unidade', 'un', { options: ['pç', 'm²', 'm linear', 'barra', 'saco', 'un', 'kg'] }), F('Preço de venda (R$)', 'preco', { type: 'number', ph: '0,00' }), F('Estoque atual', 'estoque', { type: 'number', ph: '0' })];
     else if (mt === 'servico') modalFields = [F('Código', 'cod', { ph: 'S01' }), F('Categoria', 'cat', { options: this.cats }), F('Descrição do serviço', 'nome', { full: 1, ph: 'Ex: Instalação de forro de gesso liso' }), F('Unidade de medida', 'un', { options: ['m²', 'm linear', 'un', 'diária', 'obra'] }), F('Valor (R$)', 'preco', { type: 'number', ph: '0,00' }), F('Prazo estimado', 'prazo', { ph: '2 a 4 dias' })];
     else if (typeof mt === 'string' && mt.indexOf('gd:') === 0) {
@@ -1864,15 +1863,15 @@ class Component extends DCLogic {
       pv = {
         pTipo: pn.tipo, pNumero: pn.numero, pData: (pn.data || '').split(' ')[0], pImpresso: new Date().toLocaleString('pt-BR'),
         pCliNome: c ? c.nome : 'NÃO CADASTRADO', pCliDoc: c ? c.doc : '—', pCliTel: c ? c.tel : '—',
-        pCliRua: c ? c.rua : '', pCliNum: c ? c.num : '', pCliBairro: c ? c.bairro : '', pCliCep: c ? c.cep : '',
-        pCliMun: c ? (c.municipio + '-' + c.uf) : '', pVendedor: '—',
+        pCliRua: c ? (c.rua || c.end || '') : '', pCliNum: c ? c.num : '', pCliBairro: c ? c.bairro : '', pCliCep: c ? c.cep : '',
+        pCliMun: c ? [c.municipio, c.uf].filter(Boolean).join(' - ') : '', pVendedor: '—',
         pItens: pn.itens.map(i => {
           const ref = cat.find(x => x.nome === i.nome) || {};
           return { cod: ref.cod || '—', nome: (i.nome || '').toUpperCase(), un: (i.un || 'un').toUpperCase(), qtd: Number(i.qtd).toFixed(1), preco: M(i.preco), desc: M(0), total: M(i.qtd * i.preco) };
         }),
         pQtd: String(tt.qtd), pSub: M(tt.sub), pDesc: M(tt.d), pFrete: M(0),
         pDescPct: (tt.sub ? (tt.d / tt.sub * 100).toFixed(2).replace('.', ',') : '0,00') + ' %',
-        pTotal: M(tt.total), pObs: pn.obs || '', pValidade: pn.validade || '—', pFormaPgto: '—'
+        pTotal: M(tt.total), pObs: pn.obs || '', pValidade: '30 dias', pFormaPgto: '—'
       };
     }
 
