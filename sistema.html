@@ -1079,6 +1079,17 @@ class Component extends DCLogic {
   }
 
   money(n) { return 'R$ ' + (Number(n) || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+  // Busca por "começo de palavra": cada palavra digitada (separada por espaço)
+  // precisa ser o inicio de alguma palavra do texto — ignora acento e maiusculas,
+  // entao "ge for" acha "Gesso Fort" e "jose" acha "José" mesmo sem digitar o acento.
+  matchBusca(text, query) {
+    if (!query) return true;
+    const norm = (v) => String(v === undefined || v === null ? '' : v).normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+    const tokens = norm(query).split(/\s+/).filter(Boolean);
+    if (!tokens.length) return true;
+    const words = norm(text).split(/[^a-z0-9]+/).filter(Boolean);
+    return tokens.every(tok => words.some(w => w.startsWith(tok)));
+  }
   nomeExibicao(u) {
     if (!u) return '';
     const parte = u.trim().split(/[.\s]/)[0];
@@ -1423,7 +1434,7 @@ class Component extends DCLogic {
 
   renderVals() {
     const s = this.state, M = n => this.money(n), page = s.active;
-    const q = s.busca.toLowerCase();
+    const q = s.busca;
 
     const rail = this.menus.map(m => {
       const on = s.fly === m.id || m.items.some(i => i.id === page);
@@ -1519,7 +1530,7 @@ class Component extends DCLogic {
       cols = [{ label: 'Número', style: th('left') }, { label: 'Emissão', style: th('left') }, { label: 'Cliente', style: th('left') }, { label: 'CNPJ/CPF', style: th('left') }, { label: 'Itens', style: th('center') }, { label: 'Total', style: th('right') }, { label: 'Validade', style: th('left') }, { label: 'Vendedor', style: th('left') }, { label: 'Situação', style: th('left') }];
       const list = s.notas.filter(n => n.tipo === tipo)
         .filter(n => s.filtro === 'Todos' || n.sit === s.filtro)
-        .filter(n => !q || n.numero.includes(q) || this.cliNome(n.cliente).toLowerCase().includes(q));
+        .filter(n => this.matchBusca(n.numero + ' ' + this.cliNome(n.cliente), q));
       rows = list.map(n => {
         const on = s.sel === n.id;
         const cli = s.clientes.find(x => x.id === n.cliente) || {};
@@ -1548,7 +1559,7 @@ class Component extends DCLogic {
       colsOpts = ['5 Coluna(s)', '4 Coluna(s)'];
       colsOpts = ['11 Coluna(s)', '8 Coluna(s)', '5 Coluna(s)'];
       cols = [{ label: 'Documento', style: th('left') }, { label: 'Nome', style: th('left') }, { label: 'Fantasia', style: th('left') }, { label: 'Contato', style: th('left') }, { label: 'Município', style: th('left') }, { label: 'UF', style: th('center') }, { label: 'Telefone', style: th('left') }, { label: 'Celular', style: th('left') }, { label: 'Ativo', style: th('center') }, { label: 'Dt. Compra', style: th('left') }, { label: 'Dt. Nascimento', style: th('left') }];
-      rows = s.clientes.filter(c => !q || c.nome.toLowerCase().includes(q) || String(c.doc).includes(q)).map(c => {
+      rows = s.clientes.filter(c => this.matchBusca(c.nome + ' ' + c.doc, q)).map(c => {
         const on = s.sel === c.id, ink = on ? '#fff' : '#2A2A2A';
         const td = (a, b) => 'padding:12px 16px;text-align:' + a + ';font-size:13px;white-space:nowrap;color:' + ink + (b ? ';font-weight:600' : '');
         return { select: () => this.setState({ sel: on ? null : c.id }),
@@ -1566,7 +1577,7 @@ class Component extends DCLogic {
       }));
       cols = [{ label: 'Cód.', style: th('left') }, { label: isMat ? 'Produto' : 'Serviço', style: th('left') }, { label: 'Categoria', style: th('left') }, { label: 'Un.', style: th('center') }, { label: isMat ? 'Estoque' : 'Prazo', style: th('right') }, { label: 'Preço', style: th('right') }];
       rows = (isMat ? s.materiais : s.servicos)
-        .filter(x => (s.filtro === 'Todos' || x.cat === s.filtro) && (!q || x.nome.toLowerCase().includes(q) || String(x.cod).toLowerCase().includes(q)))
+        .filter(x => (s.filtro === 'Todos' || x.cat === s.filtro) && this.matchBusca(x.nome + ' ' + x.cod, q))
         .map(x => {
           const on = s.sel === x.id, ink = on ? '#fff' : '#2A2A2A';
           const td = (a, b) => 'padding:12px 16px;text-align:' + a + ';font-size:13px;color:' + ink + (b ? ';font-weight:600' : '');
@@ -1593,7 +1604,7 @@ class Component extends DCLogic {
       const sitInk = (v, on) => on ? '#E0B75C' : sitBad.indexOf(v) >= 0 ? '#A34A24' : sitGood.indexOf(v) >= 0 ? '#5F7052' : '#8A6318';
       const sitIcon = v => sitGood.indexOf(v) >= 0 ? '✓ ' : sitBad.indexOf(v) >= 0 ? '⊘ ' : '● ';
       const src = (s.seed[gd.seed] || []).filter(r => !gd.filtroKey || s.filtro === 'Todos' || r[gd.filtroKey] === s.filtro)
-        .filter(r => !q || Object.values(r).some(v => String(v).toLowerCase().includes(q)));
+        .filter(r => this.matchBusca(Object.values(r).join(' '), q));
       rows = src.map((r) => {
         const rid = page + ':' + r.id, on = s.sel === rid, ink = on ? '#fff' : '#2A2A2A';
         return {
@@ -1634,7 +1645,7 @@ class Component extends DCLogic {
       cols = [{ label: 'Protocolo', style: th('left') }, { label: 'Recebido em', style: th('left') }, { label: 'Nome', style: th('left') }, { label: 'WhatsApp', style: th('left') }, { label: 'Cidade', style: th('left') }, { label: 'Serviço', style: th('left') }, { label: 'Metragem', style: th('right') }, { label: 'Situação', style: th('left') }];
       rows = s.leads
         .filter(l => s.filtro === 'Todos' || l.sit === s.filtro)
-        .filter(l => !q || (l.nome + ' ' + l.protocolo + ' ' + l.servico).toLowerCase().includes(q))
+        .filter(l => this.matchBusca(l.nome + ' ' + l.protocolo + ' ' + l.servico, q))
         .map(l => {
           const on = s.sel === l.protocolo, ink = on ? '#fff' : '#2A2A2A';
           const td = (a, b) => 'padding:12px 16px;text-align:' + a + ';font-size:13px;white-space:nowrap;color:' + ink + (b ? ';font-weight:600' : '');
