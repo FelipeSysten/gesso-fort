@@ -328,19 +328,19 @@ input:focus,select:focus,textarea:focus{outline:2px solid #C79A3B;outline-offset
                 <h3 style="margin:0;font-family:'Nunito',sans-serif;font-weight:800;font-size:15px">Cliente</h3>
                 <button onClick="{{ openNovoCliente }}" style="background:none;border:none;color:#8A6318;font-size:13px;font-weight:600;cursor:pointer;padding:0">+ Cadastrar cliente</button>
               </div>
-              <select value="{{ novaCliente }}" onChange="{{ onNovaCliente }}" style="width:100%;padding:12px 14px;font-size:14.5px;border:1px solid #e2ded6;border-radius:10px;background:#fff">
-                <option value="">NÃO CADASTRADO</option>
-                <sc-for list="{{ clientesOpts }}" as="c" hint-placeholder-count="4"><option value="{{ c.id }}">{{ c.nome }}</option></sc-for>
-              </select>
+              <input type="text" list="dl-clientes" value="{{ clienteTexto }}" onChange="{{ onClienteTexto }}" placeholder="Digite para buscar um cliente…" autocomplete="off" style="width:100%;padding:12px 14px;font-size:14.5px;border:1px solid #e2ded6;border-radius:10px;background:#fff" />
+              <datalist id="dl-clientes">
+                <sc-for list="{{ clientesOpts }}" as="c" hint-placeholder-count="4"><option value="{{ c.label }}"></option></sc-for>
+              </datalist>
             </div>
 
             <div style="background:#fff;border:1px solid #e2ded6;border-radius:14px;box-shadow:0 4px 24px rgba(0,0,0,.05);padding:22px">
               <h3 style="margin:0 0 12px;font-family:'Nunito',sans-serif;font-weight:800;font-size:15px">Produtos e serviços</h3>
               <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px">
-                <select value="{{ addSel }}" onChange="{{ onAddSel }}" style="flex:1;min-width:200px;padding:12px 14px;font-size:14px;border:1px solid #e2ded6;border-radius:10px;background:#fff">
-                  <option value="">Selecione um item do catálogo…</option>
-                  <sc-for list="{{ catalogoOpts }}" as="o" hint-placeholder-count="6"><option value="{{ o.id }}">{{ o.label }}</option></sc-for>
-                </select>
+                <input type="text" list="dl-catalogo" value="{{ addTexto }}" onChange="{{ onAddTexto }}" placeholder="Digite para buscar um item do catálogo…" autocomplete="off" style="flex:1;min-width:200px;padding:12px 14px;font-size:14px;border:1px solid #e2ded6;border-radius:10px;background:#fff" />
+                <datalist id="dl-catalogo">
+                  <sc-for list="{{ catalogoOpts }}" as="o" hint-placeholder-count="6"><option value="{{ o.label }}"></option></sc-for>
+                </datalist>
                 <button onClick="{{ addItem }}" style="padding:12px 22px;border:none;border-radius:10px;background:#0D0D0D;color:#fff;font-weight:600;font-size:14px;cursor:pointer" style-hover="background:#2A2A2A">Adicionar</button>
               </div>
               <div style="display:flex;flex-direction:column;gap:8px">
@@ -820,7 +820,7 @@ class Component extends DCLogic {
     busca: '', campo: 'Todos', de: '2026-06-01', ate: '2026-09-17',
     colsSel: '9 Coluna(s)', filtro: 'Todos', sel: null, optionsOpen: false,
     modal: null, form: {}, editId: null, leads: [],
-    novaTipo: 'Orçamento', novaCliente: '', novaObs: '', novaDesc: 0, itens: [], addSel: '', editingNotaId: null,
+    novaTipo: 'Orçamento', novaCliente: '', clienteTexto: '', novaObs: '', novaDesc: 0, itens: [], addSel: '', addTexto: '', editingNotaId: null,
     printId: null, seq: 1,
     materiais: [],
     servicos: [],
@@ -1028,7 +1028,7 @@ class Component extends DCLogic {
       this.setState(st => ({ clientes: [cli, ...st.clientes] }));
     }
     await this.setLeadSit(lead, 'Convertido');
-    this.setState({ novaTipo: 'Orçamento', novaCliente: cli.id, itens: [], novaDesc: 0, editingNotaId: null,
+    this.setState({ novaTipo: 'Orçamento', novaCliente: cli.id, clienteTexto: this.clienteLabel(cli), itens: [], novaDesc: 0, editingNotaId: null,
       novaObs: lead.servico + (lead.metragem ? ' · ' + lead.metragem : '') + (lead.obs ? '\n' + lead.obs : '') + '\nOrigem: site (protocolo ' + lead.protocolo + ')' });
     this.open('nova');
   };
@@ -1079,6 +1079,14 @@ class Component extends DCLogic {
   }
 
   money(n) { return 'R$ ' + (Number(n) || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+  clienteLabel(c) { return !c ? '' : c.nome + (c.doc && c.doc !== '—' ? ' — ' + c.doc : ''); }
+  getCatalogoOpts() {
+    const s = this.state;
+    return [
+      ...s.materiais.map(m => ({ id: 'p:' + m.id, label: 'PRODUTO · ' + m.nome + ' — ' + this.money(m.preco) + '/' + m.un + ' · estoque: ' + (m.estoque === '' || m.estoque === undefined ? '—' : m.estoque) })),
+      ...s.servicos.map(x => ({ id: 's:' + x.id, label: 'SERVIÇO · ' + x.nome + ' — ' + this.money(x.preco) + '/' + x.un }))
+    ];
+  }
   // Busca por "começo de palavra": cada palavra digitada (separada por espaço)
   // precisa ser o inicio de alguma palavra do texto — ignora acento e maiusculas,
   // entao "ge for" acha "Gesso Fort" e "jose" acha "José" mesmo sem digitar o acento.
@@ -1387,7 +1395,7 @@ class Component extends DCLogic {
 
   editarNota = (nota) => {
     this.setState({
-      novaTipo: nota.tipo, novaCliente: nota.cliente || '', novaObs: nota.obs || '', novaDesc: nota.desc || 0,
+      novaTipo: nota.tipo, novaCliente: nota.cliente || '', clienteTexto: this.clienteLabel(this.state.clientes.find(c => c.id === nota.cliente)), novaObs: nota.obs || '', novaDesc: nota.desc || 0,
       itens: nota.itens.map((i, idx) => ({ key: 'e' + idx + '_' + Date.now(), nome: i.nome, un: i.un, cat: '', qtd: i.qtd, preco: i.preco })),
       editingNotaId: nota.id
     });
@@ -1399,7 +1407,23 @@ class Component extends DCLogic {
     const i = sel.indexOf(':');
     const tipo = sel.slice(0, i), id = sel.slice(i + 1);
     const src = (tipo === 's' ? this.state.servicos : this.state.materiais).find(x => x.id === id); if (!src) return;
-    this.setState(s => ({ itens: [...s.itens, { key: 'i' + Date.now(), nome: src.nome, un: src.un, cat: src.cat, qtd: 1, preco: src.preco }], addSel: '' }));
+    this.setState(s => ({ itens: [...s.itens, { key: 'i' + Date.now(), nome: src.nome, un: src.un, cat: src.cat, qtd: 1, preco: src.preco }], addSel: '', addTexto: '' }));
+  };
+
+  // Combobox de texto (cliente / catalogo): digitar filtra a lista nativa do
+  // <datalist>; so resolve pra um id de verdade quando o texto bate exato com
+  // uma opcao (o que acontece ao clicar/escolher na lista, ou ao digitar o
+  // nome completo). Digitar algo sem selecionar deixa sem cliente/item (igual
+  // a "NÃO CADASTRADO"/"selecione um item").
+  onClienteTexto = (e) => {
+    const val = e.target.value;
+    const match = this.state.clientes.find(c => this.clienteLabel(c) === val);
+    this.setState({ clienteTexto: val, novaCliente: match ? match.id : '' });
+  };
+  onAddTexto = (e) => {
+    const val = e.target.value;
+    const opt = this.getCatalogoOpts().find(o => o.label === val);
+    this.setState({ addTexto: val, addSel: opt ? opt.id : '' });
   };
 
   salvarNota = async () => {
@@ -1411,26 +1435,26 @@ class Component extends DCLogic {
       const editId = s.editingNotaId;
       try {
         const nota = await this.api('/api/notas?id=' + editId, { method: 'PATCH', body: JSON.stringify(payload) });
-        this.setState(st => ({ notas: st.notas.map(n => n.id === editId ? nota : n), itens: [], novaObs: '', novaDesc: 0, novaCliente: '', editingNotaId: null, printId: nota.id }));
+        this.setState(st => ({ notas: st.notas.map(n => n.id === editId ? nota : n), itens: [], novaObs: '', novaDesc: 0, novaCliente: '', clienteTexto: '', editingNotaId: null, printId: nota.id }));
         return;
       } catch (e) {}
       this.setState(st => ({
         notas: st.notas.map(n => n.id === editId ? { ...n, tipo: payload.tipo, cliente: payload.clienteId, obs: payload.obs, desc: payload.desc, itens } : n),
-        itens: [], novaObs: '', novaDesc: 0, novaCliente: '', editingNotaId: null
+        itens: [], novaObs: '', novaDesc: 0, novaCliente: '', clienteTexto: '', editingNotaId: null
       }));
       return;
     }
 
     try {
       const nota = await this.api('/api/notas', { method: 'POST', body: JSON.stringify(payload) });
-      this.setState(st => ({ notas: [nota, ...st.notas], itens: [], novaObs: '', novaDesc: 0, novaCliente: '', printId: nota.id }));
+      this.setState(st => ({ notas: [nota, ...st.notas], itens: [], novaObs: '', novaDesc: 0, novaCliente: '', clienteTexto: '', printId: nota.id }));
       return;
     } catch (e) {}
     const nota = { id: 'n' + Date.now(), numero: String(s.seq).padStart(6, '0'), tipo: s.novaTipo, cliente: s.novaCliente, obs: s.novaObs, desc: Number(s.novaDesc) || 0, sit: 'Pendente', validade: '', data: new Date().toLocaleDateString('pt-BR') + ' ' + new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }), itens };
-    this.setState(st => ({ notas: [nota, ...st.notas], seq: st.seq + 1, itens: [], novaObs: '', novaDesc: 0, novaCliente: '', printId: nota.id }));
+    this.setState(st => ({ notas: [nota, ...st.notas], seq: st.seq + 1, itens: [], novaObs: '', novaDesc: 0, novaCliente: '', clienteTexto: '', printId: nota.id }));
   };
 
-  novaDe(tipo) { return () => { this.setState({ novaTipo: tipo, itens: [], novaCliente: '', novaObs: '', novaDesc: 0, editingNotaId: null }); this.open('nova'); }; }
+  novaDe(tipo) { return () => { this.setState({ novaTipo: tipo, itens: [], novaCliente: '', clienteTexto: '', novaObs: '', novaDesc: 0, editingNotaId: null }); this.open('nova'); }; }
 
   renderVals() {
     const s = this.state, M = n => this.money(n), page = s.active;
@@ -1796,10 +1820,8 @@ class Component extends DCLogic {
       label: tp, go: () => this.setState({ novaTipo: tp }),
       style: 'padding:11px 18px;border-radius:999px;font-size:13.5px;font-weight:600;cursor:pointer;border:1px solid ' + (s.novaTipo === tp ? '#B8862B' : '#e2ded6') + ';background:' + (s.novaTipo === tp ? 'linear-gradient(160deg,#E0B75C,#B8862B)' : '#fff') + ';color:' + (s.novaTipo === tp ? '#1a1206' : '#6a6a6a')
     }));
-    const catalogoOpts = [
-      ...s.materiais.map(m => ({ id: 'p:' + m.id, label: 'PRODUTO · ' + m.nome + ' — ' + M(m.preco) + '/' + m.un + ' · estoque: ' + (m.estoque === '' || m.estoque === undefined ? '—' : m.estoque) })),
-      ...s.servicos.map(x => ({ id: 's:' + x.id, label: 'SERVIÇO · ' + x.nome + ' — ' + M(x.preco) + '/' + x.un }))
-    ];
+    const catalogoOpts = this.getCatalogoOpts();
+    const clientesOpts = s.clientes.map(c => ({ id: c.id, label: this.clienteLabel(c) }));
     const itensNova = s.itens.map((i, idx) => {
       const matRef = s.materiais.find(m => m.nome === i.nome);
       const estoqueDisp = matRef && matRef.estoque !== '' && matRef.estoque !== undefined ? Number(matRef.estoque) : null;
@@ -1953,9 +1975,9 @@ class Component extends DCLogic {
       ],
       isNova: page === 'nova', novaTitulo: (s.editingNotaId ? 'Editar ' : 'Novo ') + s.novaTipo, tiposDoc, novaTipo: s.novaTipo,
       salvarNotaLabel: s.editingNotaId ? 'Salvar alterações' : 'Gerar documento',
-      clientesOpts: s.clientes, novaCliente: s.novaCliente, onNovaCliente: this.set('novaCliente'),
+      clientesOpts, clienteTexto: s.clienteTexto, onClienteTexto: this.onClienteTexto,
       openNovoCliente: () => this.openModal('cliente'),
-      catalogoOpts, addSel: s.addSel, onAddSel: this.set('addSel'), addItem: this.addItem,
+      catalogoOpts, addTexto: s.addTexto, onAddTexto: this.onAddTexto, addItem: this.addItem,
       itensNova, semItens: s.itens.length === 0, novaObs: s.novaObs, onNovaObs: this.set('novaObs'),
       temSemEstoque: semEstoqueQtd > 0,
       semEstoqueResumo: semEstoqueQtd === 1 ? '1 item com estoque insuficiente. Confira antes de gerar o documento.' : semEstoqueQtd + ' itens com estoque insuficiente. Confira antes de gerar o documento.',
