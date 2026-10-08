@@ -28,7 +28,7 @@ input:focus,select:focus,textarea:focus{outline:2px solid #C79A3B;outline-offset
 @keyframes gfFade{from{opacity:0}to{opacity:1}}
 @media print{
   body *{visibility:hidden!important}
-  #gf-print,#gf-print *{visibility:visible!important}
+  #gf-print,#gf-print *{visibility:visible!important;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;color-adjust:exact!important}
   #gf-print{position:absolute!important;inset:0!important;padding:0!important;background:#fff!important;overflow:visible!important}
   .gf-noprint{display:none!important}
 }
@@ -693,12 +693,12 @@ input:focus,select:focus,textarea:focus{outline:2px solid #C79A3B;outline-offset
     <button onClick="{{ doPrint }}" style="margin-left:auto;padding:10px 20px;border:none;border-radius:999px;background:linear-gradient(160deg,#E0B75C,#B8862B);color:#1a1206;font-weight:700;font-size:13.5px;cursor:pointer">Imprimir / PDF</button>
   </div>
 
-  <div id="gf-print" style="max-width:860px;margin:26px auto;background:#fff;padding:clamp(24px,4vw,44px) clamp(22px,4vw,46px);box-shadow:0 16px 48px rgba(0,0,0,.35);color:#16213e;font-size:12.5px;line-height:1.45">
-    <div style="display:grid;grid-template-columns:150px 1fr 1fr;gap:14px;align-items:start">
+  <div id="gf-print" style="max-width:860px;margin:26px auto;background:#fff;box-shadow:0 16px 48px rgba(0,0,0,.35);color:#16213e;font-size:12.5px;line-height:1.45;overflow:hidden">
+    <div style="background:#0D0D0D;color:#fff;padding:clamp(24px,4vw,44px) clamp(22px,4vw,46px) 0;display:grid;grid-template-columns:150px 1fr 1fr;gap:14px;align-items:start">
       <img src="assets/gessofort-logo.png" alt="Gesso Fort" style="width:150px" />
       <div style="text-align:center;padding-top:2px">
-        <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:30px;letter-spacing:-.01em;color:#16213e">{{ pTipo }}</div>
-        <div style="font-size:9.5px;font-weight:700;line-height:1.5;margin-top:8px;color:#16213e">
+        <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:30px;letter-spacing:-.01em;color:#fff">{{ pTipo }}</div>
+        <div style="font-size:9.5px;font-weight:700;line-height:1.5;margin-top:8px;color:#fff">
           NÃO É DOCUMENTO FISCAL - NÃO É VÁLIDO COMO RECIBO E COMO<br />
           GARANTIA DE MERCADORIA - NÃO COMPROVA PAGAMENTO<br />
           EXIJA A NOTA OU O CUPOM FISCAL
@@ -714,6 +714,7 @@ input:focus,select:focus,textarea:focus{outline:2px solid #C79A3B;outline-offset
       </div>
     </div>
 
+    <div style="background:#fff;color:#16213e;padding:0 clamp(22px,4vw,46px) clamp(24px,4vw,44px)">
     <div style="border-top:1.5px solid #16213e;margin-top:14px;padding-top:7px">
       <div style="font-family:'Nunito',sans-serif;font-weight:800;font-size:15px">Cliente</div>
       <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px 16px;margin-top:8px">
@@ -781,6 +782,7 @@ input:focus,select:focus,textarea:focus{outline:2px solid #C79A3B;outline-offset
         <div style="border-top:1px solid #16213e;padding-top:7px;font-size:12px">{{ pCliNome }}</div>
         <div style="font-size:10px;letter-spacing:.14em;text-transform:uppercase;margin-top:3px;color:#5a6280">Assinatura do cliente</div>
       </div>
+    </div>
     </div>
   </div>
 </div>
