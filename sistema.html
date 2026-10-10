@@ -37,6 +37,11 @@ input:focus,select:focus,textarea:focus{outline:2px solid #C79A3B;outline-offset
      o conteudo do orcamento pagina como qualquer texto comum, sem repetir. */
   #gf-app-shell{display:none!important}
   .gf-noprint{display:none!important}
+  /* o <body> normal e cinza-claro (#F5F4F2); como o overlay agora so ocupa a
+     altura real do conteudo (nao mais a tela toda), o resto da folha ate o
+     fim da pagina mostrava esse cinza por tras. Forca o fundo da folha pra
+     branco tambem. */
+  html,body{background:#fff!important}
   #gf-print-overlay{position:static!important;background:#fff!important;padding:0!important;min-height:0!important}
   #gf-print{position:static!important;margin:0!important;box-shadow:none!important}
   #gf-print,#gf-print *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;color-adjust:exact!important}
