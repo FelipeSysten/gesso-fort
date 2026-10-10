@@ -27,10 +27,19 @@ input:focus,select:focus,textarea:focus{outline:2px solid #C79A3B;outline-offset
 @keyframes gfFly{from{opacity:0;transform:translateX(-8px)}to{opacity:1;transform:none}}
 @keyframes gfFade{from{opacity:0}to{opacity:1}}
 @media print{
-  body *{visibility:hidden!important}
-  #gf-print,#gf-print *{visibility:visible!important;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;color-adjust:exact!important}
-  #gf-print{position:absolute!important;inset:0!important;padding:0!important;background:#fff!important;overflow:visible!important}
+  /* #gf-print-overlay fica sobre a tela toda com position:fixed (preciso na
+     tela, pra ficar preso ao rolar). Na especificacao de paged media, um
+     elemento "fixed" (e tambem "absolute" quando ancorado na pagina toda via
+     inset:0) se repete em CADA pagina impressa — como o app por tras segue
+     montado no DOM, isso duplicava o orcamento inteiro numa 2ª pagina.
+     A solucao robusta e tirar o app inteiro do layout (display:none, nao so
+     invisivel) e deixar o overlay em fluxo normal (position:static), assim
+     o conteudo do orcamento pagina como qualquer texto comum, sem repetir. */
+  #gf-app-shell{display:none!important}
   .gf-noprint{display:none!important}
+  #gf-print-overlay{position:static!important;background:#fff!important}
+  #gf-print{position:static!important}
+  #gf-print,#gf-print *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;color-adjust:exact!important}
 }
 </style>
 </helmet>
@@ -83,7 +92,7 @@ input:focus,select:focus,textarea:focus{outline:2px solid #C79A3B;outline-offset
 </sc-if>
 
 <sc-if value="{{ isApp }}" hint-placeholder-val="{{ false }}">
-<div style="min-height:100vh;display:flex;background:#EFEDEA">
+<div id="gf-app-shell" style="min-height:100vh;display:flex;background:#EFEDEA">
 
   <sc-if value="{{ avisoBanco }}" hint-placeholder-val="{{ false }}">
     <div class="gf-noprint" style="position:fixed;right:16px;bottom:16px;z-index:80;max-width:min(360px,calc(100vw - 32px));background:#A34A24;color:#fff;font-size:12px;line-height:1.5;padding:12px 14px;border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,.25);display:flex;gap:10px;align-items:flex-start">
@@ -686,7 +695,7 @@ input:focus,select:focus,textarea:focus{outline:2px solid #C79A3B;outline-offset
 </sc-if>
 
 <sc-if value="{{ isPrint }}" hint-placeholder-val="{{ false }}">
-<div style="position:fixed;inset:0;z-index:70;background:#2A2A2A;overflow-y:auto;padding:0 0 60px">
+<div id="gf-print-overlay" style="position:fixed;inset:0;z-index:70;background:#2A2A2A;overflow-y:auto;padding:0 0 60px">
   <div class="gf-noprint" style="position:sticky;top:0;z-index:5;background:#0D0D0D;display:flex;align-items:center;gap:12px;padding:14px clamp(14px,3vw,28px);flex-wrap:wrap">
     <button onClick="{{ closePrint }}" style="background:none;border:1px solid rgba(255,255,255,.16);border-radius:999px;color:#cfcfcf;padding:9px 18px;font-size:13.5px;cursor:pointer" style-hover="color:#fff;border-color:#C79A3B">← Voltar</button>
     <div style="font-size:13.5px;color:#8a8a8a">Pré-visualização do documento</div>
